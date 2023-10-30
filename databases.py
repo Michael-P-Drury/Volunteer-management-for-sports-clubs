@@ -91,4 +91,3 @@ class Jobs(UserMixin, db.Model):
         job.assign_volunteers_needed(volunteers_needed)
         db.session.add(job)
         db.session.commit()
-        return job
