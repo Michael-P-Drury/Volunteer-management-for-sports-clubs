@@ -62,10 +62,3 @@ class Jobs(UserMixin, db.Model):
         db.session.add(job)
         db.session.commit()
         return job
-
-
-
-
-
-
-
