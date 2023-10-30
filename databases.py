@@ -20,12 +20,52 @@ class User(UserMixin, db.Model):
     qualifications = db.Column(db.String(64))
     events = db.Column(db.String(100))
 
-class jobs(UserMixin, db.Model):
+class Jobs(UserMixin, db.Model):
     __tablename__ = 'jobs'
     jobid = db.Column(db.Integer, primary_key=True)
     volunteers_assigned = db.Column(db.String(300))
     volunteers_needed = db.Column(db.Integer)
-    times = db.Column(db.String(20))
+    start_time = db.Column(db.String(20))
+    end_time = db.Column(db.String(20))
     date = db.Column(db.String(20))
     job_description = db.Column(db.String(300))
     job_requirements = db.Column(db.String(200))
+
+    def clear_volunters(self):
+        self.volunteers = ''
+
+    def assign_times(self, start_time, end_time):
+        self.start_time = start_time
+        self.end_time = end_time
+
+    def assign_date(self, date):
+        self.date = date
+
+    def assign_description(self, job_description):
+        self.job_description = job_description
+
+    def assign_requirements(self, job_requirements):
+        self.job_requirements = job_requirements
+
+    def assign_volunteers_needed(self, volunteers_needed):
+        self.volunteers_needed = volunteers_needed
+
+    @staticmethod
+    def add_new_job(volunteers_needed, start_time, end_time, date, job_description, job_requirements):
+        job = Jobs()
+        job.clear_volunters()
+        job.assign_times(start_time, end_time)
+        job.assign_date(date)
+        job.assign_description(job_description)
+        job.assign_requirements(job_requirements)
+        job.assign_volunteers_needed(volunteers_needed)
+        db.session.add(job)
+        db.session.commit()
+        return job
+
+
+
+
+
+
+
