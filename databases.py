@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'password'
@@ -19,6 +20,35 @@ class User(UserMixin, db.Model):
     preferred_name = db.Column(db.String(15))
     qualifications = db.Column(db.String(64))
     events = db.Column(db.String(100))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def set_mobile(self, mobile):
+        self.mobile = mobile
+
+    def set_email(self, email):
+        self.email = email
+
+    def set_preferred_name(self, preferred_name):
+        self.preferred_name = preferred_name
+
+    @staticmethod
+    def register(username, password, email, preferred_name):
+        user = User(username=username)
+        user.set_password(password)
+        user.set_email(email)
+        user.set_preferred_name(preferred_name)
+        db.session.add(user)
+        db.session.commit()
+        return user
+    def __repr__(self):
+        return '<User {0}>'.format(self.username)
+
+
 
 class Jobs(UserMixin, db.Model):
     __tablename__ = 'jobs'
