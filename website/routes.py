@@ -9,5 +9,9 @@ def login():
     return render_template('login.html')
 
 @app.route('/', methods=['GET', 'POST'])
-def login():
+def pick_club():
     return render_template('pick_club.html')
+
+@app.route('/')
+def home():
+    return render_template('home.html')
