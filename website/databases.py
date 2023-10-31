@@ -1,14 +1,6 @@
-from flask_login import UserMixin
-from flask import Flask
-from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'password'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-bootstrap = Bootstrap(app)
-db = SQLAlchemy(app)
+from flask_login import UserMixin
+from . import db
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
