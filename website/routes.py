@@ -17,6 +17,10 @@ def pick_club():
 def home():
     return render_template('home.html')
 
+@app.route('/timetable')
+def timetable():
+    return render_template('timetable.html')
+
 @lm.user_loader
 def load_user(userid):
     return User.query.get(int(userid))
