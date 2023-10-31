@@ -20,6 +20,7 @@ class User(UserMixin, db.Model):
     preferred_name = db.Column(db.String(15))
     qualifications = db.Column(db.String(64))
     events = db.Column(db.String(100))
+    admin = db.Column(db.Boolean)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -36,11 +37,15 @@ class User(UserMixin, db.Model):
     def set_preferred_name(self, preferred_name):
         self.preferred_name = preferred_name
 
+    def set_admin(self, admin):
+        self.admin = admin
+
     @staticmethod
-    def register(username, password, email, preferred_name):
+    def register(username, password, email, preferred_name, admin):
         user = User(username=username)
         user.set_password(password)
         user.set_email(email)
+        user.set_admin(admin)
         user.set_preferred_name(preferred_name)
         db.session.add(user)
         db.session.commit()
