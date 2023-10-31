@@ -32,12 +32,24 @@ class User(UserMixin, db.Model):
     def set_admin(self, admin):
         self.admin = admin
 
+    def no_mobile(self):
+        self.mobile = None
+
+    def no_qualifications(self):
+        self.qualifications = None
+
+    def no_events(self):
+        self.events = None
+
     @staticmethod
     def register(username, password, email, preferred_name, admin):
         user = User(username=username)
         user.set_password(password)
         user.set_email(email)
         user.set_admin(admin)
+        user.no_mobile()
+        user.no_events()
+        user.no_qualifications()
         user.set_preferred_name(preferred_name)
         db.session.add(user)
         db.session.commit()
