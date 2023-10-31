@@ -5,6 +5,8 @@ from . import app, lm
 from .databases import Jobs
 from . import db
 
+# from .forms import ... (if you want to import a form)
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     return render_template('login.html')
