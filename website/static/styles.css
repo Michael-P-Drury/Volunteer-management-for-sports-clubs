@@ -3,7 +3,6 @@ body {
   margin: 0;
 }
 
-
 .navbar {
     list-style-type: none;
     padding: 0;
@@ -14,7 +13,8 @@ body {
     margin: 0px;
     z-index: 1;
     border-top: solid;
-    border-top: white;
+    border-top-color: grey;
+    border-top-width: 1.5px;
 }
 
 .navbar_box {
@@ -55,4 +55,15 @@ li {
   font-size: 180%;
   text-align: center;
   padding: 10% 10%;
+}
+
+.header {
+    background-color: #4A55A2;
+    margin: 0px;
+    height: 110px;
+    text-align: center;
+}
+
+.top_logo {
+    height: 110px;
 }

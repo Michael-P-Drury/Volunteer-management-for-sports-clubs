@@ -7,6 +7,10 @@
 
 <div id="page-container">
 
+    <div class="header">
+        <img class="top_logo" src="{{ url_for('static', filename='images/dark_logo.png') }}">
+    </div>
+
     <ul class = "navbar">
         <li style = "margin-left: 10px"><div class = "navbar_box"><a class = "navbar_item" href="{{ url_for('home') }}">Home</a></div></li>
         <li><div class = "navbar_box"><a class = "navbar_item" href="{{ url_for('timetable') }}">timetable</a></div></li>
