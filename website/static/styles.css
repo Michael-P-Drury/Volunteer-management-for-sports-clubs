@@ -7,7 +7,7 @@ body {
     list-style-type: none;
     padding: 0;
     overflow: hidden;
-    background-color: #4A55A2;
+    background-color: #012A4A;
     position: sticky;
     top: 0px;
     margin: 0px;
@@ -58,7 +58,7 @@ li {
 }
 
 .header {
-    background-color: #4A55A2;
+    background-color: #012A4A;
     margin: 0px;
     height: 110px;
     text-align: center;
