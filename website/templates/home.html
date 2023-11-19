@@ -2,6 +2,27 @@
 
 {% block page_content %}
 
-<h1>home page</h1>
+<div class="welcome-message">
+    <h1>Welcome to Student Volunteer Management</h1>
+    <p class="small-text">A new way to organize your club</p>
+</div>
+
+<div class="main-content">
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='images/image_1.1.jpg')}}" alt="Image 1">
+    </div>
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='images/image_2.1.jpg')}}" alt="Image 2">
+    </div>
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='images/image_3.1.jpg')}}" alt="Image 3">
+    </div>
+</div>
+<div class ="welcome-message">
+    <p class="small-text">Get started with Student Volunteers today</p>
+</div>
+<div class="sign-up-button">
+    <a class="navbar_item" href="{{ url_for('signup') }}">Sign Up</a>
+</div>
 
 {% endblock %}

@@ -24,6 +24,7 @@ body {
     margin-bottom: 10px;
 }
 
+
 .navbar_box:hover {
     border-left: 1px solid grey;
     border-right: 1px solid grey;
@@ -66,4 +67,61 @@ li {
 
 .top_logo {
     height: 110px;
+}
+
+.welcome-message {
+    text-align: center;
+    font-family: "Roboto", sans-serif ;
+}
+
+.welcome-message {
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+}
+
+.welcome-message h1 {
+    font-size: 36px;
+}
+
+.welcome-message p.small-text {
+    font-size: 25px;
+}
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.image-container {
+    margin-right: 10px;
+}
+
+.image-container img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.sign-up-button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.sign-up-button a {
+    display: block;
+    text-decoration: none;
+    font-family: Andale Mono, monospace;
+    color: #F3F3F3;
+    font-size: 24px;
+    padding: 15px 30px;
+    background-color: #012A4A;
+    border: 2px solid #F3F3F3;
+    border-radius: 5px;
+}
+
+.sign-up-button a:hover {
+    background-color: #F3F3F3;
+    color: #012A4A;
 }
