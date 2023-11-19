@@ -6,17 +6,12 @@
     <h1>Welcome to Student Volunteer Management</h1>
     <p class="small-text">A new way to organize your club</p>
 </div>
-
 <div class="main-content">
-    <div class="image-container">
-        <img src="{{ url_for('static', filename='images/image_1.1.jpg')}}" alt="Image 1">
-    </div>
-    <div class="image-container">
-        <img src="{{ url_for('static', filename='images/image_2.1.jpg')}}" alt="Image 2">
-    </div>
-    <div class="image-container">
-        <img src="{{ url_for('static', filename='images/image_3.1.jpg')}}" alt="Image 3">
-    </div>
+    {% for i in range(1, 4) %}
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='images/image_' ~ i ~ '.1.jpg')}}" alt="Image {{ i }}">
+        </div>
+    {% endfor %}
 </div>
 <div class ="welcome-message">
     <p class="small-text">Get started with Student Volunteers today</p>
@@ -24,5 +19,14 @@
 <div class="sign-up-button">
     <a class="navbar_item" href="{{ url_for('signup') }}">Sign Up</a>
 </div>
-
+<div class="about-us-title">
+    <h1>About us</h1>
+    <div class="about-us">
+        <p>We can help manage volunteers from all different sports
+            efficiently and effectively. Organising volunteers to handle responsibilities
+            can be difficult at times. Try our solution today and make cancelled events
+            a thing of the past!
+        </p>
+    </div>
+</div>
 {% endblock %}

@@ -69,24 +69,6 @@ li {
     height: 110px;
 }
 
-.welcome-message {
-    text-align: center;
-    font-family: "Roboto", sans-serif ;
-}
-
-.welcome-message {
-    text-align: center;
-    font-family: "Roboto", sans-serif;
-}
-
-.welcome-message h1 {
-    font-size: 36px;
-}
-
-.welcome-message p.small-text {
-    font-size: 25px;
-}
-
 .main-content {
     display: flex;
     justify-content: center;
@@ -124,4 +106,20 @@ li {
 .sign-up-button a:hover {
     background-color: #F3F3F3;
     color: #012A4A;
+}
+
+.welcome-message,
+.about-us-title h1,
+.about-us {
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+}
+
+.welcome-message h1 {
+    font-size: 36px;
+}
+
+.welcome-message p.small-text,
+.about-us {
+    font-size: 25px;
 }
