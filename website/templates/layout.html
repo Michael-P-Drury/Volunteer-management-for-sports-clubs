@@ -8,7 +8,13 @@
 <div id="page-container">
 
     <div class="header">
-        <img class="top_logo" src="{{ url_for('static', filename='images/light_logo.png') }}">
+        <a href="{{ url_for('home') }}">
+            <img class="top_logo"
+               src="{{ url_for('static', filename='images/darker_logo.png') }}"
+               onmouseover="this.src='{{ url_for('static', filename='images/light_logo.png') }}'"
+               onmouseout="this.src='{{ url_for('static', filename='images/darker_logo.png') }}'"
+               alt="logo image" />
+        </a>
     </div>
 
     <ul class = "navbar">
