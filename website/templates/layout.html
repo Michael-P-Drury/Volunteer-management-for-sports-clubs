@@ -22,14 +22,13 @@
 
     {% block content %}
         <div class="container">
-            {% block page_content %}{% endblock %}
+            <div id = "content-wrap">
+                {% block page_content %}{% endblock %}
+            </div>
         </div>
     {% endblock %}
 
-
-    <footer class="footer">
+    <footer id="footer">
         <p class = "footer_text">footer text</p>
     </footer>
-
-<!--footer not in layout as don't want footer in login, signup, thank you and checkout page-->
 </div>
