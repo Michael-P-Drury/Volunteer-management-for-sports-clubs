@@ -9,7 +9,7 @@ body {
     overflow: hidden;
     background-color: #012A4A;
     position: sticky;
-    top: 0px;
+    top: -1.5px;
     margin: 0px;
     z-index: 1;
     border-top: solid;
