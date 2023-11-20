@@ -52,7 +52,7 @@ li {
   text-decoration: none;
   font-family: Andale Mono, monospace;
   color: #F3F3F3;
-  font-size: 120%;
+  font-size: 180%;
   text-align: center;
   padding: 10% 10%;
 }
@@ -89,4 +89,59 @@ li {
 .footer_text {
     color: white;
     text-align: center;
+}
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.image-container {
+    margin-right: 10px;
+}
+
+.image-container img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.sign-up-button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.sign-up-button a {
+    display: block;
+    text-decoration: none;
+    font-family: Andale Mono, monospace;
+    color: #F3F3F3;
+    font-size: 24px;
+    padding: 15px 30px;
+    background-color: #012A4A;
+    border: 2px solid #F3F3F3;
+    border-radius: 5px;
+}
+
+.sign-up-button a:hover {
+    background-color: #F3F3F3;
+    color: #012A4A;
+}
+
+.welcome-message,
+.about-us-title h1,
+.about-us {
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+}
+
+.welcome-message h1 {
+    font-size: 36px;
+}
+
+.welcome-message p.small-text,
+.about-us {
+    font-size: 25px;
 }

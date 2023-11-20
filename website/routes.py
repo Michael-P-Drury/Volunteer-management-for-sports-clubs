@@ -27,3 +27,6 @@ def timetable():
 def load_user(userid):
     return User.query.get(int(userid))
 
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
