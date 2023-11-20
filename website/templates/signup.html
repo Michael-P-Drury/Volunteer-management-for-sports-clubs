@@ -4,4 +4,13 @@
 
 <h1>Sign Up</h1>
 
+{{ form.csrf_token }}
+{{ form.username.label }} {{ form.username() }}
+{{ form.password.label }} {{ form.password() }}
+{{ form.verifyPassword.label }} {{ form.verifyPassword() }}
+{{ form.email.label }} {{ form.email() }}
+{{ form.email.label }} {{ form.email() }}
+{{ form.admin.label }} {{ form.admin() }}
+{{ form.submit() }}
+
 {% endblock %}
