@@ -99,7 +99,8 @@ li {
 }
 
 .image-container {
-    margin-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .image-container img {
