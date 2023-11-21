@@ -12,10 +12,6 @@ from . import db
 def login():
     return render_template('login.html')
 
-@app.route('/pick_club', methods=['GET', 'POST'])
-def pick_club():
-    return render_template('pick_club.html')
-
 @app.route('/home')
 def home():
     return render_template('home.html')
