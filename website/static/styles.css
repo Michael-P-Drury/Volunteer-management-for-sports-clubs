@@ -24,6 +24,7 @@ body {
     margin-bottom: 10px;
 }
 
+
 .navbar_box:hover {
     border-left: 1px solid grey;
     border-right: 1px solid grey;
@@ -67,15 +68,13 @@ li {
     overflow: auto;
 }
 
-.header {
-    background-color: #012A4A;
-    margin: 0px;
-    height: 110px;
-    text-align: center;
-}
-
 .top_logo {
-    height: 110px;
+    height: 80px;
+    width: 80px;
+    text-align: center;
+    display: flex;
+    margin-left: 15px;
+    margin-top: -30px;
 }
 
 #footer {
