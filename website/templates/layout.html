@@ -8,20 +8,41 @@
 <div id="page-container">
 
     <div class="header">
-        <a href="{{ url_for('home') }}">
-            <img class="top_logo"
-               src="{{ url_for('static', filename='images/darker_logo.png') }}"
-               onmouseover="this.src='{{ url_for('static', filename='images/light_logo.png') }}'"
-               onmouseout="this.src='{{ url_for('static', filename='images/darker_logo.png') }}'"
-               alt="logo image" />
-        </a>
+        
     </div>
 
-    <ul class = "navbar">
-        <li style = "margin-left: 10px"><div class = "navbar_box"><a class = "navbar_item" href="{{ url_for('home') }}">Home</a></div></li>
-        <li><div class = "navbar_box"><a class = "navbar_item" href="{{ url_for('timetable') }}">Timetable</a></div></li>
-        <li><div class = "navbar_box"><a class = "navbar_item" href="{{ url_for('signup') }}">Sign Up</a></div></li>
-        <li><div class = "navbar_box"><a class = "navbar_item" href="{{ url_for('login') }}">Login</a></div></li>
+    <ul class="navbar">
+        <li>
+            <div class="navbar_box">
+                <a class="navbar_item" href="{{ url_for('home') }}">
+                    <img class="top_logo"
+                        src="{{ url_for('static', filename='images/darker_logo.png') }}"
+                        onmouseover="this.src='{{ url_for('static', filename='images/light_logo.png') }}'"
+                        onmouseout="this.src='{{ url_for('static', filename='images/darker_logo.png') }}'"
+                        alt="logo image" /> 
+                </a>
+            </div>
+        </li>
+        <li style="margin-left: 10px">
+            <div class="navbar_box">
+                <a class="navbar_item" href="{{ url_for('home') }}">Home</a>
+            </div>
+        </li>
+        <li>
+            <div class="navbar_box">
+                <a class="navbar_item" href="{{ url_for('timetable') }}">Timetable</a>
+            </div>
+        </li>
+        <li>
+            <div class="navbar_box">
+                <a class="navbar_item" href="{{ url_for('signup') }}">Sign Up</a>
+            </div>
+        </li>
+        <li>
+            <div class="navbar_box">
+                <a class="navbar_item" href="{{ url_for('login') }}">Login</a>
+            </div>
+        </li>
     </ul>
 
 
