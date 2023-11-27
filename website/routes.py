@@ -47,9 +47,12 @@ def signup():
 
     return render_template('signup.html', form=signup_form)
 
+<<<<<<< HEAD
 @app.route('/terms')
 def terms():
     return render_template('terms.html')
+=======
+>>>>>>> c9daf54325ed49c17e6ea703a390af65b3f1131d
 
 @app.route('/logout')
 @login_required
