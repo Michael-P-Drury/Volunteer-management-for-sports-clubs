@@ -9,12 +9,9 @@ body {
     overflow: hidden;
     background-color: #012A4A;
     position: sticky;
-    top: -1.5px;
+    top: 0px;
     margin: 0px;
     z-index: 1;
-    border-top: solid;
-    border-top-color: grey;
-    border-top-width: 1.5px;
 }
 
 .navbar_box {
