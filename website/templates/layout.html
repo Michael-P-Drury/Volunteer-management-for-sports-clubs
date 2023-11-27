@@ -23,12 +23,13 @@
                 </a>
             </div>
         </li>
+
+        {% if current_user.is_authenticated %}
         <li style="margin-left: 10px">
             <div class="navbar_box">
                 <a class="navbar_item" href="{{ url_for('home') }}">Home</a>
             </div>
         </li>
-        {% if current_user.is_authenticated %}
         <li>
             <div class="navbar_box">
                 <a class="navbar_item" href="{{ url_for('timetable') }}">Timetable</a>
