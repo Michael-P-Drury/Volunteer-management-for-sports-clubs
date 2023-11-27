@@ -4,7 +4,7 @@ from . import db
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
-    userid = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(16), index=True, unique=True)
     password_hash = db.Column(db.String(64))
     email = db.Column(db.String(30))
@@ -13,6 +13,9 @@ class User(UserMixin, db.Model):
     qualifications = db.Column(db.String(64))
     events = db.Column(db.String(100))
     admin = db.Column(db.Boolean)
+
+    def get_id(self):
+        return str(self.user_id)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -60,6 +63,7 @@ class User(UserMixin, db.Model):
         db.session.add(user)
         db.session.commit()
         return user
+
     def __repr__(self):
         return '<User {0}>'.format(self.username)
 
@@ -67,7 +71,7 @@ class User(UserMixin, db.Model):
 
 class Jobs(UserMixin, db.Model):
     __tablename__ = 'jobs'
-    jobid = db.Column(db.Integer, primary_key=True)
+    job_id = db.Column(db.Integer, primary_key=True)
     volunteers_assigned = db.Column(db.String(300))
     volunteers_needed = db.Column(db.Integer)
     start_time = db.Column(db.String(20))
