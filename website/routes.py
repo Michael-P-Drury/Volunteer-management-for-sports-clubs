@@ -47,6 +47,10 @@ def signup():
 
     return render_template('signup.html', form=signup_form)
 
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
 @app.route('/logout')
 @login_required
 def logout():
