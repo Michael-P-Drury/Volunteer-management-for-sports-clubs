@@ -47,6 +47,7 @@ def signup():
 
     return render_template('signup.html', form=signup_form)
 
+
 @app.route('/logout')
 @login_required
 def logout():
