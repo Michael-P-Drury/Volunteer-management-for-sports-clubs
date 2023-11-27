@@ -21,6 +21,13 @@ body {
     margin-bottom: 10px;
 }
 
+.navbar_box_logo {
+    height: 50px;
+    width: 140px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 
 .navbar_box:hover {
     border-left: 1px solid grey;
