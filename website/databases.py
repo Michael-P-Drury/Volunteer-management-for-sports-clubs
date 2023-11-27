@@ -41,16 +41,22 @@ class User(UserMixin, db.Model):
     def no_events(self):
         self.events = None
 
+    def no_preffered_name(self):
+        self.preferred_name = None
+
+    def no_email(self):
+        self.email = None
+
     @staticmethod
-    def register(username, password, email, preferred_name, admin):
+    def register(username, password, admin):
         user = User(username=username)
         user.set_password(password)
-        user.set_email(email)
+        user.no_email()
         user.set_admin(admin)
         user.no_mobile()
         user.no_events()
         user.no_qualifications()
-        user.set_preferred_name(preferred_name)
+        user.no_preffered_name()
         db.session.add(user)
         db.session.commit()
         return user

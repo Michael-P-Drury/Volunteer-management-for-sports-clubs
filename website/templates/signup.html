@@ -4,13 +4,17 @@
 
 <h1>Sign Up</h1>
 
-{{ form.csrf_token }}
-{{ form.username.label }} {{ form.username() }}
-{{ form.password.label }} {{ form.password() }}
-{{ form.verifyPassword.label }} {{ form.verifyPassword() }}
-{{ form.email.label }} {{ form.email() }}
-{{ form.email.label }} {{ form.email() }}
-{{ form.admin.label }} {{ form.admin() }}
-{{ form.submit() }}
+{% if exists %}
+<p>User already exists</p>
+{% endif %}
+
+<form action="" method="POST">
+    {{ form.csrf_token }}
+    {{ form.username.label }} {{ form.username() }}
+    {{ form.password.label }} {{ form.password() }}
+    {{ form.verify_password.label }} {{ form.verify_password() }}
+    {{ form.admin.label }} {{ form.admin() }}
+    {{ form.submit() }}
+</form>
 
 {% endblock %}

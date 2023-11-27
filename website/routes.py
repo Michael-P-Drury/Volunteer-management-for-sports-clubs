@@ -20,10 +20,24 @@ def home():
 def timetable():
     return render_template('timetable.html')
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
+
     signup_form = SignupForm()
-    return render_template('signup.html', form = signup_form)
+
+    if signup_form.validate_on_submit():
+
+        password_in = str(signup_form.password.data)
+        username_in = str(signup_form.username.data)
+        admin_in = bool(signup_form.admin.data)
+
+        if User.query.filter_by(username=username_in).first() is None:
+            User.register(username_in, password_in, admin_in)
+            return redirect(url_for('home'))
+        else:
+            return render_template('signup.html', form=signup_form, exists=True)
+
+    return render_template('signup.html', form=signup_form)
 
 
 @lm.user_loader
