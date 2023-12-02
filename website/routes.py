@@ -47,6 +47,10 @@ def signup():
 
     return render_template('signup.html', form=signup_form)
 
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
 <<<<<<< HEAD
 @app.route('/terms')
 def terms():
