@@ -1,14 +1,41 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block page_content %}
+<head>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
 
-<h1>Login page</h1>
+<body>
 
-<form action="" method="POST">
-    {{ form.csrf_token }}
-    {{ form.username.label }} {{ form.username() }}
-    {{ form.password.label }} {{ form.password() }}
-    {{ form.submit() }}
-</form>
+<div class="login_container">
 
-{% endblock %}
+    <div class="big_left">
+        <img class="login_logo"
+                        src="{{ url_for('static', filename='images/light_logo.png') }}">
+    </div>
+
+    <div class="big_right">
+        <div class="login_box">
+            <h1>Login</h1>
+            <form action="" method="POST">
+                {{ form.csrf_token }}
+                <p>
+                {{ form.username.label }} {{ form.username() }}
+                </p>
+                <p>
+                {{ form.password.label }} {{ form.password() }}
+                </p>
+                <p>
+                {{ form.submit() }}
+                </p>
+
+            </form>
+            <a class = 'to_signup' href="{{ url_for('signup') }}"><div>sign up</div></a>
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+</html>
