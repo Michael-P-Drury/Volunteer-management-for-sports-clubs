@@ -51,9 +51,9 @@ def signup():
 def profile():
     return render_template('profile.html')
 
-app.route('/privacy')
+@app.route('/privacy')
 def privacy():
-    return render_template('privacy_policy.html')
+    return render_template('privacypolicy.html')
 
 @app.route('/terms')
 def terms():

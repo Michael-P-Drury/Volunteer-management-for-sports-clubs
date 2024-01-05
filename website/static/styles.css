@@ -226,7 +226,7 @@ body {
 }
 
 .terms-container h2 {
-    font-size: 18px;
+    font-size: 20x;
 }
 
 .terms-container p {
@@ -245,6 +245,5 @@ body {
 }
 
 .terms-container h3 {
-    font-size: 22px;
-    margin-top: 20px;
+    font-size: 18px;
 }
