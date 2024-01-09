@@ -187,6 +187,7 @@ li {
 .to_signup{
     display: block;
   text-decoration: none;
+  font-size: #646464;
   font-family: Andale Mono, monospace;
   font-size: 120%;
 }
