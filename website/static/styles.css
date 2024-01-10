@@ -248,3 +248,22 @@ body {
 .terms-container h3 {
     font-size: 18px;
 }
+
+.profile-image {
+    padding: 0px;
+    margin: 10px;
+    position: absolute;
+}
+
+.img1 {
+    max-height:100%;
+    max-width:100%;
+    
+    float:left;
+
+}
+.profile-box {
+    background-color:#ffffff;
+    box-shadow:0 5px 5px #9e9d9d;
+    border-radius: 10px;
+}

@@ -2,6 +2,24 @@
 
 {% block page_content %}
 
-<h1>Profile</h1>
+<div class="profile-image" style = "margin-top: 30px; margin-left:120px; width:15%;" class=”container”>
+    <img src="{{ url_for('static', filename='images/profileimage.jpg')}}" class="img1" style=" width:100%;"alt="profile image">
+</div>
+<div class="" style="padding: 45px; background-color: #9fbfd7; margin-top: 150px;">
+    <div class="" style="font-size: 35px; margin-left: 350px ; ">Name</div>
+    <div class="" style="font-size: 25px; margin-left: 350px; ">Company Name</div>
+    <button style="float: right;">Edit profile</button>
+</div>
 
+<div style="background-color: #ececec; border-radius: 10px; padding: 20px; margin: 100px; position: static;">
+    <div class="profile-box" style="width:76%; height:295px; float:right; ">
+        Details
+    </div>
+    <div class="profile-box" style="width:22%; height:295px;">
+        Personal Information
+    </div> 
+    <div class="profile-box"style="width:100%; height:295px; margin-top: 30px;">
+        Experience
+    </div>
+</div>
 {% endblock %}
