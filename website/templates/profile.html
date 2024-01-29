@@ -29,11 +29,26 @@
                 </div>
             </form>
         </div>
+
+        <div class = "new_mobile">
+            <form action="" method="POST">
+                <div class = "checkout_login_form">
+                    {{ mobile_form.csrf_token }}
+                    <p class="login_field">
+                        Want to change your mobile?
+                    </p>
+                    <p class="login_field">
+                        {{ mobile_form.new_mobile.label }} {{ mobile_form.new_mobile(class = "input_field") }} {{ mobile_form.submit2(class = "add_to_button") }}
+
+                    </p>
+                </div>
+            </form>
+        </div>
+
     </div>
     <div class="profile-box"style="width:100%; height:295px; margin-top: 30px;">
         Experience
     </div>
 </div>
-
 
 {% endblock %}

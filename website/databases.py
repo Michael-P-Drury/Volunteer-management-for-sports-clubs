@@ -2,7 +2,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from . import db
 
-
 # creates the user table which stores user's information
 class User(UserMixin, db.Model):
     __tablename__ = 'users'

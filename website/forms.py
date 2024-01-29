@@ -20,3 +20,8 @@ class LoginForm(FlaskForm):
 class emailChangeForm(FlaskForm):
     new_email = StringField('Enter a new email:', validators=[Regexp(regex="[^@]+@[^@]+.[^@]+", message = 'has to be a valid email'), input_required()])
     submit1 = SubmitField('Submit')
+
+# form for changing/ adding mobile number
+class mobileChangeForm(FlaskForm):
+    new_mobile = StringField('Enter a new mobile:', validators=[Regexp(regex='^[+-]?[0-9]+$', message = 'only integers allowed'), input_required(), Length(11, 11)])
+    submit2 = SubmitField('Submit')
