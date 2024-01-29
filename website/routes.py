@@ -6,6 +6,7 @@ from .databases import Jobs
 from .forms import SignupForm
 from .forms import LoginForm
 from . import db
+from .forms import emailChangeForm
 
 # from .forms import ... (if you want to import a form)
 # routing for the pages in the website
@@ -59,10 +60,21 @@ def signup():
 
     return render_template('signup.html', form=signup_form)
 
+
 # routing for the profile page which takes you to the home page and the URL of the base URL/profile
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
-    return render_template('profile.html')
+
+    email_form = emailChangeForm()
+
+    if email_form.validate_on_submit() and email_form.validate():
+        new_email = email_form.new_email.data
+        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
+            user.email = new_email
+        db.session.commit()
+        return redirect(url_for('profile'))
+
+    return render_template('profile.html', email_form = email_form)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
