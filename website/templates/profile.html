@@ -5,10 +5,11 @@
 <h1>Profile</h1>
 
 <div style="background-color: #ececec; border-radius: 10px; padding: 20px; margin: 100px; position: static;">
-    <div class="profile-box" style="width:60%; height:295px; float:right; ">
+    <div class="profile-box" style="width:55%; height:295px; float:right; ">
         Details
     </div>
-    <div class="profile-box" style="width:38%; height:295px;">
+
+    <div class="profile-box" style="width:39%; height:295px;">
         Personal Information
         <p>Username: {{ current_user.username }}</p>
 
@@ -30,14 +31,14 @@
             </form>
         </div>
 
-        <div class = "new_mobile">
+        <div>
             <form action="" method="POST">
-                <div class = "checkout_login_form">
+                <div>
                     {{ mobile_form.csrf_token }}
-                    <p class="login_field">
+                    <p>
                         Want to change your mobile?
                     </p>
-                    <p class="login_field">
+                    <p>
                         {{ mobile_form.new_mobile.label }} {{ mobile_form.new_mobile(class = "input_field") }} {{ mobile_form.submit2(class = "add_to_button") }}
 
                     </p>
