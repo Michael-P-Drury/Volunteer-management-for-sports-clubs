@@ -287,7 +287,6 @@ body {
     border-radius: 5px;
     padding: 0.5%;
     margin-bottom: 30px;
-    height: 300px;
 }
 
 .profile-box-title {
@@ -305,5 +304,16 @@ body {
     .profile-box {
         width: 100%;
     }
+
+    .profile-box-text {
+        font-size: 2vw;
+    }
+
+    .profile-box-title {
+    text-decoration: underline;
+        font-size: 2.4vw;
+    }
+
+
 
 }
