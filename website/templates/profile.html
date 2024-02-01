@@ -25,7 +25,7 @@
                         Want to change your email?
                     </p>
                     <p class = "profile-box-text">
-                        {{ email_form.new_email.label }} {{ email_form.new_email(class = "input_field") }} {{ email_form.submit1(class = "add_to_button") }}
+                        {{ email_form.new_email.label }} {{ email_form.new_email() }} {{ email_form.submit1() }}
                     </p>
                 </div>
             </form>
@@ -39,8 +39,22 @@
                         Want to change your mobile?
                     </p>
                     <p class = "profile-box-text">
-                        {{ mobile_form.new_mobile.label }} {{ mobile_form.new_mobile(class = "input_field") }} {{ mobile_form.submit2(class = "add_to_button") }}
+                        {{ remove_mobile.submit4() }}
+                    </p>
+                </div>
+            </form>
+        </div>
 
+
+        <div>
+            <form action="" method="POST">
+                <div>
+                    {{ remove_email.csrf_token }}
+                    <p class = "profile-box-text">
+                        Want to change your email?
+                    </p>
+                    <p class = "profile-box-text">
+                        {{ remove_email.submit3() }}
                     </p>
                 </div>
             </form>

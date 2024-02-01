@@ -25,3 +25,11 @@ class emailChangeForm(FlaskForm):
 class mobileChangeForm(FlaskForm):
     new_mobile = StringField('Enter a new mobile:', validators=[Regexp(regex='^[+-]?[0-9]+$', message = 'only integers allowed'), input_required(), Length(11, 11)])
     submit2 = SubmitField('Submit')
+
+class removeEmail(FlaskForm):
+    submit3 = SubmitField('Remove email?')
+
+class removeMobile(FlaskForm):
+    submit4 = SubmitField('Remove mobile?')
+
+

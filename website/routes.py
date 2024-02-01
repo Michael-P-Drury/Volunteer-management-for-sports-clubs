@@ -7,7 +7,10 @@ from .forms import SignupForm
 from .forms import LoginForm
 from . import db
 from .forms import emailChangeForm
-from.forms import mobileChangeForm
+from .forms import mobileChangeForm
+from .forms import removeMobile
+from .forms import removeEmail
+
 
 # from .forms import ... (if you want to import a form)
 # routing for the pages in the website
@@ -69,6 +72,9 @@ def profile():
     email_form = emailChangeForm()
     mobile_form = mobileChangeForm()
 
+    remove_email = removeEmail()
+    remove_mobile = removeMobile()
+
     if mobile_form.validate_on_submit() and mobile_form.validate():
         new_mobile = mobile_form.new_mobile.data
         for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
@@ -83,7 +89,17 @@ def profile():
         db.session.commit()
         return redirect(url_for('profile'))
 
-    return render_template('profile.html', email_form = email_form, mobile_form = mobile_form)
+    if email_form.validate_on_submit() and email_form.validate():
+        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
+            user.email = None
+        db.session.commit()
+
+    if email_form.validate_on_submit() and email_form.validate():
+        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
+            user.mobile = None
+        db.session.commit()
+
+    return render_template('profile.html', email_form = email_form, mobile_form = mobile_form, remove_mobile = remove_mobile, remove_email = remove_email)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
