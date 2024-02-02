@@ -43,6 +43,11 @@ def home():
 def timetable():
     return render_template('timetable.html')
 
+# routing for the admin page which takes you to the home page and the URL of the base URL/admin
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
+
 # route for the signup page which takes you to the home page and the URL of the base URL/signup
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -94,7 +99,6 @@ def profile():
             user.no_mobile()
         db.session.commit()
         return redirect(url_for('profile'))
-
 
 
     if remove_email.submit3.data and remove_email.validate():

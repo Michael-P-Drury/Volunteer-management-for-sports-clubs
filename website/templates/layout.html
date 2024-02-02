@@ -54,24 +54,21 @@
                 <a class="navbar_item" href="{{ url_for('profile') }}">Profile</a>
             </div>
         </li>
+
+        {% if current_user.admin %}
+            <li>
+            <div class="navbar_box">
+                <a class="navbar_item" href="{{ url_for('admin') }}">Admin</a>
+            </div>
+        </li>
+        {% endif %}
+
         <li>
             <div class="navbar_box">
                 <a class="navbar_item" href="{{ url_for('logout') }}">Logout</a>
             </div>
         </li>
-        {% else %}
-        <li>
-            <div class="navbar_box">
-                <a class="navbar_item" href="{{ url_for('signup') }}">Sign Up</a>
-            </div>
-        </li>
-        <li>
-            <div class="navbar_box">
-                <a class="navbar_item" href="{{ url_for('login') }}">Login</a>
-            </div>
-        </li>
         {% endif %}
-
     </ul>
 
 
