@@ -89,19 +89,22 @@ def profile():
         db.session.commit()
         return redirect(url_for('profile'))
 
-    if remove_email.validate_on_submit() and email_form.validate():
+    if remove_mobile.submit4.data and remove_mobile.validate():
         for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.email = None
+            user.no_mobile()
         db.session.commit()
         return redirect(url_for('profile'))
 
-    if remove_mobile.validate_on_submit() and email_form.validate():
+
+
+    if remove_email.submit3.data and remove_email.validate():
         for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.mobile = None
+            user.no_email()
         db.session.commit()
         return redirect(url_for('profile'))
 
-    return render_template('profile.html', email_form = email_form, mobile_form = mobile_form, remove_mobile = remove_mobile, remove_email = remove_email)
+    return render_template('profile.html', email_form = email_form, mobile_form = mobile_form,
+                           remove_mobile = remove_mobile, remove_email = remove_email)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
