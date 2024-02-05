@@ -2,28 +2,30 @@
 
 {% block page_content %}
 
-<div class="welcome-message">
-    <h1>Welcome to Student Volunteer Management</h1>
-    <p class="small-text">A new way to organize your club</p>
-</div>
-<div class="main-content">
-    {% for i in range(1, 4) %}
+<div class="main-welcome">
+    <div class="main-content">
         <div class="image-container">
-            <img src="{{ url_for('static', filename='images/image_' ~ i ~ '.1.jpg')}}" alt="Image {{ i }}">
+            <img src="{{ url_for('static', filename='images/image_3.1.jpg')}}">
         </div>
-    {% endfor %}
-</div>
-<div class ="welcome-message">
-    <p class="small-text">Get started with Student Volunteers today</p>
-</div>
-<div class="about-us-title">
-    <h1>About us</h1>
-    <div class="about-us">
-        <p>We can help manage volunteers from all different sports
-            efficiently and effectively. Organising volunteers to handle responsibilities
-            can be difficult at times. Try our solution today and make cancelled events
-            a thing of the past!
-        </p>
+        <div class="side-text">
+            <h1>Welcome to Student Volunteer Management</h1>
+            <p class="small-text">A new way to organize your club</p>
+            <a href="/timetable" class="btn">View My Timetable &#8594;</a>
+        </div>
+        </div>
+    </div>
+    <div class ="welcome-message">
+        <p class="small-text">Get started with Student Volunteers today</p>
+    </div>
+    <div class="about-us-title">
+        <h1 class="about-us-header">About us</h1>
+        <div class="about-us">
+            <p>
+                Streamline the management of diverse sports volunteers with our comprehensive solution. 
+                Effectively organize and manage responsibilities with ease, transforming the challenges of coordinating volunteers into a seamless process. 
+                Say goodbye to cancelled events and experience a new era of efficiency. Try our solution today and elevate your volunteer management to unprecedented levels!
+            </p>
+        </div>
     </div>
 </div>
 {% endblock %}

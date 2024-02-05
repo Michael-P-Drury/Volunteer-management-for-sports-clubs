@@ -84,7 +84,6 @@ li {
 }
 
 #footer {
-    position: absolute;
     bottom: 0;
     width: 100%;
     height: 115px;
@@ -109,26 +108,57 @@ li {
 .main-content {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+    align-items: flex-start;
+    max-height: 100%;
+    background-color:#013A63;
 }
 
 .image-container {
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 0;
+    padding: 0;
+    max-height: 100%;
+    flex-grow: 2;
 }
 
 .image-container img {
     width: 100%;
-    height: 300px;
-    object-fit: cover;
+    height: auto;
+    display: block;
+    margin: 0;
+    padding: 0;
 }
 
-.welcome-message,
-.about-us-title h1,
-.about-us {
-    text-align: center;
+.side-text {
+    flex-grow: 1;
+    display: inline-block;
+    align-items: center; /* Vertical centering */
+    padding: 200px 80px;
+    color: white;
+}
+
+
+.welcome-message {
+    text-align: Center;
     font-family: "Roboto", sans-serif;
+}
+
+.about-us-title {
+    text-align: Left;
+    font-family: "Roboto", sans-serif;
+    margin-left: 20px;
+}
+
+.btn{
+    display: inline-block;
+    background: #3bb4ff;
+    color: #fff;
+    padding: 8px 30px;
+    margin: 30px 0;
+    border-radius: 30px;
+    transition: background 0.5s;
+}
+.btn:hover{
+    background: #3bb4ff92;
 }
 
 .welcome-message h1 {
@@ -312,6 +342,15 @@ body {
 
     .login_box {
         margin: 10%;
+    }
+
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .text-box {
+        height: auto;
     }
 
 }
