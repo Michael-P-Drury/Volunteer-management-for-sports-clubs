@@ -71,11 +71,11 @@
     <div id = "content-wrap">
         {% block page_content %}{% endblock %}
     </div>
-
-    <footer class="footer">
-        <p class = 'footer_text'>for more infomation click on the following links:</p>
-        <p><a href="{{ url_for('terms') }}" class = 'footer_text'>→ Terms & Conditions</a></p>
-        <p><a href="{{ url_for('privacy')}}" class = 'footer_text'>→ Privacy Policy</a></p>
-    </footer>
     
 </div>
+
+<footer class="footer">
+    <p class = 'footer_text'>for more infomation click on the following links:</p>
+    <p><a href="{{ url_for('terms') }}" class = 'footer_link'>→ Terms & Conditions</a></p>
+    <p><a href="{{ url_for('privacy')}}" class = 'footer_link'>→ Privacy Policy</a></p>
+</footer>

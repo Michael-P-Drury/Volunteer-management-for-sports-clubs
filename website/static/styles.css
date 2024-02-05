@@ -29,7 +29,6 @@ body {
     margin-bottom: 10px;
 }
 
-
 .navbar_box:hover {
     border-left: 1px solid grey;
     border-right: 1px solid grey;
@@ -70,7 +69,6 @@ li {
 }
 
 #content-wrap {
-    padding-bottom: 115px;
     overflow: auto;
 }
 
@@ -84,20 +82,23 @@ li {
 }
 
 .footer {
-    position: absolute;
     width: 100%;
-    bottom: 0;
     height: 115px;
     background-color: #012A4A;
     text-align: center;
+    margin-top: auto;
 }
 
-.footer_text{
+.footer_text, .footer_link{
     color: white;
     text-decoration: none;
     font-family: Andale Mono, monospace;
     font-size: 16px;
     text-align: center;
+}
+
+.footer_text{
+    padding-top: 12px;
 }
 
 .footer a:hover {
@@ -140,6 +141,7 @@ li {
     text-align: Center;
     font-family: "Roboto", sans-serif;
 }
+
 
 .about-us-title {
     text-align: Left;
