@@ -5,10 +5,10 @@
 <h1>Admin page</h1>
 
 <h3>Upload Jobs CSV file</h3>
-<form method="POST" action="/upload_jobs" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="submit" value="Upload">
-</form>
+    <form method="POST" action="/upload_jobs" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+    </form>
 
 <h3>Club Members</h3>
 <table>
@@ -22,15 +22,15 @@
         </tr>
     </thead>
     <tbody>
-        {% for user in users %}
-        <tr>
-            <td>{{ user.preferred_name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.mobile }}</td>
-            <td>{{ user.qualifications }}</td>
-            <td>{{ user.events }}</td>
-        </tr>
-        {% endfor %}
+    {% for user in users %}
+    <tr>
+        <td>{{ user.preferred_name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.mobile }}</td>
+        <td>{{ user.qualifications }}</td>
+        <td>{{ user.events }}</td>
+    </tr>
+    {% endfor %}
     </tbody>
 </table>
 

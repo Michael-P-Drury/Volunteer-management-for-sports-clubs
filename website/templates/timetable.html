@@ -9,6 +9,7 @@
     <thead>
         <tr>
             <th>ID</th>
+            <th>job name</th>
             <th>Volunteers Assigned</th>
             <th>Volunteers Needed</th>
             <th>Start Time</th>
@@ -22,6 +23,7 @@
         {% for job in jobs %}
         <tr>
             <td>{{ job.job_id }}</td>
+            <td>{{ job.job_name }}</td>
             <td>{{ job.volunteers_assigned }}</td>
             <td>{{ job.volunteers_needed }}</td>
             <td>{{ job.start_time }}</td>
