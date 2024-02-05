@@ -121,7 +121,7 @@ class Jobs(UserMixin, db.Model):
     def assign_volunteers_needed(self, volunteers_needed):
         self.volunteers_needed = volunteers_needed
 
-    # assignes job name
+    # assigns job name to the job
     def assign_job_name(self, new_job_name):
         self.job_name = new_job_name
 
