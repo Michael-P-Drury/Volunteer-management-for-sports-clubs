@@ -87,6 +87,7 @@ class User(UserMixin, db.Model):
 class Jobs(UserMixin, db.Model):
     __tablename__ = 'jobs'
     job_id = db.Column(db.Integer, primary_key=True)
+    job_name = db.Column(db.String(20))
     volunteers_assigned = db.Column(db.String(300))
     volunteers_needed = db.Column(db.Integer)
     start_time = db.Column(db.String(20))
@@ -120,13 +121,19 @@ class Jobs(UserMixin, db.Model):
     def assign_volunteers_needed(self, volunteers_needed):
         self.volunteers_needed = volunteers_needed
 
+    # assignes job name
+    def assign_job_name(self, new_job_name):
+        self.job_name = new_job_name
+
+
     # creates a new job with the information passed into it
     @staticmethod
-    def add_new_job(volunteers_needed, start_time, end_time, date, job_description, job_requirements):
+    def add_new_job(job_name, volunteers_needed, start_time, end_time, date, job_description, job_requirements):
         job = Jobs()
         job.clear_volunters()
         job.assign_times(start_time, end_time)
         job.assign_date(date)
+        job.assign_job_name(job_name)
         job.assign_description(job_description)
         job.assign_requirements(job_requirements)
         job.assign_volunteers_needed(volunteers_needed)
