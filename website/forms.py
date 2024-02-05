@@ -31,5 +31,3 @@ class removeEmail(FlaskForm):
 
 class removeMobile(FlaskForm):
     submit4 = SubmitField('Remove mobile?')
-
-

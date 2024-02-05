@@ -2,13 +2,45 @@
 
 {% block page_content %}
 
-<h1>Timetable page</h1>
+<h1>Timetable Page</h1>
+
+{% if jobs %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Volunteers Assigned</th>
+            <th>Volunteers Needed</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Requirements</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td>{{ job.job_id }}</td>
+            <td>{{ job.volunteers_assigned }}</td>
+            <td>{{ job.volunteers_needed }}</td>
+            <td>{{ job.start_time }}</td>
+            <td>{{ job.end_time }}</td>
+            <td>{{ job.date }}</td>
+            <td>{{ job.job_description }}</td>
+            <td>{{ job.job_requirements }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No jobs.</p>
+{% endif %}
+
 <h3>Upload File</h3>
-<form>
-    <input type="file" id="myFile" name="filename"> <!--To make it just .csv do accept=".csv" -->
-    <br>
-    <button type="submit">Submit</button>
-    <button type="reset">Reset</button>
+<form method="POST" action="/upload_jobs" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value="Upload">
 </form>
 
 {% endblock %}

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, session
 from flask_login import login_required, login_user, logout_user, current_user
 from .databases import User
 from . import app, lm
@@ -10,7 +10,8 @@ from .forms import emailChangeForm
 from .forms import mobileChangeForm
 from .forms import removeMobile
 from .forms import removeEmail
-
+import pandas as pd
+import io
 
 # from .forms import ... (if you want to import a form)
 # routing for the pages in the website
@@ -41,7 +42,50 @@ def home():
 # routing for the timetable page which takes you to the home page and the URL of the base URL/timetable
 @app.route('/timetable')
 def timetable():
-    return render_template('timetable.html')
+    jobs = Jobs.query.all()
+    return render_template('timetable.html', jobs=jobs)
+
+@app.route('/upload_jobs', methods=['POST'])
+def upload_file():
+    #Check if the file is in the request.
+    if 'file' not in request.files:
+        return redirect(request.url)
+
+    file = request.files['file']
+
+    #If the user does not select a file, error.
+    if file.filename == '':
+        return redirect(request.url)
+
+    if file:
+        #Ensure the file is a CSV before processing.
+        if file.filename.endswith('.csv'):
+            #Convert the file stream to a panda
+            stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
+            csv_input = pd.read_csv(stream)
+
+            #Iterate over the rows in the csv file and create new jobs intsance of each row.
+            for loopcount, row in csv_input.iterrows():
+                new_job = Jobs(
+                    volunteers_assigned=row.get('volunteers_assigned', ''),
+                    volunteers_needed=row.get('volunteers_needed', 0),
+                    start_time=row.get('start_time', ''),
+                    end_time=row.get('end_time', ''),
+                    date=row.get('date', ''),
+                    job_description=row.get('job_description', ''),
+                    job_requirements=row.get('job_requirements', '')
+                )
+                # Add each new job to the session
+                db.session.add(new_job)
+
+            # Commit the session to save all new Jobs to the database
+            db.session.commit()
+            return redirect(url_for('admin'))  # Redirect to the admin page to display jobs.
+        else:
+            return redirect(request.url)
+    else:
+        return redirect(request.url)
+    
 
 # routing for the admin page which takes you to the home page and the URL of the base URL/admin
 @app.route('/admin')
@@ -131,3 +175,5 @@ def logout():
 @lm.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
