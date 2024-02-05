@@ -80,7 +80,7 @@ def upload_file():
 
             # Commit the session to save all new Jobs to the database
             db.session.commit()
-            return redirect(url_for('admin'))  # Redirect to the admin page to display jobs.
+            return redirect(url_for('timetable'))  # Redirect to the admin page to display jobs.
         else:
             return redirect(request.url)
     else:

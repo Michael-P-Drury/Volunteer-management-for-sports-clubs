@@ -4,4 +4,10 @@
 
 <h1>Admin page</h1>
 
+<h3>Upload Jobs CSV file</h3>
+<form method="POST" action="/upload_jobs" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value="Upload">
+</form>
+
 {% endblock %}
