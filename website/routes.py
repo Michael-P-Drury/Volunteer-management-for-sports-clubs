@@ -90,7 +90,8 @@ def upload_file():
 # routing for the admin page which takes you to the home page and the URL of the base URL/admin
 @app.route('/admin')
 def admin():
-    return render_template('admin.html')
+    users = User.query.all()
+    return render_template('admin.html', users=users)
 
 # route for the signup page which takes you to the home page and the URL of the base URL/signup
 @app.route('/signup', methods=['GET', 'POST'])
