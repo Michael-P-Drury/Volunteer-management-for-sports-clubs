@@ -92,24 +92,42 @@ def admin():
         new_job_date = new_job_form.date.data
         new_job_start = new_job_form.start_time.data
         new_job_end = new_job_form.end_time.data
-        new_job_requirements = new_job_form.end_time.data
+        new_job_requirements = new_job_form.job_requirements.data
         new_job_volunteers_needed = new_job_form.volunteers_needed.data
         new_job_description = new_job_form.job_description.data
+
+        new_job_start_hour = new_job_start.hour
+        new_job_start_minute = new_job_start.minute
+
+        new_job_end_hour = new_job_end.hour
+        new_job_end_minute = new_job_end.minute
+
+        new_job_year = new_job_date.year
+        new_job_month = new_job_date.month
+        new_job_day = new_job_date.day
+
+        date_insert = f'{new_job_day}/{new_job_month}/{new_job_year}'
+        start_time_insert = f'{new_job_start_hour}:{new_job_start_minute}'
+        end_time_insert = f'{new_job_end_hour}:{new_job_end_minute}'
 
         new_job = Jobs(
             volunteers_assigned='',
             volunteers_needed=new_job_volunteers_needed,
-            start_time=new_job_start,
-            end_time=new_job_end,
-            date=new_job_date,
+            start_time=start_time_insert,
+            end_time=end_time_insert,
+            date=date_insert,
             job_description=new_job_description,
-            job_requirements=new_job_requirements,
+            job_requirements='',
             job_name = new_job_name
         )
 
         db.session.add(new_job)
+        db.session.commit()
+
+        return redirect(url_for('admin'))
 
     return render_template('admin.html', users=users, new_job_form = new_job_form)
+
 
 # route for the signup page which takes you to the home page and the URL of the base URL/signup
 @app.route('/signup', methods=['GET', 'POST'])
