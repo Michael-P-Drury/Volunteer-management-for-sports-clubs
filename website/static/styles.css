@@ -15,12 +15,6 @@ body {
     z-index: 1;
 }
 
-.navbar_box {
-    height: 50px;
-    width: 140px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
 
 .navbar_box_logo {
     height: 50px;
@@ -29,11 +23,21 @@ body {
     margin-bottom: 10px;
 }
 
+
+.navbar_box {
+    height: 50px;
+    width: 140px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    transition: border 0.7s ease;
+}
+
 .navbar_box:hover {
     border-left: 1px solid grey;
     border-right: 1px solid grey;
     width: 138px;
 }
+
 
 li {
   float: left;
@@ -305,6 +309,11 @@ body {
 
 .profile-box-text {
     font-size: 1vw;
+}
+
+.page_title{
+    font-size: 3vw;
+    text-align: center;
 }
 
 
