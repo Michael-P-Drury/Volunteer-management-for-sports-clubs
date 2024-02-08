@@ -85,6 +85,9 @@ class User(UserMixin, db.Model):
 
 # creates the job table which stores all the jobs
 
+# stores date as a string in the format 'day/month/year
+# stores time as a string in the format 'hour:minute'
+
 class Jobs(UserMixin, db.Model):
     __tablename__ = 'jobs'
     job_id = db.Column(db.Integer, primary_key=True)
