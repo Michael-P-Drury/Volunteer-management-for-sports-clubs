@@ -84,6 +84,7 @@ class User(UserMixin, db.Model):
 
 
 # creates the job table which stores all the jobs
+
 class Jobs(UserMixin, db.Model):
     __tablename__ = 'jobs'
     job_id = db.Column(db.Integer, primary_key=True)

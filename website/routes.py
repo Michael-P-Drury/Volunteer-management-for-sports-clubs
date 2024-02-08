@@ -1,15 +1,8 @@
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
-from .databases import User
-from . import app, lm
-from .databases import Jobs
-from .forms import SignupForm
-from .forms import LoginForm
-from . import db
-from .forms import emailChangeForm
-from .forms import mobileChangeForm
-from .forms import removeMobile
-from .forms import removeEmail
+from .databases import User, Jobs
+from . import app, lm, db
+from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm
 import pandas as pd
 import io
 
@@ -22,17 +15,17 @@ import io
 @app.route('/', methods=['GET', 'POST'])
 def login():
     # form is the variable for the logins form
-    form = LoginForm()
+    login_form = LoginForm()
 
     # if the form is submitted the checks if user is in database and checks password
     # if user is verified takes to home page and log ins the current user as the current user
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.verify_password(form.password.data):
+    if login_form.validate_on_submit():
+        user = User.query.filter_by(username=login_form.username.data).first()
+        if user is None or not user.verify_password(login_form.password.data):
             return redirect(url_for('login', **request.args))
         login_user(user)
         return redirect(url_for('home'))
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=login_form)
 
 # routing for the home page which takes you to the home page and the URL of the base URL/home
 @app.route('/home')
@@ -88,10 +81,35 @@ def upload_file():
     
 
 # routing for the admin page which takes you to the home page and the URL of the base URL/admin
-@app.route('/admin')
+@app.route('/admin', methods=['GET', 'POST'])
 def admin():
     users = User.query.all()
-    return render_template('admin.html', users=users)
+
+    new_job_form = newJobForm()
+
+    if new_job_form.validate_on_submit():
+        new_job_name = new_job_form.job_name.data
+        new_job_date = new_job_form.date.data
+        new_job_start = new_job_form.start_time.data
+        new_job_end = new_job_form.end_time.data
+        new_job_requirements = new_job_form.end_time.data
+        new_job_volunteers_needed = new_job_form.volunteers_needed.data
+        new_job_description = new_job_form.job_description.data
+
+        new_job = Jobs(
+            volunteers_assigned='',
+            volunteers_needed=new_job_volunteers_needed,
+            start_time=new_job_start,
+            end_time=new_job_end,
+            date=new_job_date,
+            job_description=new_job_description,
+            job_requirements=new_job_requirements,
+            job_name = new_job_name
+        )
+
+        db.session.add(new_job)
+
+    return render_template('admin.html', users=users, new_job_form = new_job_form)
 
 # route for the signup page which takes you to the home page and the URL of the base URL/signup
 @app.route('/signup', methods=['GET', 'POST'])

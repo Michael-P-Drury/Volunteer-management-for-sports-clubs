@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, FieldList, DateField, TimeField
 from wtforms.validators import input_required, Length, EqualTo, Regexp
+
 
 # creates the signup form to be used by routes
 class SignupForm(FlaskForm):
@@ -31,3 +32,13 @@ class removeEmail(FlaskForm):
 
 class removeMobile(FlaskForm):
     submit4 = SubmitField('Remove mobile?')
+
+class newJobForm(FlaskForm):
+    job_name = StringField('Job name', validators=[input_required()])
+    job_description = StringField('Job description', validators=[input_required()])
+    volunteers_needed = IntegerField('Number of volunteers needed', validators=[input_required()])
+    start_time = TimeField('Start time', validators=[input_required()])
+    end_time = TimeField('End time', validators=[input_required()])
+    date = DateField('Date', validators=[input_required()], format='%Y-%m-%d')
+    job_requirements = FieldList(StringField('Requirement'))
+    submit = SubmitField('Add Job')

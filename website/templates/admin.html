@@ -4,11 +4,42 @@
 
 <h1>Admin page</h1>
 
+<form action="" method="POST">
+    {{ new_job_form.csrf_token }}
+    <p>
+    {{ new_job_form.job_name.label }} {{ new_job_form.job_name() }}
+    </p>
+    <p>
+    {{ new_job_form.job_description.label }} {{ new_job_form.job_description() }}
+    </p>
+    <p>
+    {{ new_job_form.volunteers_needed.label }} {{ new_job_form.volunteers_needed() }}
+    </p>
+    <p>
+    {{ new_job_form.start_time.label }} {{ new_job_form.start_time() }}
+    </p>
+    <p>
+    {{ new_job_form.end_time.label }} {{ new_job_form.end_time() }}
+    </p>
+    <p>
+    {{ new_job_form.date.label }} {{ new_job_form.date() }}
+    </p>
+    <p>
+    {{ new_job_form.job_requirements.label }} {{ new_job_form.job_requirements() }}
+    </p>
+    <p>
+    {{ new_job_form.submit() }}
+    </p>
+
+</form>
+
+
 <h3>Upload Jobs CSV file</h3>
-    <form method="POST" action="/upload_jobs" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Upload">
-    </form>
+
+<form method="POST" action="/upload_jobs" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value="Upload">
+</form>
 
 <h3>Club Members</h3>
 <table>
