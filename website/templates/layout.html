@@ -8,7 +8,6 @@
 <div id="page-container">
 
     <ul class="navbar">
-        {% if current_user.is_authenticated %}
         <li>
             <div class="navbar_box_logo">
                 <a class="navbar_item" href="{{ url_for('home') }}">
@@ -20,21 +19,7 @@
                 </a>
             </div>
         </li>
-        {% else %}
-        <li>
-            <div class="navbar_box_logo">
-                <a class="navbar_item" href="{{ url_for('login') }}">
-                    <img class="top_logo"
-                        src="{{ url_for('static', filename='images/darker_logo.png') }}"
-                        onmouseover="this.src='{{ url_for('static', filename='images/light_logo.png') }}'"
-                        onmouseout="this.src='{{ url_for('static', filename='images/darker_logo.png') }}'"
-                        alt="logo image" />
-                </a>
-            </div>
-        </li>
-        {% endif %}
 
-        {% if current_user.is_authenticated %}
         <li style="margin-left: 10px">
             <div class="navbar_box">
                 <a class="navbar_item" href="{{ url_for('home') }}">Home</a>
@@ -59,12 +44,11 @@
         </li>
         {% endif %}
 
-        <li>
+        <li class = "navbar_right">
             <div class="navbar_box">
                 <a class="navbar_item" href="{{ url_for('logout') }}">Logout</a>
             </div>
         </li>
-        {% endif %}
     </ul>
 
 

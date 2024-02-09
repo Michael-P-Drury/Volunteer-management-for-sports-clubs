@@ -29,7 +29,6 @@ body {
     width: 140px;
     margin-top: 10px;
     margin-bottom: 10px;
-    transition: border 0.7s ease;
 }
 
 .navbar_box:hover {
@@ -38,13 +37,13 @@ body {
     width: 138px;
 }
 
-
 li {
   float: left;
 }
 
 .navbar_right {
     float: right;
+    margin-right: 30px;
 }
 
 .navbar_far_right {

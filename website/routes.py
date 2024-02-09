@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 from .databases import User, Jobs
-from . import app, lm, db
+from . import lm, db, app
 from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm
 import pandas as pd
 import io
