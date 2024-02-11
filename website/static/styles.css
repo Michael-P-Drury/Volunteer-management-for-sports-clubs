@@ -4,6 +4,8 @@ body {
   height: 100%;
 }
 
+/* Navbar Section */
+
 .navbar {
     list-style-type: none;
     padding: 0;
@@ -66,6 +68,8 @@ li {
   padding: 10% 10%;
 }
 
+/* Page Content */
+
 #page-container {
     position: relative;
     min-height: 100vh;
@@ -75,6 +79,8 @@ li {
     overflow: auto;
 }
 
+/* Logo */
+
 .top_logo {
     height: 80px;
     width: 80px;
@@ -83,6 +89,8 @@ li {
     margin-left: 15px;
     margin-top: -30px;
 }
+
+/* Footer Section */
 
 .footer {
     width: 100%;
@@ -108,19 +116,21 @@ li {
     color: #A3A3A3;
 }
 
+/* Homepage Main Section */
+
 .main-content {
     display: flex;
     justify-content: center;
     align-items: flex-start;
     max-height: 100%;
     background-color:#013A63;
+    margin: auto;
 }
 
 .image-container {
     margin: 0;
     padding: 0;
     max-height: 100%;
-    flex-grow: 2;
 }
 
 .image-container img {
@@ -139,17 +149,26 @@ li {
     color: white;
 }
 
+/* Welcome Message */
 
 .welcome-message {
     text-align: Center;
     font-family: "Roboto", sans-serif;
 }
 
+.welcome-message h1 {
+    font-size: 36px;
+}
+/* About Us Section */
 
-.about-us-title {
+.about-us-header {
     text-align: Left;
     font-family: "Roboto", sans-serif;
     margin-left: 20px;
+    font-size: 40px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .btn{
@@ -165,18 +184,67 @@ li {
     background: #3bb4ff92;
 }
 
-.welcome-message h1 {
-    font-size: 36px;
+.welcome-message p.small-text,
+.about-us, .row {
+    font-size: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #f9f9f9;
+    padding: 50px;
+    text-align: center
 }
 
-.welcome-message p.small-text,
-.about-us {
-    font-size: 25px;
+/* What We Do Section */
+
+.what-we-do {
+    background-color: #f9f9f9;
+    padding: 60px 0;
+  }
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #333;
+  }
+  
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+.row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+.col-md-4 {
+    flex: 0 0 33.33%;
+    max-width: 33.33%;
+    padding: 0 15px;
+}
+  
+.container-2 {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  
+.service h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+  
+.service p {
+    color: #666;
+    font-size: 16px;
 }
 
 .already_exists {
     color: red;
 }
+
+/* Login Section */
 
 .login_box {
     text-align: center;
@@ -229,6 +297,8 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+/* Terms and Conditions Section */
+
 .terms-container {
     max-width: 800px;
     margin: 0 auto;
@@ -264,6 +334,8 @@ body {
 .terms-container h3 {
     font-size: 18px;
 }
+
+/* Profile Page Section */
 
 .profile-image {
     padding: 0px;
@@ -315,6 +387,7 @@ body {
     text-align: center;
 }
 
+/* Mobile Section */
 
 @media only screen and (max-width: 800px) {
 
