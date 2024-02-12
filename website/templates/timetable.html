@@ -1,48 +1,59 @@
 {% extends "layout.html" %}
 
 {% block page_content %}
-
 <h1 class = 'page_title'>Timetable Page</h1>
 
 {% if jobs %}
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>job name</th>
-            <th>Volunteers Assigned</th>
-            <th>Volunteers Needed</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Requirements</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for job in jobs %}
-        <tr>
-            <td>{{ job.job_id }}</td>
-            <td>{{ job.job_name }}</td>
-            <td>{{ job.volunteers_assigned }}</td>
-            <td>{{ job.volunteers_needed }}</td>
-            <td>{{ job.start_time }}</td>
-            <td>{{ job.end_time }}</td>
-            <td>{{ job.date }}</td>
-            <td>{{ job.job_description }}</td>
-            <td>
-                {% for qualification in job.job_qualifications %}
-                    {{ qualification.qualification_name }}{% if not loop.last %}, {% endif %}
-                {% else %}
-                    No qualifications
-                {% endfor %}
-        </td>
-    </tr>
-{% endfor %}
-    </tbody>
-</table>
+<div style="margin:0px 100px; text-align:center; ">
+    {% for job in jobs %}
+    <div class="job-content">
+        <element onclick="togglePopup('{{ job.job_id }}')">
+        <div class = "job-box">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div style="font-size: 20px; margin-bottom: 20px;">{{ job.job_name }}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="margin-top: 20px;">{{ job.date }}</div>
+                        </td>
+                    </tr>
+                    <td>{{ job.start_time }}</td>
+                    <td>{{ job.end_time }}</td>
+                    <tr>
+                        <td>Volunteers Needed:</td><td style="text-align: right;">{{ job.volunteers_needed }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </element>
+    
+        <div class="popup" id = "popup-{{ job.job_id }}" >
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="close-btn" onclick="togglePopup('{{ job.job_id }}')" >&times;</div>
+                    <p style="font-size: 25px;" >{{ job.job_name }}</p>
+                    <p>Volunteers Assigned: {{ job.volunteers_assigned }}</p>
+                    <p>Volunteers Needed: {{ job.volunteers_needed }}</p>
+                    <p>Time: {{ job.start_time }} to {{ job.end_time }}</p>
+                    <p>Date: {{ job.date }}</p>
+                    <p>Description: {{ job.job_description }}</p>
+                    <p>Requirements: {{ job.job_requirements }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
 {% else %}
 <p>No jobs.</p>
 {% endif %}
-
+<script>
+    function togglePopup(jobId){
+        document.getElementById("popup-" + jobId).classList.toggle("active");
+    }
+</script>
 {% endblock %}
