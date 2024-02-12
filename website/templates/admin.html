@@ -25,10 +25,15 @@
     {{ new_job_form.date.label }} {{ new_job_form.date() }}
     </p>
     <p>
-    {{ new_job_form.job_requirements.label }} {{ new_job_form.job_requirements() }}
+        {{ new_job_form.job_requirements.label }}
+        {% for subfield in new_job_form.job_requirements %}
+            <div>
+                {{ subfield }} {{ subfield.label }}
+            </div>
+        {% endfor %}
     </p>
     <p>
-    {{ new_job_form.submit() }}
+        {{ new_job_form.submit() }}
     </p>
 </form>
 
@@ -63,5 +68,20 @@
     {% endfor %}
     </tbody>
 </table>
+
+<h3>Add New Qualification</h3>
+<form action="" method="POST">
+    {{ qualification_form.csrf_token }}
+    {{ qualification_form.qualification_name.label }} {{ qualification_form.qualification_name() }}
+    {{ qualification_form.qualification_description.label }} {{ qualification_form.qualification_description() }}
+    {{ qualification_form.submit() }}
+</form>
+
+<h3>Existing Qualifications</h3>
+<ul>
+{% for qualification in qualifications %}
+    <li>{{ qualification.qualification_name }}: {{ qualification.qualification_description }}</li>
+{% endfor %}
+</ul>
 
 {% endblock %}

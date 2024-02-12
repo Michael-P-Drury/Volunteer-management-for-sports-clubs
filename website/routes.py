@@ -1,8 +1,8 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
-from .databases import User, Jobs
+from .databases import User, Jobs, Qualification
 from . import lm, db, app
-from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm
+from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, QualificationForm
 import pandas as pd
 import io
 
@@ -84,15 +84,20 @@ def upload_file():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     users = User.query.all()
-
+    qualifications = Qualification.query.all()
     new_job_form = newJobForm()
+
+    new_job_form.job_requirements.choices = [(q.qualifications_id, q.qualification_name) for q in qualifications]
+
+    qualification_form = QualificationForm()
 
     if new_job_form.validate_on_submit():
         new_job_name = new_job_form.job_name.data
         new_job_date = new_job_form.date.data
         new_job_start = new_job_form.start_time.data
         new_job_end = new_job_form.end_time.data
-        new_job_requirements = new_job_form.job_requirements.data
+        #new_job_requirements = new_job_form.job_requirements.data
+        selected_qualifications = new_job_form.job_requirements.data #NEW
         new_job_volunteers_needed = new_job_form.volunteers_needed.data
         new_job_description = new_job_form.job_description.data
 
@@ -117,16 +122,32 @@ def admin():
             end_time=end_time_insert,
             date=date_insert,
             job_description=new_job_description,
-            job_requirements='',
+            #job_requirements='',
             job_name = new_job_name
         )
 
         db.session.add(new_job)
+        db.session.flush()  
+
+        for qual_id in selected_qualifications:
+            qualification = Qualification.query.get(qual_id)
+            new_job.job_qualifications.append(qualification)
+
         db.session.commit()
-
         return redirect(url_for('admin'))
+    
+    if qualification_form.validate_on_submit():
+        new_qualification = Qualification(
+            qualification_name=qualification_form.qualification_name.data,
+            qualification_description=qualification_form.qualification_description.data,
+        )
 
-    return render_template('admin.html', users=users, new_job_form = new_job_form)
+        db.session.add(new_qualification)
+        db.session.commit()
+        return redirect(url_for('admin'))
+    
+    qualifications = Qualification.query.all()
+    return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form, qualifications=qualifications)
 
 
 # route for the signup page which takes you to the home page and the URL of the base URL/signup

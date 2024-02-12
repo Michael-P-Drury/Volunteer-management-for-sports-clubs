@@ -2,6 +2,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from . import db
 
+user_qualifications = db.Table('user_qualifications',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
+    db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True)
+)
+
+job_requirements = db.Table('job_requirements',
+    db.Column('job_id', db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True),
+    db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True)
+)
+
 # creates the user table which stores user's information
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -14,6 +24,9 @@ class User(UserMixin, db.Model):
     qualifications = db.Column(db.String(64))
     events = db.Column(db.String(100))
     admin = db.Column(db.Boolean)
+
+    qualifications = db.relationship('Qualification', secondary=user_qualifications,
+                        backref=db.backref('users', lazy='subquery'))
 
     # gets the current users id
     def get_id(self):
@@ -98,7 +111,9 @@ class Jobs(UserMixin, db.Model):
     end_time = db.Column(db.String(20))
     date = db.Column(db.String(20))
     job_description = db.Column(db.String(300))
-    job_requirements = db.Column(db.String(200))
+
+    job_qualifications = db.relationship('Qualification', secondary=job_requirements,
+                                         backref=db.backref('jobs', lazy='subquery'))
 
     # clears volunteers from one of the jobs
     def clear_volunters(self):
@@ -143,3 +158,9 @@ class Jobs(UserMixin, db.Model):
         job.assign_volunteers_needed(volunteers_needed)
         db.session.add(job)
         db.session.commit()
+
+class Qualification(UserMixin, db.Model):
+    __tablename__ = 'qualification'
+    qualifications_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    qualification_name = db.Column(db.String(300))
+    qualification_description = db.Column(db.String(300))
