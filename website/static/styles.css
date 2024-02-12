@@ -120,31 +120,41 @@ li {
 
 .main-content {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    max-height: 100%;
+    flex-direction: row;
     background-color:#013A63;
     margin: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .image-container {
-    margin: 0;
-    padding: 0;
-    max-height: 100%;
-}
-
-.image-container img {
-    width: 100%;
-    height: auto;
+    position: relative;
+    flex: 70%;
     display: block;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+/* Home page img slideshow */
+
+.mySlides {
+    position: absolute;
+    display: block;
+    margin: 0;
+    padding: 0px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.fade {
+    transition: opacity 1s ease-in-out;
 }
 
 .side-text {
-    flex-grow: 1;
-    display: inline-block;
-    align-items: center; /* Vertical centering */
+    flex: 30%;
+    display: block;
     padding: 200px 80px;
     color: white;
 }
