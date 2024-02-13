@@ -12,6 +12,17 @@ job_requirements = db.Table('job_requirements',
     db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True)
 )
 
+user_request = db.Table('user_request',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
+    db.Column('request_id', db.Integer, db.ForeignKey('requests.request_id'), primary_key=True)
+)
+
+job_request = db.Table('job_request',
+    db.Column('job_id', db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True),
+    db.Column('request_id', db.Integer, db.ForeignKey('requests.request_id'), primary_key=True)
+)
+
+
 # creates the user table which stores user's information
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -62,7 +73,7 @@ class User(UserMixin, db.Model):
 
     # sets qualifications to blank
     def no_qualifications(self):
-        self.qualifications = None
+        self.qualifications = []
 
     # sets the users events to blank
     def no_events(self):
@@ -98,7 +109,7 @@ class User(UserMixin, db.Model):
 
 # creates the job table which stores all the jobs
 
-# stores date as a string in the format 'day/month/year
+# stores date as a string in the format 'day/month/year'
 # stores time as a string in the format 'hour:minute'
 
 class Jobs(UserMixin, db.Model):
@@ -111,7 +122,6 @@ class Jobs(UserMixin, db.Model):
     end_time = db.Column(db.String(20))
     date = db.Column(db.String(20))
     job_description = db.Column(db.String(300))
-
     job_qualifications = db.relationship('Qualification', secondary=job_requirements,
                                          backref=db.backref('jobs', lazy='subquery'))
 
@@ -164,3 +174,15 @@ class Qualification(UserMixin, db.Model):
     qualifications_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     qualification_name = db.Column(db.String(300))
     qualification_description = db.Column(db.String(300))
+
+
+
+class Requests(UserMixin, db.Model):
+    __tablename__ = 'requests'
+    request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    user_id = db.relationship('User', secondary=user_request,
+                                         backref=db.backref('requests', lazy='subquery'))
+
+    job_id = db.relationship('Jobs', secondary=job_request,
+                                         backref=db.backref('requests', lazy='subquery'))

@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
-from .databases import User, Jobs, Qualification
+from .databases import User, Jobs, Qualification, Requests
 from . import lm, db, app
 from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, QualificationForm
 import pandas as pd
@@ -32,11 +32,30 @@ def login():
 def home():
     return render_template('home.html')
 
+
 # routing for the timetable page which takes you to the home page and the URL of the base URL/timetable
-@app.route('/timetable')
+@app.route('/timetable', methods=['GET', 'POST'])
 def timetable():
     jobs = Jobs.query.all()
+
+    if request.method == 'POST':
+        current_user_id = current_user.get_id()
+        job_id_request = request.form['job_id_request']
+
+        user = User.query.get(current_user_id)
+        job = Jobs.query.get(job_id_request)
+
+        new_request = Requests()
+
+        new_request.user_id.append(user)
+        new_request.job_id.append(job)
+
+        db.session.add(new_request)
+        db.session.commit()
+
+
     return render_template('timetable.html', jobs=jobs)
+
 
 @app.route('/upload_jobs', methods=['POST'])
 def upload_file():
@@ -87,6 +106,8 @@ def admin():
     qualifications = Qualification.query.all()
     new_job_form = newJobForm()
 
+    requests = Requests.query.all()
+
     new_job_form.job_requirements.choices = [(q.qualifications_id, q.qualification_name) for q in qualifications]
 
     qualification_form = QualificationForm()
@@ -96,7 +117,7 @@ def admin():
         new_job_date = new_job_form.date.data
         new_job_start = new_job_form.start_time.data
         new_job_end = new_job_form.end_time.data
-        #new_job_requirements = new_job_form.job_requirements.data
+        # new_job_requirements = new_job_form.job_requirements.data
         selected_qualifications = new_job_form.job_requirements.data #NEW
         new_job_volunteers_needed = new_job_form.volunteers_needed.data
         new_job_description = new_job_form.job_description.data
@@ -147,7 +168,8 @@ def admin():
         return redirect(url_for('admin'))
     
     qualifications = Qualification.query.all()
-    return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form, qualifications=qualifications)
+    return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form,
+                           qualifications=qualifications, requests = requests)
 
 
 # route for the signup page which takes you to the home page and the URL of the base URL/signup
@@ -222,7 +244,7 @@ def privacy():
 def terms():
     return render_template('terms.html')
 
-# routing for the timetable page which takes you to the login page and logs our the current user
+# routing for the logout which takes you to the login page and logs our the current user
 @app.route('/logout')
 @login_required
 def logout():

@@ -4,6 +4,12 @@
 
 <h1 class = 'page_title'>Admin page</h1>
 
+{% for request in requests %}
+
+<p> {{ request.user_id }} {{ request.job_id }} </p>
+
+{% endfor %}
+
 <form action="" method="POST">
     {{ new_job_form.csrf_token }}
     <p>

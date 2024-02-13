@@ -18,11 +18,11 @@
                     </tr>
                     <tr>
                         <td>
-                            <div style="margin-top: 20px;">{{ job.date }}</div>
+                            <div style="margin-top: 20px;">date: {{ job.date }}</div>
                         </td>
                     </tr>
-                    <td>{{ job.start_time }}</td>
-                    <td>{{ job.end_time }}</td>
+                    <td>start time: {{ job.start_time }}</td>
+                    <td>end time: {{ job.end_time }}</td>
                     <tr>
                         <td>Volunteers Needed:</td><td style="text-align: right;">{{ job.volunteers_needed }}</td>
                     </tr>
@@ -42,6 +42,11 @@
                     <p>Date: {{ job.date }}</p>
                     <p>Description: {{ job.job_description }}</p>
                     <p>Requirements: {{ job.job_requirements }}</p>
+
+                    <form method = "post">
+                        <input type = "hidden" name = "job_id_request" value = {{ job.job_id }}>
+                        <input type = "submit" value = "request job">
+                    </form>
             </div>
         </div>
     </div>
