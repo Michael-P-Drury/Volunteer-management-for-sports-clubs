@@ -4,11 +4,20 @@
 
 <h1 class = 'page_title'>Admin page</h1>
 
+<h2>Requests:</h2>
+
 {% for request in requests %}
 
-<p> {{ request.user_id }} {{ request.job_id }} </p>
+<p> volunteer name: {{ request.user_id[0].username }} job name: {{ request.job_id[0].job_name }} </p>
+
+<form method = "post">
+    <input type = "hidden" name = "accept_request" value = "{{ request.user_id[0].user_id }},{{ request.job_id[0].job_id }}">
+    <input type = "submit" value = "accept request?">
+</form>
 
 {% endfor %}
+
+<h2>Add new job?:</h2>
 
 <form action="" method="POST">
     {{ new_job_form.csrf_token }}
@@ -44,14 +53,14 @@
 </form>
 
 
-<h3>Upload Jobs CSV file</h3>
+<h2>Upload Jobs CSV file</h2>
 
 <form method="POST" action="/upload_jobs" enctype="multipart/form-data">
     <input type="file" name="file">
     <input type="submit" value="Upload">
 </form>
 
-<h3>Club Members</h3>
+<h2>Club Members</h2>
 <table>
     <thead>
         <tr>
@@ -65,6 +74,7 @@
     <tbody>
     {% for user in users %}
     <tr>
+        <td>{{ user.username }}</td>
         <td>{{ user.preferred_name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.mobile }}</td>

@@ -127,7 +127,7 @@ class Jobs(UserMixin, db.Model):
 
     # clears volunteers from one of the jobs
     def clear_volunters(self):
-        self.volunteers = ''
+        self.volunteers_assigned = ''
 
     # assigns start and end times to the job
     def assign_times(self, start_time, end_time):
@@ -153,6 +153,13 @@ class Jobs(UserMixin, db.Model):
     # assigns job name to the job
     def assign_job_name(self, new_job_name):
         self.job_name = new_job_name
+
+    def add_volunteer(self, volunteer_id):
+        current_volunteers = self.volunteers_assigned
+
+        new_volunteers = current_volunteers + str(volunteer_id)
+
+        self.volunteers_assigned = new_volunteers
 
 
     # creates a new job with the information passed into it
