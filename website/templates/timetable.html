@@ -43,10 +43,16 @@
                     <p>Description: {{ job.job_description }}</p>
                     <p>Requirements: {{ job.job_requirements }}</p>
 
+                    {% if current_user_id not in (job.volunteers_assigned.split()) %}
+
                     <form method = "post">
                         <input type = "hidden" name = "job_id_request" value = {{ job.job_id }}>
                         <input type = "submit" value = "request job">
                     </form>
+
+                    {% endif %}
+
+
             </div>
         </div>
     </div>

@@ -157,7 +157,7 @@ class Jobs(UserMixin, db.Model):
     def add_volunteer(self, volunteer_id):
         current_volunteers = self.volunteers_assigned
 
-        new_volunteers = current_volunteers + str(volunteer_id)
+        new_volunteers = current_volunteers + ' ' + str(volunteer_id)
 
         self.volunteers_assigned = new_volunteers
 

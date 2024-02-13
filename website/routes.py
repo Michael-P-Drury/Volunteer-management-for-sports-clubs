@@ -38,6 +38,8 @@ def home():
 def timetable():
     jobs = Jobs.query.all()
 
+    current_user_id = current_user.get_id()
+
     if request.method == 'POST':
         current_user_id = current_user.get_id()
         job_id_request = request.form['job_id_request']
@@ -54,7 +56,7 @@ def timetable():
         db.session.commit()
 
 
-    return render_template('timetable.html', jobs=jobs)
+    return render_template('timetable.html', jobs=jobs, current_user_id = current_user_id)
 
 
 @app.route('/upload_jobs', methods=['POST'])
