@@ -59,6 +59,8 @@ def timetable():
         except:
             pass
 
+        redirect(url_for('timetable'))
+
     return render_template('timetable.html', jobs=jobs, current_user_id = current_user_id)
 
 
