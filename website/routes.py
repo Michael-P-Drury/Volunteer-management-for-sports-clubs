@@ -41,20 +41,23 @@ def timetable():
     current_user_id = current_user.get_id()
 
     if request.method == 'POST':
-        current_user_id = current_user.get_id()
-        job_id_request = request.form['job_id_request']
+        try:
+            current_user_id = current_user.get_id()
+            job_id_request = request.form['job_id_request']
 
-        user = User.query.get(current_user_id)
-        job = Jobs.query.get(job_id_request)
+            user = User.query.get(current_user_id)
+            job = Jobs.query.get(job_id_request)
 
-        new_request = Requests()
+            new_request = Requests()
 
-        new_request.user_id.append(user)
-        new_request.job_id.append(job)
+            new_request.user_id.append(user)
+            new_request.job_id.append(job)
 
-        db.session.add(new_request)
-        db.session.commit()
+            db.session.add(new_request)
+            db.session.commit()
 
+        except:
+            pass
 
     return render_template('timetable.html', jobs=jobs, current_user_id = current_user_id)
 
