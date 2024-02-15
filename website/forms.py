@@ -29,7 +29,7 @@ class mobileChangeForm(FlaskForm):
 
 
 class removeEmail(FlaskForm):
-    submit3 = SubmitField('Remove email?')
+    submit3 = SubmitField('Remove Email')
 
 class removeMobile(FlaskForm):
     submit4 = SubmitField('Remove mobile?')

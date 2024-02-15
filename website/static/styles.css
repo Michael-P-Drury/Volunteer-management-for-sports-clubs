@@ -347,6 +347,18 @@ body {
 
 /* Profile Page Section */
 
+.profile-title {
+    text-align: center;
+    font-size: 3vw;
+    color: white;
+}
+
+.p-title-box {
+    background-color: #013A63;
+    padding: 1px;
+    margin-bottom: 25px;
+}
+
 .profile-image {
     padding: 0px;
     margin: 10px;
@@ -357,7 +369,6 @@ body {
     max-height:100%;
     max-width:100%;
     float:left;
-
 }
 
 .profile-personal-box {
@@ -390,11 +401,6 @@ body {
 
 .profile-box-text {
     font-size: 1vw;
-}
-
-.page_title{
-    font-size: 3vw;
-    text-align: center;
 }
 
 /* Mobile Section */
