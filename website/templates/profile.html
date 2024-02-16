@@ -24,7 +24,7 @@
             <form action="" method="POST">
                 <div>
                     {{ email_form.csrf_token }}
-                    <p class = "profile-box-text" id = "profile-box-text" style="display:none">
+                    <p class = "profile-box-text" id = "profile-box-email" style = "display:none">
                         {{ email_form.new_email.label }} {{ email_form.new_email() }} {{ email_form.submit1() }}
                         {{ remove_email.submit3() }}
                     </p>
@@ -33,46 +33,20 @@
             
         </p>
 
-        <p class = "profile-box-text">Mobile: {{ current_user.mobile }}</p>
-
-        <div>
-            
-        </div>
-
-        <div>
-            <form action="" method="POST">
+        <p class = "profile-box-text">
+            Mobile: {{ current_user.mobile }}
+            <button class="Edit" onclick = "editMobile()"> Edit </button>
+            <form action = "" method = "POST">
                 <div>
                     {{ mobile_form.csrf_token }}
-                    <p class = "profile-box-text">
-                        Want to change your mobile?
-                    </p>
-                    <p class = "profile-box-text">
+                    <p class = "profile-box-text" id = "profile-box-mobile" style = "display:none">
                         {{ mobile_form.new_mobile.label }} {{ mobile_form.new_mobile() }} {{ mobile_form.submit2() }}
-                    </p>
-                </div>
-            </form>
-        </div>
-
-
-        <div>
-            <form action="" method="POST">
-                <div>
-                    {{ remove_email.csrf_token }}
-                    
-                </div>
-            </form>
-        </div>
-
-        <div>
-            <form action="" method="POST">
-                <div>
-                    {{ remove_mobile.csrf_token }}
-                    <p>
                         {{ remove_mobile.submit4() }}
                     </p>
                 </div>
+                
             </form>
-        </div>
+        </p>
     </div>
 
     <div class="profile-experience-box profile-box">
