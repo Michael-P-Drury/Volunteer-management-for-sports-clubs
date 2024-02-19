@@ -132,7 +132,15 @@ def admin():
 
             current_job.add_volunteer(user_accept)
 
+            request_to_delete = Requests.query.filter(Requests.user_id.any(user_id=user_accept),
+                                                      Requests.job_id.any(job_id=job_accept)).first()
+
+            if request_to_delete:
+                db.session.delete(request_to_delete)
+
             db.session.commit()
+
+            return redirect(url_for('admin'))
 
         except:
 
@@ -151,8 +159,9 @@ def admin():
                     db.session.delete(request_to_delete)
                     db.session.commit()
 
-            except Exception as e:
-                print("Error deleting request:", e)
+                return redirect(url_for('admin'))
+
+            except:
 
                 if new_job_form.validate_on_submit():
                     new_job_name = new_job_form.job_name.data
