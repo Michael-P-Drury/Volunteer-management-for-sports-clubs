@@ -49,9 +49,33 @@
         </p>
     </div>
 
-    <div class="profile-experience-box profile-box">
-        <p class = "profile-box-title">Experience</p>
+    <div class="profile-qualifications-box profile-box">
+        <p class="profile-box-title">Qualifications</p>
+        <p class = "profile-box-text">
+                {% for qualification in current_user.qualifications %}
+                    {{ qualification.qualification_name }}
+                {% endfor %}
+        </p>
+
     </div>
+
+    <div class="profile-qualifications-box profile-box">
+        <p class="profile-box-title">Add Qualifications</p>
+        <form action="" method="POST">
+            {{ email_form.csrf_token }}
+            {% for qualification in qualifications %}
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="qualification_ids" value="{{ qualification.qualifications_id }}" {% if qualification.qualifications_id in user_qualifications %} checked {% endif %}>
+                        <strong>{{ qualification.qualification_name }}</strong><br>
+                        <span style="margin-left: 22px;">{{ qualification.qualification_description }}</span>
+                    </label>
+                </div>
+            {% endfor %}
+            <input type="submit" value="Update Qualifications">
+        </form>
+    </div>
+
 </div>
 
 {% endblock %}

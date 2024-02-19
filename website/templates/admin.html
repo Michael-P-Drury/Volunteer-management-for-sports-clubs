@@ -1,103 +1,117 @@
 {% extends "layout.html" %}
 
 {% block page_content %}
+<div class="admin-container">
+    <h1 class='page_title'>Admin Dashboard</h1>
 
-<h1 class = 'page_title'>Admin page</h1>
-
-<h2>Requests:</h2>
-
-{% for request in requests %}
-
-<p> volunteer name: {{ request.user_id[0].username }} job name: {{ request.job_id[0].job_name }} </p>
-
-<form method = "post">
-    <input type = "hidden" name = "accept_request" value = "{{ request.user_id[0].user_id }},{{ request.job_id[0].job_id }}">
-    <input type = "submit" value = "accept request?">
-</form>
-
-{% endfor %}
-
-<h2>Add new job?:</h2>
-
-<form action="" method="POST">
-    {{ new_job_form.csrf_token }}
-    <p>
-    {{ new_job_form.job_name.label }} {{ new_job_form.job_name() }}
-    </p>
-    <p>
-    {{ new_job_form.job_description.label }} {{ new_job_form.job_description() }}
-    </p>
-    <p>
-    {{ new_job_form.volunteers_needed.label }} {{ new_job_form.volunteers_needed() }}
-    </p>
-    <p>
-    {{ new_job_form.start_time.label }} {{ new_job_form.start_time() }}
-    </p>
-    <p>
-    {{ new_job_form.end_time.label }} {{ new_job_form.end_time() }}
-    </p>
-    <p>
-    {{ new_job_form.date.label }} {{ new_job_form.date() }}
-    </p>
-    <p>
-        {{ new_job_form.job_requirements.label }}
-        {% for subfield in new_job_form.job_requirements %}
-            <div>
-                {{ subfield }} {{ subfield.label }}
-            </div>
+    <div class="admin-box">
+        <h2>Requests</h2>
+        {% for request in requests %}
+        <div>
+            <p>Volunteer name: {{ request.user_id[0].username }} | Job name: {{ request.job_id[0].job_name }}</p>
+            <form method="post">
+                <input type="hidden" name="accept_request" value="{{ request.user_id[0].user_id }},{{ request.job_id[0].job_id }}">
+                <input type="submit" value="Accept Request?" class="btn">
+            </form>
+        </div>
         {% endfor %}
-    </p>
-    <p>
-        {{ new_job_form.submit() }}
-    </p>
-</form>
+    </div>
 
+    <div class="admin-box">
+        <h2>Add New Job</h2>
+        <form action="" method="POST">
+            {{ new_job_form.csrf_token }}
+            <div>
+                {{ new_job_form.job_name.label }} {{ new_job_form.job_name() }}
+            </div>
+            <div>
+                {{ new_job_form.job_description.label }} {{ new_job_form.job_description() }}
+            </div>
+            <div>
+                {{ new_job_form.volunteers_needed.label }} {{ new_job_form.volunteers_needed() }}
+            </div>
+            <div>
+                {{ new_job_form.start_time.label }} {{ new_job_form.start_time() }}
+            </div>
+            <div>
+                {{ new_job_form.end_time.label }} {{ new_job_form.end_time() }}
+            </div>
+            <div>
+                {{ new_job_form.date.label }} {{ new_job_form.date() }}
+            </div>
+            <div>
+                {{ new_job_form.job_requirements.label }}
+                {% for subfield in new_job_form.job_requirements %}
+                <div>
+                    {{ subfield }} {{ subfield.label }}
+                </div>
+                {% endfor %}
+            </div>
+            <div>
+                {{ new_job_form.submit() }}
+            </div>
+        </form>
+    </div>
 
-<h2>Upload Jobs CSV file</h2>
+    <div class="admin-box">
+        <h2>Upload Jobs CSV File</h2>
+        <form method="POST" action="/upload_jobs" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Upload" class="btn">
+        </form>
+    </div>
 
-<form method="POST" action="/upload_jobs" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="submit" value="Upload">
-</form>
+    <div class="admin-box">
+        <h2>Club Members</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Preferred Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Qualifications</th>
+                    <th>Events</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.preferred_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.mobile }}</td>
+                <td>{{ user.qualifications }}</td>
+                <td>{{ user.events }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-<h2>Club Members</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Preferred Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Qualifications</th>
-            <th>Events</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for user in users %}
-    <tr>
-        <td>{{ user.username }}</td>
-        <td>{{ user.preferred_name }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.mobile }}</td>
-        <td>{{ user.qualifications }}</td>
-        <td>{{ user.events }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+    <div class="admin-box">
+        <h3>Add New Qualification</h3>
+        <form action="" method="POST">
+            {{ qualification_form.csrf_token }}
+            <div>
+                {{ qualification_form.qualification_name.label }} {{ qualification_form.qualification_name() }}
+            </div>
+            <div>
+                {{ qualification_form.qualification_description.label }} {{ qualification_form.qualification_description() }}
+            </div>
+            <div>
+                {{ qualification_form.submit() }}
+            </div>
+        </form>
+    </div>
 
-<h3>Add New Qualification</h3>
-<form action="" method="POST">
-    {{ qualification_form.csrf_token }}
-    {{ qualification_form.qualification_name.label }} {{ qualification_form.qualification_name() }}
-    {{ qualification_form.qualification_description.label }} {{ qualification_form.qualification_description() }}
-    {{ qualification_form.submit() }}
-</form>
-
-<h3>Existing Qualifications</h3>
-<ul>
-{% for qualification in qualifications %}
-    <li>{{ qualification.qualification_name }}: {{ qualification.qualification_description }}</li>
-{% endfor %}
-</ul>
-
+    <div class="admin-box">
+        <h3>Existing Qualifications</h3>
+        <ul>
+        {% for qualification in qualifications %}
+            <li>{{ qualification.qualification_name }}: {{ qualification.qualification_description }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock %}
