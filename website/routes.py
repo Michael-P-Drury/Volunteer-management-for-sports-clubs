@@ -152,7 +152,6 @@ def admin():
                     db.session.commit()
 
             except Exception as e:
-
                 print("Error deleting request:", e)
 
                 if new_job_form.validate_on_submit():
