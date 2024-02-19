@@ -1,59 +1,61 @@
 {% extends "layout.html" %}
 
 {% block page_content %}
-<h1 class = 'page_title'>Timetable Page</h1>
-
-<p>Click on jobs to see more details and request to volunteer for jobs</p>
+<div class="timetable-title-box">
+    <h1 class='timetable-title'>Timetable</h1>
+</div>
 
 {% if jobs %}
-<div style="margin:0px 100px; text-align:center; ">
+<p class="timetable-guide">Click on jobs to see more details and request to volunteer for jobs</p>
+
+<div class="timetable-boxes">
     {% for job in jobs %}
     <div class="job-content">
         <element onclick="togglePopup('{{ job.job_id }}')">
-        <div class = "job-box">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div style="font-size: 20px; margin-bottom: 20px;">{{ job.job_name }}</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div style="margin-top: 20px;">date: {{ job.date }}</div>
-                        </td>
-                    </tr>
-                    <td>start time: {{ job.start_time }}</td>
-                    <td>end time: {{ job.end_time }}</td>
-                    <tr>
-                        <td>Volunteers Needed:</td><td style="text-align: right;">{{ job.volunteers_needed }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <div class="job-box">
+                <div class="job-name-box">
+                    <div class="job-name"><b>{{ job.job_name }}</b></div>
+                </div>
+                <div>
+                    <span>Volunteers Needed:</span>
+                    <span>{{ job.volunteers_needed }}</span>
+                </div>
+                <div>
+                    <span>Date:</span>
+                    <span class="job-box-data">{{ job.date }}</span>
+                </div>
+                <div>
+                    <span>Start time: {{ job.start_time }}</span>
+                    <span class="job-box-data">End time: {{ job.end_time }}</span>
+                </div>
+            </div>
         </element>
     
         <div class="popup" id = "popup-{{ job.job_id }}" >
-            <div class="overlay"></div>
-            <div class="content">
-                <div class="close-btn" onclick="togglePopup('{{ job.job_id }}')" >&times;</div>
-                    <p style="font-size: 25px;" >{{ job.job_name }}</p>
-                    <p>Volunteers Assigned: {{ job.volunteers_assigned }}</p>
+            <div class="popup-overlay"></div>
+            <div class="popup-content">
+                <div class="popup-close-btn" onclick="togglePopup('{{ job.job_id }}')" >&times;</div>
+                <div class= "popup-job-name-box">
+                    <p class="job-name"><b>{{ job.job_name }}</b></p>
+                </div>
+                <div class="popup-info">
                     <p>Volunteers Needed: {{ job.volunteers_needed }}</p>
-                    <p>Time: {{ job.start_time }} to {{ job.end_time }}</p>
+                    <p>Volunteers Assigned: {{ job.volunteers_assigned }}</p>
+                    <hr>
                     <p>Date: {{ job.date }}</p>
-                    <p>Description: {{ job.job_description }}</p>
+                    <p>Time: {{ job.start_time }} - {{ job.end_time }}</p>
+                    <hr>
+                    <p>{{ job.job_description }}</p>
+                    <hr>
                     <p>Requirements: {{ job.job_requirements }}</p>
-
+                    
                     {% if current_user_id not in (job.volunteers_assigned.split()) %}
-
                     <form method = "post">
                         <input type = "hidden" name = "job_id_request" value = {{ job.job_id }}>
                         <input type = "submit" value = "request job">
                     </form>
-
                     {% endif %}
-
+                </div>
             </div>
         </div>
     </div>
@@ -61,7 +63,11 @@
 </div>
 
 {% else %}
-<p>No jobs.</p>
+<div class="no-jobs">
+    <h1>No jobs found</h1>
+    <p>There currently seems to be no available jobs at this moment.</p>
+</div>
+
 {% endif %}
 <script>
     function togglePopup(jobId){

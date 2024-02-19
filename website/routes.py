@@ -257,9 +257,18 @@ def profile():
             user.no_email()
         db.session.commit()
         return redirect(url_for('profile'))
+    
+    qualifications = Qualification.query.all()
 
-    return render_template('profile.html', email_form = email_form, mobile_form = mobile_form,
-                           remove_mobile = remove_mobile, remove_email = remove_email)
+    if request.method == 'POST':
+
+        qualifications = Qualification.query.all()
+        selected_qualification_ids = request.form.getlist('qualification_ids')  # Correctly retrieves list of selected qualification IDs
+        current_user.qualifications = [Qualification.query.get(id) for id in selected_qualification_ids]
+        db.session.commit()
+        return redirect(url_for('profile'))
+    
+    return render_template('profile.html', email_form=email_form, mobile_form=mobile_form, remove_mobile=remove_mobile, remove_email=remove_email, qualifications=qualifications, user_qualifications=[q.qualifications_id for q in current_user.qualifications])
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
