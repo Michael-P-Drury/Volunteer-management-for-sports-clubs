@@ -25,7 +25,6 @@ body {
     margin-bottom: 10px;
 }
 
-
 .navbar_box {
     height: 50px;
     width: 140px;
@@ -653,6 +652,11 @@ body {
     width: 45%;
     margin-bottom: 20px;
     padding: 20px;
+}
+
+.admin-scrollable-box{
+    maxHeight: 400px;
+    overflow: auto;
 }
 
 .admin-box h2 {

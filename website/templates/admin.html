@@ -8,14 +8,18 @@
 
 <div class="admin-container">
 
-    <div class="admin-box">
-        <h2>Requests</h2>
+    <div class="admin-box admin-scrollable-box">
+        <h2>Job Requests</h2>
         {% for request in requests %}
         <div>
             <p>Volunteer name: {{ request.user_id[0].username }} | Job name: {{ request.job_id[0].job_name }}</p>
             <form method="post">
                 <input type="hidden" name="accept_request" value="{{ request.user_id[0].user_id }},{{ request.job_id[0].job_id }}">
                 <input type="submit" value="Accept Request?" class="btn">
+            </form>
+            <form method="post">
+                <input type="hidden" name="delete_request" value = "{{ request.user_id[0].user_id }},{{ request.job_id[0].job_id }}">
+                <input type="submit" value="Delete Request?" class="btn">
             </form>
         </div>
         {% endfor %}
@@ -65,7 +69,7 @@
         </form>
     </div>
 
-    <div class="admin-box">
+    <div class="admin-box admin-scrollable-box">
         <h2>Club Members</h2>
         <table>
             <thead>
@@ -109,7 +113,7 @@
         </form>
     </div>
 
-    <div class="admin-box">
+    <div class="admin-box admin-scrollable-box">
         <h3>Existing Qualifications</h3>
         <ul>
         {% for qualification in qualifications %}
