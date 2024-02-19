@@ -444,6 +444,12 @@ body {
     font-size: 1vw;
 }
 
+
+.profile-qualifications-box {
+    clear: both;
+}
+
+
 /* Mobile Section */
 
 @media only screen and (max-width: 800px) {
