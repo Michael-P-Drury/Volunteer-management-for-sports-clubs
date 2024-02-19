@@ -124,17 +124,18 @@ li {
     background-color:#013A63;
     margin: auto;
     max-width: 100%;
-    max-height: 100%;
+    height: 80vh;    
 }
 
 .image-container {
     position: relative;
-    flex: 70%;
+    flex: 65%;
     display: block;
     margin: 0;
     padding: 0;
+    max-width: 65%;
+    height: auto;
     overflow: hidden;
-    max-height: 100%;
 }
 
 /* Home page img slideshow */
@@ -144,8 +145,8 @@ li {
     display: block;
     margin: 0;
     padding: 0px;
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: auto;
 }
 
 .fade {
@@ -153,9 +154,14 @@ li {
 }
 
 .side-text {
-    flex: 30%;
-    display: block;
-    padding: 200px 80px;
+    flex: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: auto;
+    max-width: 35%;
     color: white;
 }
 
@@ -171,13 +177,54 @@ li {
 }
 /* About Us Section */
 
+.collapsible {
+    background-color: #012A4A;
+    color: white;
+    border: none;
+    border-radius: 35px;
+    outline: none;
+    cursor: pointer;
+    padding: 1rem;
+    width: 70%;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    margin: 1rem;
+}
+  
+  .active,
+  .collapsible:hover {
+    background-color: #555;
+  }
+  
+  .content {
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.25s ease-out;
+    text-align: center;
+  }
+  
+  .collapsible:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+  }
+  
+  .active:after {
+    content: "\2212";
+  }
+
 .about-us-header {
     text-align: Left;
     font-family: "Roboto", sans-serif;
     margin-left: 20px;
     font-size: 40px;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
     text-align: center;
 }
 
@@ -218,8 +265,14 @@ li {
   }
   
 .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     max-width: 1200px;
     margin: 0 auto;
+    justify-content: center;
+    align-items: center;
   }
   
 .row {
