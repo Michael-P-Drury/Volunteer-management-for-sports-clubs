@@ -19,3 +19,13 @@ function showSlides() {
     slides[slideIndex-1].style.opacity = 1;
     setTimeout(showSlides, 3000);
 }
+
+function expand(button) {
+    button.classList.toggle("active");
+    var content = button.nextElementSibling;
+    if (content.style.maxHeight) {
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  }
