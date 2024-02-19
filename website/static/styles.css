@@ -211,7 +211,6 @@ li {
     color: white;
     font-weight: bold;
     float: right;
-    margin-left: 5px;
   }
   
   .active:after {
@@ -221,10 +220,8 @@ li {
 .about-us-header {
     text-align: Left;
     font-family: "Roboto", sans-serif;
-    margin-left: 20px;
     font-size: 40px;
     color: #333;
-    margin-bottom: 1rem;
     text-align: center;
 }
 
