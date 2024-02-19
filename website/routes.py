@@ -61,7 +61,7 @@ def timetable():
 
         redirect(url_for('timetable'))
 
-    return render_template('timetable.html', jobs=jobs, current_user_id = current_user_id)
+    return render_template('timetable.html', jobs=jobs, current_user_id = current_user_id, Requests = Requests)
 
 
 @app.route('/upload_jobs', methods=['POST'])
