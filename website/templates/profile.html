@@ -94,9 +94,30 @@
 
     <div class="profile-qualifications-box profile-box">
         <p class="profile-box-title">My Pending Requests</p>
+
+        <p class="profile-box-subtitle">Volunteering requests:</p>
+
+        {% if my_requests %}
+
         {% for my_request in my_requests %}
             <p> Job name: {{ my_request.job_id[0].job_name }} </p>
         {% endfor %}
+
+        {% else %}
+            <p> No current requests for jobs </p>
+        {% endif %}
+
+        <p class="profile-box-subtitle">Remove from job requests:</p>
+
+        {% if my_remove_requests %}
+
+        {% for my_remove_request in my_remove_requests %}
+            <p> Job name: {{ my_remove_request.job_id[0].job_name }} </p>
+        {% endfor %}
+
+        {% else %}
+            <p> No current remove requests for jobs </p>
+        {% endif %}
     </div>
 
 </div>

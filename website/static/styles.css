@@ -652,7 +652,7 @@ body {
 }
 
 .admin-scrollable-box{
-    maxHeight: 100px;
+    max-height: 400px;
     overflow: auto;
 }
 
@@ -666,4 +666,9 @@ body {
     .admin-box {
         width: 90%;
     }
+}
+
+.profile-box-subtitle{
+    font-size: 1.1vw;
+    font-weight: bold;
 }

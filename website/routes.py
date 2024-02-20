@@ -317,6 +317,7 @@ def profile():
     remove_mobile = removeMobile()
 
     my_requests = Requests.query.filter(Requests.user_id.any(user_id=current_user.get_id())).all()
+    my_remove_requests = RemoveRequests.query.filter(RemoveRequests.user_id.any(user_id=current_user.get_id())).all()
 
     if mobile_form.validate_on_submit() and mobile_form.validate():
         new_mobile = mobile_form.new_mobile.data
@@ -357,7 +358,7 @@ def profile():
     
     return render_template('profile.html', email_form=email_form, mobile_form=mobile_form, remove_mobile=remove_mobile,
                            remove_email=remove_email, qualifications=qualifications, user_qualifications=[q.qualifications_id for q in current_user.qualifications],
-                           my_requests = my_requests)
+                           my_requests = my_requests, my_remove_requests = my_remove_requests)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
