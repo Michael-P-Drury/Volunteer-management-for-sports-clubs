@@ -171,6 +171,17 @@ class Jobs(UserMixin, db.Model):
 
         self.volunteers_assigned = new_volunteers
 
+    def remove_volunteer(self, volunteer_id):
+        current_volunteers = self.volunteers_assigned
+
+        new_volunteers_list = current_volunteers.split()
+
+        new_volunteers_list.remove(volunteer_id)
+
+        new_volunteers = ' '.join(new_volunteers_list)
+
+        self.volunteers_assigned = new_volunteers
+
 
     # creates a new job with the information passed into it
     @staticmethod

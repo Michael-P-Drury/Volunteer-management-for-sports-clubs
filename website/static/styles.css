@@ -652,7 +652,7 @@ body {
 }
 
 .admin-scrollable-box{
-    maxHeight: 400px;
+    maxHeight: 100px;
     overflow: auto;
 }
 
