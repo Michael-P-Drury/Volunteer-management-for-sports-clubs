@@ -22,6 +22,16 @@ job_request = db.Table('job_request',
     db.Column('request_id', db.Integer, db.ForeignKey('requests.request_id'), primary_key=True)
 )
 
+user_remove_request = db.Table('user_remove_request',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
+    db.Column('remove_request_id', db.Integer, db.ForeignKey('remove_requests.remove_request_id'), primary_key=True)
+)
+
+job_remove_request = db.Table('job_remove_request',
+    db.Column('job_id', db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True),
+    db.Column('remove_request_id', db.Integer, db.ForeignKey('remove_requests.remove_request_id'), primary_key=True)
+)
+
 
 # creates the user table which stores user's information
 class User(UserMixin, db.Model):
@@ -193,3 +203,15 @@ class Requests(UserMixin, db.Model):
 
     job_id = db.relationship('Jobs', secondary=job_request,
                                          backref=db.backref('requests', lazy='subquery'))
+
+
+
+class RemoveRequests(UserMixin, db.Model):
+    __tablename__ = 'remove_requests'
+    remove_request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    user_id = db.relationship('User', secondary=user_remove_request,
+                                         backref=db.backref('remove_requests', lazy='subquery'))
+
+    job_id = db.relationship('Jobs', secondary=job_remove_request,
+                                         backref=db.backref('remove_requests', lazy='subquery'))

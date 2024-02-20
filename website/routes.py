@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
-from .databases import User, Jobs, Qualification, Requests
+from .databases import User, Jobs, Qualification, Requests, RemoveRequests
 from . import lm, db, app
 from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, QualificationForm
 import pandas as pd
@@ -58,6 +58,26 @@ def timetable():
             db.session.commit()
 
         except:
+            try:
+
+                job_request_remove = request.form['remove_request_job_id']
+
+
+                user = User.query.get(current_user.get_id())
+                job = Jobs.query.get(job_request_remove)
+
+                new_remove_request = RemoveRequests()
+
+                new_remove_request.user_id.append(user)
+                new_remove_request.job_id.append(job)
+
+                db.session.add(new_remove_request)
+                db.session.commit()
+
+                print('added')
+
+            except Exception as e:
+                print(e)
             pass
 
         redirect(url_for('timetable'))
@@ -115,6 +135,8 @@ def admin():
     new_job_form = newJobForm()
 
     requests = Requests.query.all()
+
+    remove_requests = RemoveRequests.query.all()
 
     new_job_form.job_requirements.choices = [(q.qualifications_id, q.qualification_name) for q in qualifications]
 
@@ -222,7 +244,7 @@ def admin():
 
 
     return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form,
-                           qualifications=qualifications, requests = requests)
+                           qualifications=qualifications, requests = requests, remove_requests = remove_requests)
 
 
 # route for the signup page which takes you to the home page and the URL of the base URL/signup

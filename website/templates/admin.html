@@ -25,6 +25,15 @@
         {% endfor %}
     </div>
 
+    <div class="admin-box admin-scrollable-box">
+        <h2>Remove From Job Requests</h2>
+        {% for remove_request in remove_requests %}
+        <div>
+            <p>Volunteer name: {{ remove_request.user_id[0].username }} | Job name: {{ remove_request.job_id[0].job_name }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
     <div class="admin-box">
         <h2>Add New Job</h2>
         <form action="" method="POST">

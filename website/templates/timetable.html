@@ -32,6 +32,12 @@
                 {% if current_user_id in (job.volunteers_assigned.split()) %}
                 <div>
                     <span>You are assigned to this job</span>
+
+                    <form method = "post">
+                        <input type = "hidden" name = "remove_request_job_id" value = {{ job.job_id }}>
+                        <input type = "submit" value = "request remove from job">
+                    </form>
+
                 </div>
                 {% endif %}
 
@@ -86,6 +92,12 @@
 
                     {% if current_user_id in (job.volunteers_assigned.split()) %}
                     <p>You are assigned to this job</p>
+
+                    <form method = "post">
+                        <input type = "hidden" name = "remove_request_job_id" value = {{ job.job_id }}>
+                        <input type = "submit" value = "request remove from job">
+                    </form>
+
                     {% endif %}
 
                     {% if Requests.query.filter(Requests.user_id.any(user_id=current_user_id), Requests.job_id.any(job_id=job.job_id)).first() %}
