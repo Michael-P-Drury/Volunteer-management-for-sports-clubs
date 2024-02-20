@@ -62,7 +62,6 @@ def timetable():
 
                 job_request_remove = request.form['remove_request_job_id']
 
-
                 user = User.query.get(current_user.get_id())
                 job = Jobs.query.get(job_request_remove)
 
@@ -74,15 +73,13 @@ def timetable():
                 db.session.add(new_remove_request)
                 db.session.commit()
 
-                print('added')
-
-            except Exception as e:
-                print(e)
+            except:
+                pass
             pass
 
         redirect(url_for('timetable'))
 
-    return render_template('timetable.html', jobs=jobs, current_user_id = current_user_id, Requests = Requests)
+    return render_template('timetable.html', jobs=jobs, current_user_id = current_user_id, Requests = Requests, RemoveRequests = RemoveRequests)
 
 
 @app.route('/upload_jobs', methods=['POST'])
@@ -185,63 +182,79 @@ def admin():
                 return redirect(url_for('admin'))
 
             except:
+                try:
+                    out_list = request.form['delete_remove_request']
 
-                if new_job_form.validate_on_submit():
-                    new_job_name = new_job_form.job_name.data
-                    new_job_date = new_job_form.date.data
-                    new_job_start = new_job_form.start_time.data
-                    new_job_end = new_job_form.end_time.data
-                    # new_job_requirements = new_job_form.job_requirements.data
-                    selected_qualifications = new_job_form.job_requirements.data #NEW
-                    new_job_volunteers_needed = new_job_form.volunteers_needed.data
-                    new_job_description = new_job_form.job_description.data
+                    out_list = out_list.split(',')
 
-                    new_job_start_hour = new_job_start.hour
-                    new_job_start_minute = new_job_start.minute
+                    user_delete = out_list[0]
+                    job_delete = out_list[1]
 
-                    new_job_end_hour = new_job_end.hour
-                    new_job_end_minute = new_job_end.minute
+                    request_to_delete = RemoveRequests.query.filter(RemoveRequests.user_id.any(user_id=user_delete),
+                                                              RemoveRequests.job_id.any(job_id=job_delete)).first()
 
-                    new_job_year = new_job_date.year
-                    new_job_month = new_job_date.month
-                    new_job_day = new_job_date.day
+                    if request_to_delete:
+                        db.session.delete(request_to_delete)
+                        db.session.commit()
 
-                    date_insert = f'{new_job_day}/{new_job_month}/{new_job_year}'
-                    start_time_insert = f'{new_job_start_hour}:{new_job_start_minute}'
-                    end_time_insert = f'{new_job_end_hour}:{new_job_end_minute}'
-
-                    new_job = Jobs(
-                        volunteers_assigned='',
-                        volunteers_needed=new_job_volunteers_needed,
-                        start_time=start_time_insert,
-                        end_time=end_time_insert,
-                        date=date_insert,
-                        job_description=new_job_description,
-                        #job_requirements='',
-                        job_name = new_job_name
-                    )
-
-                    db.session.add(new_job)
-                    db.session.flush()
-
-                    for qual_id in selected_qualifications:
-                        qualification = Qualification.query.get(qual_id)
-                        new_job.job_qualifications.append(qualification)
-
-                    db.session.commit()
                     return redirect(url_for('admin'))
 
-                if qualification_form.validate_on_submit():
-                    new_qualification = Qualification(
-                        qualification_name=qualification_form.qualification_name.data,
-                        qualification_description=qualification_form.qualification_description.data,
-                    )
+                except:
 
-                    db.session.add(new_qualification)
-                    db.session.commit()
-                    return redirect(url_for('admin'))
+                    if new_job_form.validate_on_submit():
+                        new_job_name = new_job_form.job_name.data
+                        new_job_date = new_job_form.date.data
+                        new_job_start = new_job_form.start_time.data
+                        new_job_end = new_job_form.end_time.data
+                        # new_job_requirements = new_job_form.job_requirements.data
+                        selected_qualifications = new_job_form.job_requirements.data #NEW
+                        new_job_volunteers_needed = new_job_form.volunteers_needed.data
+                        new_job_description = new_job_form.job_description.data
 
+                        new_job_start_hour = new_job_start.hour
+                        new_job_start_minute = new_job_start.minute
 
+                        new_job_end_hour = new_job_end.hour
+                        new_job_end_minute = new_job_end.minute
+
+                        new_job_year = new_job_date.year
+                        new_job_month = new_job_date.month
+                        new_job_day = new_job_date.day
+
+                        date_insert = f'{new_job_day}/{new_job_month}/{new_job_year}'
+                        start_time_insert = f'{new_job_start_hour}:{new_job_start_minute}'
+                        end_time_insert = f'{new_job_end_hour}:{new_job_end_minute}'
+
+                        new_job = Jobs(
+                            volunteers_assigned='',
+                            volunteers_needed=new_job_volunteers_needed,
+                            start_time=start_time_insert,
+                            end_time=end_time_insert,
+                            date=date_insert,
+                            job_description=new_job_description,
+                            #job_requirements='',
+                            job_name = new_job_name
+                        )
+
+                        db.session.add(new_job)
+                        db.session.flush()
+
+                        for qual_id in selected_qualifications:
+                            qualification = Qualification.query.get(qual_id)
+                            new_job.job_qualifications.append(qualification)
+
+                        db.session.commit()
+                        return redirect(url_for('admin'))
+
+                    if qualification_form.validate_on_submit():
+                        new_qualification = Qualification(
+                            qualification_name=qualification_form.qualification_name.data,
+                            qualification_description=qualification_form.qualification_description.data,
+                        )
+
+                        db.session.add(new_qualification)
+                        db.session.commit()
+                        return redirect(url_for('admin'))
 
     return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form,
                            qualifications=qualifications, requests = requests, remove_requests = remove_requests)

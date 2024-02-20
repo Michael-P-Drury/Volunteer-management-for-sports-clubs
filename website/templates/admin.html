@@ -31,6 +31,14 @@
         <div>
             <p>Volunteer name: {{ remove_request.user_id[0].username }} | Job name: {{ remove_request.job_id[0].job_name }}</p>
         </div>
+        <form method="post">
+            <input type="hidden" name="accept_remove_request" value="{{ remove_request.user_id[0].user_id }},{{ remove_request.job_id[0].job_id }}">
+            <input type="submit" value="Accept Request?" class="btn">
+        </form>
+        <form method="post">
+            <input type="hidden" name="delete_remove_request" value = "{{ remove_request.user_id[0].user_id }},{{ remove_request.job_id[0].job_id }}">
+            <input type="submit" value="Delete Request?" class="btn">
+        </form>
         {% endfor %}
     </div>
 
