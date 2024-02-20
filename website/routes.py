@@ -27,6 +27,7 @@ def login():
         return redirect(url_for('home'))
     return render_template('login.html', form=login_form)
 
+
 # routing for the home page which takes you to the home page and the URL of the base URL/home
 @app.route('/home')
 def home():
@@ -256,6 +257,8 @@ def profile():
     remove_email = removeEmail()
     remove_mobile = removeMobile()
 
+    my_requests = Requests.query.filter(Requests.user_id.any(user_id=current_user.get_id())).all()
+
     if mobile_form.validate_on_submit() and mobile_form.validate():
         new_mobile = mobile_form.new_mobile.data
         for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
@@ -282,18 +285,20 @@ def profile():
             user.no_email()
         db.session.commit()
         return redirect(url_for('profile'))
+
     
     qualifications = Qualification.query.all()
 
     if request.method == 'POST':
 
-        qualifications = Qualification.query.all()
         selected_qualification_ids = request.form.getlist('qualification_ids')  # Correctly retrieves list of selected qualification IDs
         current_user.qualifications = [Qualification.query.get(id) for id in selected_qualification_ids]
         db.session.commit()
         return redirect(url_for('profile'))
     
-    return render_template('profile.html', email_form=email_form, mobile_form=mobile_form, remove_mobile=remove_mobile, remove_email=remove_email, qualifications=qualifications, user_qualifications=[q.qualifications_id for q in current_user.qualifications])
+    return render_template('profile.html', email_form=email_form, mobile_form=mobile_form, remove_mobile=remove_mobile,
+                           remove_email=remove_email, qualifications=qualifications, user_qualifications=[q.qualifications_id for q in current_user.qualifications],
+                           my_requests = my_requests)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
@@ -316,5 +321,3 @@ def logout():
 @lm.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-

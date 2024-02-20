@@ -11,7 +11,6 @@
 <div style="background-color: #ececec; border-radius: 10px; padding: 20px; margin: 10px; position: static;">
     <div class="profile-details-box profile-box">
         <p class = "profile-box-title">Details</p>
-        
     </div>
 
     <div class="profile-personal-box profile-box">
@@ -30,7 +29,6 @@
                     </p>
                 </div>
             </form>
-            
         </p>
 
         <p class = "profile-box-text">
@@ -74,6 +72,13 @@
             {% endfor %}
             <input type="submit" value="Update Qualifications">
         </form>
+    </div>
+
+    <div class="profile-qualifications-box profile-box">
+        <p class="profile-box-title">My Pending Requests</p>
+        {% for my_request in my_requests %}
+            <p> Job name: {{ my_request.job_id[0].job_name }} </p>
+        {% endfor %}
     </div>
 
 </div>
