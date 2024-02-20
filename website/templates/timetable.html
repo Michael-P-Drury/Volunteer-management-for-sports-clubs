@@ -28,6 +28,30 @@
                     <span>Start time: {{ job.start_time }}</span>
                     <span class="job-box-data">End time: {{ job.end_time }}</span>
                 </div>
+
+                {% if current_user_id in (job.volunteers_assigned.split()) %}
+                <div>
+                    <span>You are assigned to this job</span>
+                </div>
+                {% endif %}
+
+                {% if current_user_id not in (job.volunteers_assigned.split()) %}
+                {% if not Requests.query.filter(Requests.user_id.any(user_id=current_user_id), Requests.job_id.any(job_id=job.job_id)).first() %}
+
+                <form method = "post">
+                    <input type = "hidden" name = "job_id_request" value = {{ job.job_id }}>
+                    <input type = "submit" value = "request job">
+                </form>
+
+                {% endif %}
+                {% endif %}
+
+                {% if Requests.query.filter(Requests.user_id.any(user_id=current_user_id), Requests.job_id.any(job_id=job.job_id)).first() %}
+                <div>
+                    <span>You have requested for this job</span>
+                </div>
+                {% endif %}
+
             </div>
         </element>
     
@@ -48,9 +72,8 @@
                     <p>{{ job.job_description }}</p>
                     <hr>
                     <p>Requirements: {{ job.job_requirements }}</p>
-                    
-                    {% if current_user_id not in (job.volunteers_assigned.split()) %}
 
+                    {% if current_user_id not in (job.volunteers_assigned.split()) %}
                     {% if not Requests.query.filter(Requests.user_id.any(user_id=current_user_id), Requests.job_id.any(job_id=job.job_id)).first() %}
 
                     <form method = "post">
@@ -59,7 +82,16 @@
                     </form>
 
                     {% endif %}
+                    {% endif %}
 
+                    {% if current_user_id in (job.volunteers_assigned.split()) %}
+                    <p>You are assigned to this job</p>
+                    {% endif %}
+
+                    {% if Requests.query.filter(Requests.user_id.any(user_id=current_user_id), Requests.job_id.any(job_id=job.job_id)).first() %}
+                    <div>
+                        <span>You have requested for this job</span>
+                    </div>
                     {% endif %}
                 </div>
             </div>
