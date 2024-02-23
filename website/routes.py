@@ -129,6 +129,7 @@ def admin():
     users = User.query.all()
     qualifications = Qualification.query.all()
     new_job_form = newJobForm()
+    jobs = Jobs.query.all()
 
     requests = Requests.query.all()
 
@@ -244,8 +245,15 @@ def admin():
 
 
     return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form,
-                           qualifications=qualifications, requests = requests, remove_requests = remove_requests)
+                           qualifications=qualifications, requests = requests, remove_requests = remove_requests, jobs = jobs)
 
+@app.route('/delete_job/<int:job_id>', methods=['POST'])
+def delete_job(job_id):
+    delete_job = Jobs.query.get(job_id)
+    if delete_job:
+        db.session.delete(delete_job)
+        db.session.commit()
+    return redirect(url_for('admin'))
 
 # route for the signup page which takes you to the home page and the URL of the base URL/signup
 @app.route('/signup', methods=['GET', 'POST'])

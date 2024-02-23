@@ -10,19 +10,21 @@
 
 <div class="timetable-boxes">
     {% for job in jobs %}
-    <div class="job-content" onclick="togglePopup('{{ job.job_id }}')">
-        <div class="job-box">
-            <div class="job-name-box">
-                <div class="job-name"><b>{{ job.job_name }}</b></div>
+    <div class="job-content">
+        <element onclick="togglePopup('{{ job.job_id }}')">
+            <div class="job-box">
+                <div class="job-name-box">
+                    <div class="job-name"><b>{{ job.job_name }}</b></div>
+                </div>
+                <div>Volunteers Needed: <span>{{ job.volunteers_needed }}</span></div>
+                <div>Date: <span>{{ job.date }}</span></div>
+                <div>Start time: <span>{{ job.start_time }}</span></div>
+                <div>End time: <span>{{ job.end_time }}</span></div>
             </div>
-            <div>Volunteers Needed: <span>{{ job.volunteers_needed }}</span></div>
-            <div>Date: <span>{{ job.date }}</span></div>
-            <div>Start time: <span>{{ job.start_time }}</span></div>
-            <div>End time: <span>{{ job.end_time }}</span></div>
-        </div>
-
+        </element>
+        
         <div class="popup" id="popup-{{ job.job_id }}">
-            <div class="popup-overlay" onclick="togglePopup('{{ job.job_id }}')"></div>
+            <div class="popup-overlay"></div>
             <div class="popup-content">
                 <div class="popup-close-btn" onclick="togglePopup('{{ job.job_id }}')">&times;</div>
                 <div class="popup-job-name-box">
