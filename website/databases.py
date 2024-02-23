@@ -10,6 +10,7 @@ user_qualifications = db.Table('user_qualifications',
 job_requirements = db.Table('job_requirements',
     db.Column('job_id', db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True),
     db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True)
+
 )
 
 user_request = db.Table('user_request',
@@ -32,6 +33,11 @@ job_remove_request = db.Table('job_remove_request',
     db.Column('remove_request_id', db.Integer, db.ForeignKey('remove_requests.remove_request_id'), primary_key=True)
 )
 
+#New Code
+class UserJobLink(db.Model):
+    __tablename__ = 'user_job_link'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
+    job_id = db.Column(db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True)
 
 # creates the user table which stores user's information
 class User(UserMixin, db.Model):
@@ -42,12 +48,15 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(30))
     mobile = db.Column(db.String(15))
     preferred_name = db.Column(db.String(15))
-    qualifications = db.Column(db.String(64))
-    events = db.Column(db.String(100))
+    # Removed duplicate 'qualifications' field
     admin = db.Column(db.Boolean)
 
     qualifications = db.relationship('Qualification', secondary=user_qualifications,
-                        backref=db.backref('users', lazy='subquery'))
+                                     backref=db.backref('users', lazy='subquery'))
+
+    jobs = db.relationship('Jobs', secondary='user_job_link',
+                           backref=db.backref('assigned_users', lazy='dynamic'))
+
 
     # gets the current users id
     def get_id(self):
@@ -126,18 +135,25 @@ class Jobs(UserMixin, db.Model):
     __tablename__ = 'jobs'
     job_id = db.Column(db.Integer, primary_key=True)
     job_name = db.Column(db.String(20))
-    volunteers_assigned = db.Column(db.String(300))
     volunteers_needed = db.Column(db.Integer)
     start_time = db.Column(db.String(20))
     end_time = db.Column(db.String(20))
     date = db.Column(db.String(20))
     job_description = db.Column(db.String(300))
     job_qualifications = db.relationship('Qualification', secondary=job_requirements,
-                                         backref=db.backref('jobs', lazy='subquery'))
+                                         backref=db.backref('required_for_jobs', lazy='subquery'))
+
+
 
     # clears volunteers from one of the jobs
-    def clear_volunters(self):
-        self.volunteers_assigned = ''
+    #def clear_volunters(self):
+    #    self.volunteers_assigned = ''
+
+    def clear_volunteers(self):
+        links = UserJobLink.query.filter_by(job_id=self.job_id).all()
+        for link in links:
+            db.session.delete(link)
+        db.session.commit()
 
     # assigns start and end times to the job
     def assign_times(self, start_time, end_time):
@@ -164,23 +180,34 @@ class Jobs(UserMixin, db.Model):
     def assign_job_name(self, new_job_name):
         self.job_name = new_job_name
 
-    def add_volunteer(self, volunteer_id):
-        current_volunteers = self.volunteers_assigned
+    #def add_volunteer(self, volunteer_id):
+        #current_volunteers = self.volunteers_assigned
 
-        new_volunteers = current_volunteers + ' ' + str(volunteer_id)
+        #new_volunteers = current_volunteers + ' ' + str(volunteer_id)
 
-        self.volunteers_assigned = new_volunteers
+        #self.volunteers_assigned = new_volunteers
 
-    def remove_volunteer(self, volunteer_id):
-        current_volunteers = self.volunteers_assigned
+    def add_volunteer(self, user_id):
+        new_link = UserJobLink(user_id=user_id, job_id=self.job_id)
+        db.session.add(new_link)
+        db.session.commit()
 
-        new_volunteers_list = current_volunteers.split()
+    #def remove_volunteer(self, volunteer_id):
+        #current_volunteers = self.volunteers_assigned
 
-        new_volunteers_list.remove(volunteer_id)
+    #    new_volunteers_list = current_volunteers.split()
 
-        new_volunteers = ' '.join(new_volunteers_list)
+    #    new_volunteers_list.remove(volunteer_id)
 
-        self.volunteers_assigned = new_volunteers
+    #    new_volunteers = ' '.join(new_volunteers_list)
+
+        #self.volunteers_assigned = new_volunteers
+
+    def remove_volunteer(self, user_id):
+        link = UserJobLink.query.filter_by(user_id=user_id, job_id=self.job_id).first()
+        if link:
+            db.session.delete(link)
+            db.session.commit()
 
 
     # creates a new job with the information passed into it
@@ -203,26 +230,20 @@ class Qualification(UserMixin, db.Model):
     qualification_name = db.Column(db.String(300))
     qualification_description = db.Column(db.String(300))
 
-
-
 class Requests(UserMixin, db.Model):
     __tablename__ = 'requests'
     request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    job_id = db.Column(db.Integer, db.ForeignKey('jobs.job_id'))
 
-    user_id = db.relationship('User', secondary=user_request,
-                                         backref=db.backref('requests', lazy='subquery'))
-
-    job_id = db.relationship('Jobs', secondary=job_request,
-                                         backref=db.backref('requests', lazy='subquery'))
-
-
+    user = db.relationship('User', backref=db.backref('requests', lazy='subquery'))
+    job = db.relationship('Jobs', backref=db.backref('requests', lazy='subquery'))
 
 class RemoveRequests(UserMixin, db.Model):
     __tablename__ = 'remove_requests'
     remove_request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    job_id = db.Column(db.Integer, db.ForeignKey('jobs.job_id'))
 
-    user_id = db.relationship('User', secondary=user_remove_request,
-                                         backref=db.backref('remove_requests', lazy='subquery'))
-
-    job_id = db.relationship('Jobs', secondary=job_remove_request,
-                                         backref=db.backref('remove_requests', lazy='subquery'))
+    user = db.relationship('User', backref=db.backref('remove_requests', lazy='subquery'))
+    job = db.relationship('Jobs', backref=db.backref('remove_requests', lazy='subquery'))

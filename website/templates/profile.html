@@ -93,6 +93,21 @@
     </div>
 
     <div class="profile-qualifications-box profile-box">
+        <p class="profile-box-title">Assigned Jobs</p>
+        {% if assigned_jobs %}
+            {% for job in assigned_jobs %}
+                <div>
+                    <p>Job Name: {{ job.job_name }}</p>
+                    <p>Job Description: {{ job.job_description }}</p>
+                    <!-- Add more job details as needed -->
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No assigned jobs currently.</p>
+        {% endif %}
+    </div>
+
+    <div class="profile-qualifications-box profile-box">
         <p class="profile-box-title">My Pending Requests</p>
 
         <p class="profile-box-subtitle">Volunteering requests:</p>
@@ -100,7 +115,7 @@
         {% if my_requests %}
 
         {% for my_request in my_requests %}
-            <p> Job name: {{ my_request.job_id[0].job_name }} </p>
+            <p> Job name: {{ my_request.job.job_name }} </p>
         {% endfor %}
 
         {% else %}
@@ -112,7 +127,7 @@
         {% if my_remove_requests %}
 
         {% for my_remove_request in my_remove_requests %}
-            <p> Job name: {{ my_remove_request.job_id[0].job_name }} </p>
+            <p> Job name: {{ my_remove_request.job.job_name }} </p>
         {% endfor %}
 
         {% else %}

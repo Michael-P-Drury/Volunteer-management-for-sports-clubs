@@ -10,117 +10,44 @@
 
 <div class="timetable-boxes">
     {% for job in jobs %}
-    <div class="job-content">
-        <element onclick="togglePopup('{{ job.job_id }}')">
-            <div class="job-box">
-                <div class="job-name-box">
-                    <div class="job-name"><b>{{ job.job_name }}</b></div>
-                </div>
-                <div>
-                    <span>Volunteers Needed:</span>
-                    <span>{{ job.volunteers_needed }}</span>
-                </div>
-                <div>
-                    <span>Date:</span>
-                    <span class="job-box-data">{{ job.date }}</span>
-                </div>
-                <div>
-                    <span>Start time: {{ job.start_time }}</span>
-                    <span class="job-box-data">End time: {{ job.end_time }}</span>
-                </div>
-
-                {% if current_user_id in (job.volunteers_assigned.split()) %}
-
-                <div>
-                    <span>You are assigned to this job</span>
-                </div>
-                {% if not RemoveRequests.query.filter(RemoveRequests.user_id.any(user_id=current_user_id), RemoveRequests.job_id.any(job_id=job.job_id)).first() %}
-
-                <div>
-                    <form method = "post">
-                        <input type = "hidden" name = "remove_request_job_id" value = {{ job.job_id }}>
-                        <input type = "submit" value = "request remove from job">
-                    </form>
-                </div>
-
-                {% endif %}
-
-                {% endif %}
-
-                {% if current_user_id not in (job.volunteers_assigned.split()) %}
-                {% if not Requests.query.filter(Requests.user_id.any(user_id=current_user_id), Requests.job_id.any(job_id=job.job_id)).first() %}
-
-                <div>
-                    <form method = "post">
-                        <input type = "hidden" name = "job_id_request" value = {{ job.job_id }}>
-                        <input type = "submit" value = "request job">
-                    </form>
-                </div>
-
-                {% endif %}
-                {% endif %}
-
-                {% if Requests.query.filter(Requests.user_id.any(user_id=current_user_id), Requests.job_id.any(job_id=job.job_id)).first() %}
-                <div>
-                    <span>You have requested for this job</span>
-                </div>
-                {% endif %}
-
+    <div class="job-content" onclick="togglePopup('{{ job.job_id }}')">
+        <div class="job-box">
+            <div class="job-name-box">
+                <div class="job-name"><b>{{ job.job_name }}</b></div>
             </div>
-        </element>
-    
-        <div class="popup" id = "popup-{{ job.job_id }}" >
-            <div class="popup-overlay"></div>
+            <div>Volunteers Needed: <span>{{ job.volunteers_needed }}</span></div>
+            <div>Date: <span>{{ job.date }}</span></div>
+            <div>Start time: <span>{{ job.start_time }}</span></div>
+            <div>End time: <span>{{ job.end_time }}</span></div>
+        </div>
+
+        <div class="popup" id="popup-{{ job.job_id }}">
+            <div class="popup-overlay" onclick="togglePopup('{{ job.job_id }}')"></div>
             <div class="popup-content">
-                <div class="popup-close-btn" onclick="togglePopup('{{ job.job_id }}')" >&times;</div>
-                <div class= "popup-job-name-box">
+                <div class="popup-close-btn" onclick="togglePopup('{{ job.job_id }}')">&times;</div>
+                <div class="popup-job-name-box">
                     <p class="job-name"><b>{{ job.job_name }}</b></p>
                 </div>
                 <div class="popup-info">
                     <p>Volunteers Needed: {{ job.volunteers_needed }}</p>
-                    <p>Volunteers Assigned: {{ job.volunteers_assigned }}</p>
-                    <hr>
                     <p>Date: {{ job.date }}</p>
                     <p>Time: {{ job.start_time }} - {{ job.end_time }}</p>
-                    <hr>
-                    <p>{{ job.job_description }}</p>
-                    <hr>
+                    <p>Description: {{ job.job_description }}</p>
                     <p>Requirements: {{ job.job_requirements }}</p>
-
-                    {% if current_user_id not in (job.volunteers_assigned.split()) %}
-                    {% if not Requests.query.filter(Requests.user_id.any(user_id=current_user_id), Requests.job_id.any(job_id=job.job_id)).first() %}
-
-                    <div>
-                        <form method = "post">
-                            <input type = "hidden" name = "job_id_request" value = {{ job.job_id }}>
-                            <input type = "submit" value = "request job">
-                        </form>
-                    </div>
-
-                    {% endif %}
-                    {% endif %}
-
-                    {% if current_user_id in (job.volunteers_assigned.split()) %}
-
-                    <p>You are assigned to this job</p>
-
-                    {% if not RemoveRequests.query.filter(RemoveRequests.user_id.any(user_id=current_user_id), RemoveRequests.job_id.any(job_id=job.job_id)).first() %}
-
-                    <div>
-                        <form method = "post">
-                            <input type = "hidden" name = "remove_request_job_id" value = {{ job.job_id }}>
-                            <input type = "submit" value = "request remove from job">
-                        </form>
-                    </div>
-
-                    {% endif %}
-
-                    {% endif %}
-
-                    {% if Requests.query.filter(Requests.user_id.any(user_id=current_user_id), Requests.job_id.any(job_id=job.job_id)).first() %}
-                    <div>
-                        <span>You have requested for this job</span>
-                    </div>
+                    
+                    {% if job.job_id in assigned_job_ids %}
+                    <div>You are assigned to this job.</div>
+                    <form method="post">
+                        <input type="hidden" name="remove_request_job_id" value="{{ job.job_id }}">
+                        <input type="submit" value="Request to remove from job">
+                    </form>
+                    {% elif job.job_id in requested_job_ids %}
+                    <div>You have requested this job.</div>
+                    {% elif job.job_id not in requested_removal_job_ids %}
+                    <form method="post">
+                        <input type="hidden" name="job_id_request" value="{{ job.job_id }}">
+                        <input type="submit" value="Request job">
+                    </form>
                     {% endif %}
                 </div>
             </div>
@@ -134,11 +61,11 @@
     <h1>No jobs found</h1>
     <p>There currently seems to be no available jobs at this moment.</p>
 </div>
-
 {% endif %}
+
 <script>
-    function togglePopup(jobId){
-        document.getElementById("popup-" + jobId).classList.toggle("active");
-    }
+function togglePopup(jobId) {
+    document.getElementById("popup-" + jobId).classList.toggle("active");
+}
 </script>
 {% endblock %}

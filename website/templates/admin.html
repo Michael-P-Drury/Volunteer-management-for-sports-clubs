@@ -12,13 +12,13 @@
         <h2>Job Requests</h2>
         {% for request in requests %}
         <div>
-            <p>Volunteer name: {{ request.user_id[0].username }} | Job name: {{ request.job_id[0].job_name }}</p>
+            <p>Volunteer name: {{ request.user.username }} | Job name: {{ request.job.job_name }}</p>
             <form method="post">
-                <input type="hidden" name="accept_request" value="{{ request.user_id[0].user_id }},{{ request.job_id[0].job_id }}">
+                <input type="hidden" name="accept_request" value="{{ request.user_id }},{{ request.job_id }}">
                 <input type="submit" value="Accept Request?" class="btn">
             </form>
             <form method="post">
-                <input type="hidden" name="delete_request" value = "{{ request.user_id[0].user_id }},{{ request.job_id[0].job_id }}">
+                <input type="hidden" name="delete_request" value="{{ request.user_id }},{{ request.job_id }}">
                 <input type="submit" value="Delete Request?" class="btn">
             </form>
         </div>
@@ -29,16 +29,16 @@
         <h2>Remove From Job Requests</h2>
         {% for remove_request in remove_requests %}
         <div>
-            <p>Volunteer name: {{ remove_request.user_id[0].username }} | Job name: {{ remove_request.job_id[0].job_name }}</p>
+            <p>Volunteer name: {{ remove_request.user.username }} | Job name: {{ remove_request.job.job_name }}</p>
+            <form method="post">
+                <input type="hidden" name="accept_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">
+                <input type="submit" value="Accept Request?" class="btn">
+            </form>
+            <form method="post">
+                <input type="hidden" name="delete_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">
+                <input type="submit" value="Delete Request?" class="btn">
+            </form>
         </div>
-        <form method="post">
-            <input type="hidden" name="accept_remove_request" value="{{ remove_request.user_id[0].user_id }},{{ remove_request.job_id[0].job_id }}">
-            <input type="submit" value="Accept Request?" class="btn">
-        </form>
-        <form method="post">
-            <input type="hidden" name="delete_remove_request" value = "{{ remove_request.user_id[0].user_id }},{{ remove_request.job_id[0].job_id }}">
-            <input type="submit" value="Delete Request?" class="btn">
-        </form>
         {% endfor %}
     </div>
 
