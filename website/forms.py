@@ -52,3 +52,8 @@ class QualificationForm(FlaskForm):
     qualification_name = StringField('Qualification Name', validators=[input_required()])
     qualification_description = StringField('Description', validators=[input_required()])
     submit = SubmitField('Add Qualification')
+
+
+class ProfileDetailsForm(FlaskForm):
+    detail_text = StringField('Detail Text')
+    submit5 = SubmitField('Save Details')

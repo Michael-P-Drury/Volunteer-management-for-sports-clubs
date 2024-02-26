@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink
 from . import lm, db, app
-from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, QualificationForm
+from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm
 import pandas as pd
 import io
 
@@ -301,6 +301,8 @@ def profile():
     current_user_id = current_user.get_id()
     assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_user_id).all()
 
+    details_form = ProfileDetailsForm()
+
 
     if mobile_form.validate_on_submit() and mobile_form.validate():
         new_mobile = mobile_form.new_mobile.data
@@ -328,8 +330,16 @@ def profile():
             user.no_email()
         db.session.commit()
         return redirect(url_for('profile'))
-
     
+    if details_form.validate_on_submit():
+        # Update user's profile details
+        new_detail_text = details_form.detail_text.data
+        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
+            user.details = new_detail_text
+        db.session.commit()
+        return redirect(url_for('profile'))
+
+    user_profile_details = current_user.profile_details
     qualifications = Qualification.query.all()
 
     if request.method == 'POST':
@@ -339,9 +349,10 @@ def profile():
         db.session.commit()
         return redirect(url_for('profile'))
     
-    return render_template('profile.html', assigned_jobs=assigned_jobs, email_form=email_form, mobile_form=mobile_form, remove_mobile=remove_mobile,
-                           remove_email=remove_email, qualifications=Qualification.query.all(), user_qualifications=[q.qualifications_id for q in current_user.qualifications],
-                           my_requests=my_requests, my_remove_requests=my_remove_requests)
+    return render_template('profile.html', assigned_jobs=assigned_jobs, email_form=email_form, mobile_form=mobile_form,
+                           remove_mobile=remove_mobile, remove_email=remove_email, qualifications=Qualification.query.all(),
+                           user_qualifications=[q.qualifications_id for q in current_user.qualifications], my_requests=my_requests,
+                           my_remove_requests=my_remove_requests, details_form=details_form)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')

@@ -10,7 +10,14 @@
 
 <div style="background-color: #ececec; border-radius: 10px; padding: 20px; margin: 10px; position: static;">
     <div class="profile-details-box profile-box">
-        <p class = "profile-box-title">Details</p>
+        <p class="profile-box-title">Details</p>
+        <form action="" method="POST">
+            {{ details_form.crsf_token }}
+            <div class="detail-box" contenteditable="true">
+                {{ details_form.detail_text(class="editable-text", value=current_user.detail_text) }}
+            </div>
+            {{ details_form.submit5(class="btn btn-primary") }}
+        </form>
     </div>
 
     <div class="profile-personal-box profile-box">

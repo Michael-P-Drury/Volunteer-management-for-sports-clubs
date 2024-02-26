@@ -50,6 +50,7 @@ class User(UserMixin, db.Model):
     preferred_name = db.Column(db.String(15))
     # Removed duplicate 'qualifications' field
     admin = db.Column(db.Boolean)
+    profile_details = db.Column(db.String(255))
 
     qualifications = db.relationship('Qualification', secondary=user_qualifications,
                                      backref=db.backref('users', lazy='subquery'))
@@ -85,6 +86,9 @@ class User(UserMixin, db.Model):
     # sets admin statas as inputted
     def set_admin(self, admin):
         self.admin = admin
+    
+    def set_details(self, details):
+        self.details = details
 
     # sets mobile number to blank
     def no_mobile(self):
@@ -105,6 +109,10 @@ class User(UserMixin, db.Model):
     # sets email to blank
     def no_email(self):
         self.email = None
+    
+    #sets details to blank
+    def no_details(self):
+        self.details = None
 
     # registeres a new user
     @staticmethod
@@ -117,6 +125,7 @@ class User(UserMixin, db.Model):
         user.no_events()
         user.no_qualifications()
         user.no_preferred_name()
+        user.no_details()
         db.session.add(user)
         db.session.commit()
         return user
