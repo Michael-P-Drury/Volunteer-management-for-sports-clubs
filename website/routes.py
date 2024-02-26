@@ -2,7 +2,8 @@ from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink
 from . import lm, db, app
-from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm
+from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, \
+    QualificationForm, ProfileDetailsForm
 import pandas as pd
 import io
 
@@ -155,6 +156,30 @@ def admin():
             
             db.session.commit()
             return redirect(url_for('admin'))
+
+    elif 'increase_user_id' in request.form:
+
+        user_id = request.form['increase_user_id']
+
+        user = User.query.filter_by(user_id = user_id).first()
+
+        user.increase_jobs()
+
+        db.session.commit()
+
+        return redirect(url_for('admin'))
+
+    elif 'decrease_user_id' in request.form:
+
+        user_id = request.form['decrease_user_id']
+
+        user = User.query.filter_by(user_id=user_id).first()
+
+        user.decrease_jobs()
+
+        db.session.commit()
+
+        return redirect(url_for('admin'))
 
     elif 'delete_request' in request.form:
             user_id, job_id = request.form['delete_request'].split(',')

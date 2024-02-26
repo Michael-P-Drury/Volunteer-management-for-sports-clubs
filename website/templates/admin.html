@@ -97,6 +97,8 @@
                     <th>Mobile</th>
                     <th>Qualifications</th>
                     <th>Events</th>
+                    <th>Num Jobs Completed</th>
+                    <th>Change num</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,7 +110,20 @@
                 <td>{{ user.mobile }}</td>
                 <td>{{ user.qualifications }}</td>
                 <td>{{ user.events }}</td>
+                <td>{{ user.jobs_completed }}</td>
+                <td>
+                    <form method = "post">
+                        <input type = "hidden" name = "increase_user_id" value = {{ user.user_id }}>
+                        <input type = "submit" value = "+">
+                    </form>
+
+                    <form method = "post">
+                        <input type = "hidden" name = "decrease_user_id" value = {{ user.user_id }}>
+                        <input type = "submit" value = "-">
+                    </form>
+                </td>
             </tr>
+
             {% endfor %}
             </tbody>
         </table>

@@ -48,6 +48,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(30))
     mobile = db.Column(db.String(15))
     preferred_name = db.Column(db.String(15))
+    jobs_completed = db.Column(db.Integer)
     # Removed duplicate 'qualifications' field
     admin = db.Column(db.Boolean)
     profile_details = db.Column(db.String(255))
@@ -103,6 +104,9 @@ class User(UserMixin, db.Model):
     def no_events(self):
         self.events = None
 
+    def no_jobs_completed(self):
+        self.jobs_completed = 0
+
     # sets the preferred name of teh user to blank
     def no_preferred_name(self):
         self.preferred_name = None
@@ -114,6 +118,16 @@ class User(UserMixin, db.Model):
     #sets details to blank
     def no_details(self):
         self.details = None
+
+    def increase_jobs(self):
+        new_amount_jobs = self.jobs_completed + 1
+
+        self.jobs_completed = new_amount_jobs
+
+    def decrease_jobs(self):
+        new_amount_jobs = self.jobs_completed - 1
+
+        self.jobs_completed = new_amount_jobs
 
     # registeres a new user
     @staticmethod
@@ -127,6 +141,7 @@ class User(UserMixin, db.Model):
         user.no_qualifications()
         user.no_preferred_name()
         user.no_details()
+        user.no_jobs_completed()
         db.session.add(user)
         db.session.commit()
         return user
