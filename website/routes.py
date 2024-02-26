@@ -41,8 +41,17 @@ def home():
 def timetable():
     jobs = Jobs.query.all()
     current_user_id = current_user.get_id()
-
     user_job_link = UserJobLink.query.all()
+    user = User.query.get(current_user_id)
+    user_qualifications_ids = {q.qualifications_id for q in user.qualifications}
+
+    qualified_jobs_ids = set()
+    for job in jobs:
+        job_requirement_ids = {qr.qualifications_id for qr in job.job_qualifications}
+        if job_requirement_ids.issubset(user_qualifications_ids):
+            qualified_jobs_ids.add(job.job_id)
+    
+
 
 
     if request.method == 'POST':
