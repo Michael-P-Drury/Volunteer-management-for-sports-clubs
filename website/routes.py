@@ -255,6 +255,14 @@ def delete_job(job_id):
         db.session.commit()
     return redirect(url_for('admin'))
 
+@app.route('/delete_qualification/<int:qualifications_id>', methods=['POST'])
+def delete_qualification(qualifications_id):
+    delete_qualification = Qualification.query.get(qualifications_id)
+    if delete_qualification:
+        db.session.delete(delete_qualification)
+        db.session.commit()
+    return redirect(url_for('admin'))
+
 # route for the signup page which takes you to the home page and the URL of the base URL/signup
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():

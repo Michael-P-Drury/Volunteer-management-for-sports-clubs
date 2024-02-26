@@ -581,6 +581,8 @@ body {
     transform: translate(-50%, -50%) scale(0);
     z-index: 2;
     width: 40%;
+    max-height: 440px;
+    overflow: auto;
     white-space: normal; 
     word-wrap: break-word; 
     padding: 10px;
@@ -601,11 +603,11 @@ body {
     text-align: center;
 }
 
-.popup.active .popup-overlay {
+.popup.job_active .popup-overlay {
     display: block;
 }
 
-.popup.active .popup-content {
+.popup.job_active .popup-content {
     transform: translate(-50%, -50%) scale(1);
 } 
 
