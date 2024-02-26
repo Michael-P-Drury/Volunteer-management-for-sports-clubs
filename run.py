@@ -9,6 +9,6 @@ if __name__ == '__main__':
         db.create_all()
         if User.query.filter_by(username='michael').first() is None:
             User.register('michael', 'michael1', False)
-        if User.query.filter_by(username='michael').first() is None:
+        if User.query.filter_by(username='admin').first() is None:
             User.register('admin', 'admin1', True)
     app.run(debug = True)
