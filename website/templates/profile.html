@@ -14,7 +14,7 @@
         <form action="" method="POST">
             {{ details_form.crsf_token }}
             <div class="detail-box" contenteditable="true">
-                {{ details_form.detail_text(class="editable-text", value=current_user.detail_text) }}
+                {{ details_form.detail_text(class="editable-text", value=current_user.details) }}
             </div>
             {{ details_form.submit5(class="btn btn-primary") }}
         </form>

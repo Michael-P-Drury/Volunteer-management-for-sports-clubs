@@ -87,8 +87,9 @@ class User(UserMixin, db.Model):
     def set_admin(self, admin):
         self.admin = admin
     
-    def set_details(self, details):
-        self.details = details
+    #sets details as inputted
+    def set_details(self, profile_details):
+        self.details = profile_details
 
     # sets mobile number to blank
     def no_mobile(self):
