@@ -139,7 +139,7 @@ def admin():
 
     requests = Requests.query.join(User).order_by(User.jobs_completed).all()
 
-    remove_requests = RemoveRequests.join(User).order_by(User.jobs_completed).all()
+    remove_requests = RemoveRequests.query.join(User).order_by(User.jobs_completed).all()
 
     new_job_form.job_requirements.choices = [(q.qualifications_id, q.qualification_name) for q in qualifications]
 
