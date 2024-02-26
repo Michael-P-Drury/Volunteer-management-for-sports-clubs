@@ -6,6 +6,7 @@ from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm,
     QualificationForm, ProfileDetailsForm
 import pandas as pd
 import io
+from sqlalchemy import desc
 
 # from .forms import ... (if you want to import a form)
 # routing for the pages in the website
@@ -131,7 +132,7 @@ def upload_file():
 # routing for the admin page which takes you to the home page and the URL of the base URL/admin
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    users = User.query.all()
+    users = User.query.order_by(desc(User.jobs_completed)).all()
     qualifications = Qualification.query.all()
     new_job_form = newJobForm()
     jobs = Jobs.query.all()

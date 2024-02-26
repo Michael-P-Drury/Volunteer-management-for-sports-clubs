@@ -112,15 +112,20 @@
                 <td>{{ user.events }}</td>
                 <td>{{ user.jobs_completed }}</td>
                 <td>
-                    <form method = "post">
-                        <input type = "hidden" name = "increase_user_id" value = {{ user.user_id }}>
-                        <input type = "submit" value = "+">
-                    </form>
-
-                    <form method = "post">
-                        <input type = "hidden" name = "decrease_user_id" value = {{ user.user_id }}>
-                        <input type = "submit" value = "-">
-                    </form>
+                    <div style="display: inline-block;">
+                        <form method="post">
+                            <input type="hidden" name="increase_user_id" value="{{ user.user_id }}">
+                            <input type="submit" value="+">
+                        </form>
+                    </div>
+                    {% if user.jobs_completed >= 1 %}
+                    <div style="display: inline-block;">
+                        <form method="post">
+                            <input type="hidden" name="decrease_user_id" value="{{ user.user_id }}">
+                            <input type="submit" value="-">
+                        </form>
+                    </div>
+                    {% endif %}
                 </td>
             </tr>
 
