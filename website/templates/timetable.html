@@ -16,6 +16,7 @@
                 <div class="job-name-box">
                     <div class="job-name"><b>{{ job.job_name }}</b></div>
                 </div>
+                <div>Volunteers assigned: <span>{% for user_job in user_job_link %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}, {% endfor %}</span></div>
                 <div>Volunteers Needed: <span>{{ job.volunteers_needed }}</span></div>
                 <div>Date: <span>{{ job.date }}</span></div>
                 <div>Start time: <span>{{ job.start_time }}</span></div>
@@ -32,6 +33,7 @@
                 </div>
                 <div class="popup-info">
                     <p>Volunteers Needed: {{ job.volunteers_needed }}</p>
+                    <div>Volunteers assigned: <span>{% for user_job in user_job_link %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}, {% endfor %}</span></div>
                     <p>Date: {{ job.date }}</p>
                     <p>Time: {{ job.start_time }} - {{ job.end_time }}</p>
                     <p>Description: {{ job.job_description }}</p>

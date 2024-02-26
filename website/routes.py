@@ -40,6 +40,9 @@ def timetable():
     jobs = Jobs.query.all()
     current_user_id = current_user.get_id()
 
+    user_job_link = UserJobLink.query.all()
+
+
     if request.method == 'POST':
         job_id_request = request.form.get('job_id_request')
         job_request_remove = request.form.get('remove_request_job_id')
@@ -75,7 +78,8 @@ def timetable():
     requested_removal_job_ids = {rem.job_id for rem in requested_removals}
 
     return render_template('timetable.html', jobs=jobs, assigned_job_ids=assigned_job_ids,
-                           requested_job_ids=requested_job_ids, requested_removal_job_ids=requested_removal_job_ids)
+                           requested_job_ids=requested_job_ids, requested_removal_job_ids=requested_removal_job_ids,
+                           user_job_link = user_job_link, all_users = User)
 
 
 
