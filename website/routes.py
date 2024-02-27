@@ -60,9 +60,9 @@ def timetable():
         return redirect(url_for('timetable'))
 
 
-    if 'remove_request_job_id' in request.form:
+    elif 'remove_request_job_id' in request.form:
         job_id_request = request.form['remove_request_job_id']
-        new_request = Requests(user_id=current_user_id, job_id_request=job_id_request)
+        new_request = RemoveRequests(user_id=current_user_id, job_id=job_id_request)
         db.session.add(new_request)
         db.session.commit()
         return redirect(url_for('timetable'))
@@ -71,8 +71,6 @@ def timetable():
     assigned_jobs = UserJobLink.query.filter_by(user_id=current_user_id).all()
     for assigned_job in assigned_jobs:
         assigned_job_ids.append(assigned_job.job_id)
-
-    print(assigned_job_ids)
 
     requested_job_ids = []
     requested_jobs = Requests.query.filter_by(user_id=current_user_id).all()
