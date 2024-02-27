@@ -151,6 +151,9 @@ def admin():
             new_link = UserJobLink(user_id=user_id, job_id=job_id)
             db.session.add(new_link)
 
+            job = Jobs.query.filter_by(job_id=job_id).first()
+            job.decrease_needed_left()
+
             request_to_delete = Requests.query.filter_by(user_id=user_id, job_id=job_id).first()
             if request_to_delete:
                 db.session.delete(request_to_delete)
@@ -169,6 +172,11 @@ def admin():
         db.session.commit()
 
         return redirect(url_for('admin'))
+
+    elif 'auto_assign_job_id' in request.form:
+
+        job_id = request.form['auto_assign_job_id']
+
 
     elif 'decrease_user_id' in request.form:
 
@@ -198,7 +206,10 @@ def admin():
             link_to_delete = UserJobLink.query.filter_by(user_id=user_id, job_id=job_id).first()
             if link_to_delete:
                 db.session.delete(link_to_delete)
-            
+
+            job = Jobs.query.filter_by(job_id = job_id).first()
+            job.increase_needed_left()
+
             remove_request_to_delete = RemoveRequests.query.filter_by(user_id=user_id, job_id=job_id).first()
             if remove_request_to_delete:
                 db.session.delete(remove_request_to_delete)
@@ -245,6 +256,7 @@ def admin():
         new_job = Jobs(
             #volunteers_assigned='',
             volunteers_needed=new_job_volunteers_needed,
+            volunteers_needed_left = new_job_volunteers_needed,
             start_time=start_time_insert,
             end_time=end_time_insert,
             date=date_insert,

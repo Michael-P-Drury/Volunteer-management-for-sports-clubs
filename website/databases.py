@@ -161,13 +161,13 @@ class Jobs(UserMixin, db.Model):
     job_id = db.Column(db.Integer, primary_key=True)
     job_name = db.Column(db.String(20))
     volunteers_needed = db.Column(db.Integer)
+    volunteers_needed_left = db.Column(db.Integer)
     start_time = db.Column(db.String(20))
     end_time = db.Column(db.String(20))
     date = db.Column(db.String(20))
     job_description = db.Column(db.String(300))
     job_qualifications = db.relationship('Qualification', secondary=job_requirements,
                                          backref=db.backref('required_for_jobs', lazy='subquery'))
-
 
 
     # clears volunteers from one of the jobs
@@ -201,6 +201,9 @@ class Jobs(UserMixin, db.Model):
     def assign_volunteers_needed(self, volunteers_needed):
         self.volunteers_needed = volunteers_needed
 
+    def assign_volunteers_needed_left(self, volunteers_needed):
+        self.volunteers_needed_left = volunteers_needed
+
     # assigns job name to the job
     def assign_job_name(self, new_job_name):
         self.job_name = new_job_name
@@ -213,8 +216,10 @@ class Jobs(UserMixin, db.Model):
         #self.volunteers_assigned = new_volunteers
 
     def add_volunteer(self, user_id):
+
         new_link = UserJobLink(user_id=user_id, job_id=self.job_id)
         db.session.add(new_link)
+
         db.session.commit()
 
     #def remove_volunteer(self, volunteer_id):
@@ -228,11 +233,21 @@ class Jobs(UserMixin, db.Model):
 
         #self.volunteers_assigned = new_volunteers
 
+
     def remove_volunteer(self, user_id):
+
         link = UserJobLink.query.filter_by(user_id=user_id, job_id=self.job_id).first()
         if link:
             db.session.delete(link)
             db.session.commit()
+
+    def increase_needed_left(self):
+        self.volunteers_needed_left += 1
+
+    def decrease_needed_left(self):
+        self.volunteers_needed_left -= 1
+
+
 
 
     # creates a new job with the information passed into it
@@ -246,6 +261,7 @@ class Jobs(UserMixin, db.Model):
         job.assign_description(job_description)
         job.assign_requirements(job_requirements)
         job.assign_volunteers_needed(volunteers_needed)
+        job.assign_volunteers_needed_left(volunteers_needed)
         db.session.add(job)
         db.session.commit()
 
