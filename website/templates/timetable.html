@@ -68,7 +68,7 @@
                         <div>You are assigned to this job</div>
                         <form method="post">
                             <input type="hidden" name="remove_request_job_id" value="{{ job.job_id }}">
-                            <input type="submit" value="Request to remove from job"
+                            <input type="submit" value="Request to remove from job">
                         </form>
                         {% elif job.job_id in requested_job_ids %}
                         <div>You have requested this job</div>

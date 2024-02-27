@@ -45,13 +45,12 @@ def timetable():
     user = User.query.get(current_user_id)
     user_qualifications_ids = {q.qualifications_id for q in user.qualifications}
 
-    qualified_jobs_ids = set()
+    qualified_jobs_ids = []
+
     for job in jobs:
         job_requirement_ids = {qr.qualifications_id for qr in job.job_qualifications}
         if job_requirement_ids.issubset(user_qualifications_ids):
-            qualified_jobs_ids.add(job.job_id)
-    
-
+            qualified_jobs_ids.append(job.job_id)
 
 
     if request.method == 'POST':
@@ -88,7 +87,7 @@ def timetable():
     requested_removals = RemoveRequests.query.filter_by(user_id=current_user_id).all()
     requested_removal_job_ids = {rem.job_id for rem in requested_removals}
 
-    return render_template('timetable.html', jobs=jobs, assigned_job_ids=assigned_job_ids,
+    return render_template('timetable.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
                            requested_job_ids=requested_job_ids, requested_removal_job_ids=requested_removal_job_ids,
                            user_job_link = user_job_link, all_users = User)
 
