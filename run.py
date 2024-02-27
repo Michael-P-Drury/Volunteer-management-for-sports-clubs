@@ -3,6 +3,7 @@ from website.databases import User
 
 # run file which calls the application file website running the website
 # creates a login for use when testing with username michael and password michael1
+# creates an admin for use when testing with username admin and password admin1
 
 if __name__ == '__main__':
     with app.app_context():

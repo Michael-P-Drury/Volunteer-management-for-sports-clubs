@@ -52,45 +52,39 @@ def timetable():
         if job_requirement_ids.issubset(user_qualifications_ids):
             qualified_jobs_ids.append(job.job_id)
 
-
-    if request.method == 'POST':
-        job_id_request = request.form.get('job_id_request')
-        job_request_remove = request.form.get('remove_request_job_id')
-
-        if job_id_request:
-            #handle job request
-            try:
-                #THIS LINE HERE IS NOT WORKING
-                new_request = Requests(user_id=current_user_id, job_id=job_id_request)
-                db.session.add(new_request)
-                db.session.commit()
-            except Exception as e:
-                db.session.rollback()
-
-        elif job_request_remove:
-            #handle request to remove from a job
-            try:
-                new_remove_request = RemoveRequests(user_id=current_user_id, job_id=job_request_remove)
-                db.session.add(new_remove_request)
-                db.session.commit()
-            except Exception as e:
-                db.session.rollback()
-
+    if 'job_id_request' in request.form:
+        job_id_request = request.form['job_id_request']
+        new_request = Requests(user_id=current_user_id, job_id=job_id_request)
+        db.session.add(new_request)
+        db.session.commit()
         return redirect(url_for('timetable'))
-    
-    assigned_jobs = UserJobLink.query.filter_by(user_id=current_user_id).all()
-    assigned_job_ids = {link.job_id for link in assigned_jobs}
 
+
+    if 'remove_request_job_id' in request.form:
+        job_id_request = request.form['remove_request_job_id']
+        new_request = Requests(user_id=current_user_id, job_id_request=job_id_request)
+        db.session.add(new_request)
+        db.session.commit()
+        return redirect(url_for('timetable'))
+
+    assigned_job_ids = []
+    assigned_jobs = UserJobLink.query.filter_by(user_id=current_user_id).all()
+    for assigned_job in assigned_jobs:
+        assigned_job_ids.append(assigned_job.job_id)
+
+    print(assigned_job_ids)
+
+    requested_job_ids = []
     requested_jobs = Requests.query.filter_by(user_id=current_user_id).all()
-    requested_job_ids = {req.job_id for req in requested_jobs}
+    for requested in requested_jobs:
+        requested_job_ids.append(requested.job_id)
 
     requested_removals = RemoveRequests.query.filter_by(user_id=current_user_id).all()
     requested_removal_job_ids = {rem.job_id for rem in requested_removals}
 
     return render_template('timetable.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
                            requested_job_ids=requested_job_ids, requested_removal_job_ids=requested_removal_job_ids,
-                           user_job_link = user_job_link, all_users = User)
-
+                           user_job_link = user_job_link, all_users = User, assigned_job_ids = assigned_job_ids)
 
 
 @app.route('/upload_jobs', methods=['POST'])
