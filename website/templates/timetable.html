@@ -39,9 +39,16 @@
                     <p>Date: {{ job.date }}</p>
                     <p>Time: {{ job.start_time }} - {{ job.end_time }}</p>
                     <p>Description: {{ job.job_description }}</p>
-                    <p>Requirements: {{ job.job_requirements }}</p>
+                    <!--<p>Requirements: {{ job.job_requirements }}</p>-->
+                    <div>Requirements:
+                        <ul>
+                            {% for qualification in job.job_qualifications %}
+                                <li>{{ qualification.qualification_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </diV>
                     
-                    {% if job.job_id in assigned_job_ids %}
+                    <!--{% if job.job_id in assigned_job_ids %}
                     <div>You are assigned to this job.</div>
                     <form method="post">
                         <input type="hidden" name="remove_request_job_id" value="{{ job.job_id }}">
@@ -54,6 +61,25 @@
                         <input type="hidden" name="job_id_request" value="{{ job.job_id }}">
                         <input type="submit" value="Request job">
                     </form>
+                    {% endif %}-->
+
+                    {% if job.job_id in qualified_jobs_ids %}
+                        {% if job.job_id in assigned_jobs_ids %}
+                        <div>You are assigned to this job</div>
+                        <form method="post">
+                            <input type="hidden" name="remove_request_job_id" value="{{ job.job_id }}">
+                            <input type="submit" value="Request to remove from job"
+                        </form>
+                        {% elif job.job_id in requested_job_ids %}
+                        <div>You have requested this job</div>
+                        {% elif job.job_id not in requested_job_ids %}
+                        <form method="post">
+                            <input type="hidden" name="job_id_request" value="{{ job.job_Id }}">
+                            <input type="submit" value="Request job">
+                        </form>
+                        {% endif %}
+                    {% else %}
+                        <div>You do not meet the qualifications for this job.</div>
                     {% endif %}
                 </div>
             </div>
