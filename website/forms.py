@@ -3,7 +3,6 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Integ
 from wtforms.validators import input_required, Length, EqualTo, Regexp, NumberRange
 from .databases import User
 
-
 # creates the signup form to be used by routes
 class SignupForm(FlaskForm):
     username = StringField('Username', validators=[input_required(), Length(1, 20)])

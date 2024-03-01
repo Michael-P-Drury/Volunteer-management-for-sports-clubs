@@ -177,6 +177,38 @@ def admin():
 
         job_id = request.form['auto_assign_job_id']
 
+        volunteers = User.query.order_by(User.jobs_completed).all()
+
+        job = Jobs.query.filter_by(job_id = job_id).first()
+
+        needed_left = job.volunteers_needed_left
+
+        i = 0
+
+        while needed_left > 0:
+
+            current_volunteer = volunteers[i]
+            assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_volunteer.user_id).all()
+
+            assigned_job_ids = []
+            for assigned_job in assigned_jobs:
+                assigned_job_ids.append(assigned_job.job_id)
+
+            if job.job_id not in assigned_job_ids:
+
+                new_link = UserJobLink(user_id=current_volunteer.user_id, job_id=job_id)
+                db.session.add(new_link)
+
+                job.decrease_needed_left()
+
+                db.session.commit()
+
+                needed_left = needed_left - 1
+
+            i = i + 1
+
+        return redirect(url_for('admin'))
+
 
     elif 'decrease_user_id' in request.form:
 
