@@ -16,6 +16,7 @@
                 <div class="job-name-box">
                     <div class="job-name"><b>{{ job.job_name }}</b></div>
                 </div>
+
                 <div>Volunteers assigned: <span>{% for user_job in user_job_link %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}, {% endfor %}</span></div>
                 <div>Volunteers needed left: <span>{{ job.volunteers_needed_left }}</span></div>
                 <div>Volunteers Needed: <span>{{ job.volunteers_needed }}</span></div>
@@ -57,10 +58,12 @@
                         {% elif job.job_id in requested_job_ids %}
                         <div>You have requested this job</div>
                         {% elif job.job_id not in requested_job_ids %}
+                        {% if job.volunteers_needed_left > 0 %}
                         <form method="post">
                             <input type="hidden" name="job_id_request" value="{{ job.job_id }}">
                             <input type="submit" value="Request job">
                         </form>
+                        {% endif %}
                         {% endif %}
                     {% else %}
                         <div>You do not meet the qualifications for this job.</div>
