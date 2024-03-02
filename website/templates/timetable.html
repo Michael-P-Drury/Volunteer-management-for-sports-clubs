@@ -17,7 +17,7 @@
                     <div class="job-name"><b>{{ job.job_name }}</b></div>
                 </div>
 
-                <div>Volunteers assigned: <span>{% for user_job in user_job_link %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}, {% endfor %}</span></div>
+                <div>Volunteers assigned: <span>{% for user_job in user_job_link %}{% if user_job.job_id == job.job_id %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}, {% endif %}{% endfor %}</span></div>
                 <div>Volunteers needed left: <span>{{ job.volunteers_needed_left }}</span></div>
                 <div>Volunteers Needed: <span>{{ job.volunteers_needed }}</span></div>
                 <div>Date: <span>{{ job.date }}</span></div>
@@ -36,7 +36,7 @@
                 <div class="popup-info">
                     <p>Volunteers Needed: {{ job.volunteers_needed }}</p>
                     <div>Volunteers needed left: <span>{{ job.volunteers_needed_left }}</span></div>
-                    <div>Volunteers assigned: <span>{% for user_job in user_job_link %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}, {% endfor %}</span></div>
+                    <div>Volunteers assigned: <span>{% for user_job in user_job_link %}{% if user_job.job_id == job.job_id %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}, {% endif %}{% endfor %}</span></div>
                     <p>Date: {{ job.date }}</p>
                     <p>Time: {{ job.start_time }} - {{ job.end_time }}</p>
                     <p>Description: {{ job.job_description }}</p>

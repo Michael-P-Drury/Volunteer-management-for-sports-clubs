@@ -249,7 +249,6 @@ class Jobs(UserMixin, db.Model):
 
 
 
-
     # creates a new job with the information passed into it
     @staticmethod
     def add_new_job(job_name, volunteers_needed, start_time, end_time, date, job_description, job_requirements):
