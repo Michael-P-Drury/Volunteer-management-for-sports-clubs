@@ -43,6 +43,7 @@ def timetable():
     current_user_id = current_user.get_id()
     user_job_link = UserJobLink.query.all()
     user = User.query.get(current_user_id)
+
     user_qualifications_ids = {q.qualifications_id for q in user.qualifications}
 
     qualified_jobs_ids = []
@@ -194,7 +195,16 @@ def admin():
             for assigned_job in assigned_jobs:
                 assigned_job_ids.append(assigned_job.job_id)
 
-            if job.job_id not in assigned_job_ids:
+            user_qualifications_ids = {q.qualifications_id for q in current_volunteer.qualifications}
+
+            qualified_jobs_ids = []
+
+            for loopjob in jobs:
+                job_requirement_ids = {qr.qualifications_id for qr in loopjob.job_qualifications}
+                if job_requirement_ids.issubset(user_qualifications_ids):
+                    qualified_jobs_ids.append(loopjob.job_id)
+
+            if job.job_id not in assigned_job_ids and job.job_id in qualified_jobs_ids:
 
                 new_link = UserJobLink(user_id=current_volunteer.user_id, job_id=job_id)
                 db.session.add(new_link)
