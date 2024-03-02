@@ -41,8 +41,7 @@ class MultiCheckboxField(SelectMultipleField):
 class newJobForm(FlaskForm):
     job_name = StringField('Job name', validators=[input_required()])
     job_description = StringField('Job description', validators=[input_required()])
-    num_users = len(User.query.all())
-    volunteers_needed = IntegerField('Number of volunteers needed', validators=[input_required(), NumberRange(min=0, max=num_users)])
+    volunteers_needed = IntegerField('Number of volunteers needed', validators=[input_required(), NumberRange(min=0)])
     start_time = TimeField('Start time', validators=[input_required()])
     end_time = TimeField('End time', validators=[input_required()])
     date = DateField('Date', validators=[input_required()], format='%Y-%m-%d')
