@@ -415,15 +415,14 @@ def profile():
         db.session.commit()
         return redirect(url_for('profile'))
     
-    if details_form.validate_on_submit():
+    if details_form.submit5.data:
         # Update user's profile details
-        new_detail_text = details_form.detail_text.data
+        new_details = details_form.new_details.data
         for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.details = new_detail_text
+            user.details = new_details
         db.session.commit()
         return redirect(url_for('profile'))
 
-    user_profile_details = current_user.profile_details
     qualifications = Qualification.query.all()
 
     if request.method == 'POST':

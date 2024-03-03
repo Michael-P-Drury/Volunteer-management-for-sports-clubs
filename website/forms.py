@@ -55,6 +55,6 @@ class QualificationForm(FlaskForm):
 
 
 class ProfileDetailsForm(FlaskForm):
-    detail_text = StringField('Detail Text')
+    new_details = StringField('Detail Text')
     submit5 = SubmitField('Save Details')
 

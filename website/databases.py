@@ -51,7 +51,7 @@ class User(UserMixin, db.Model):
     jobs_completed = db.Column(db.Integer)
     # Removed duplicate 'qualifications' field
     admin = db.Column(db.Boolean)
-    profile_details = db.Column(db.String(255))
+    details = db.Column(db.String(255))
 
     qualifications = db.relationship('Qualification', secondary=user_qualifications,
                                      backref=db.backref('users', lazy='subquery'))
@@ -79,6 +79,11 @@ class User(UserMixin, db.Model):
     # sets email inputted
     def set_email(self, email):
         self.email = email
+    
+    # sets the details inputted
+    def set_details(self, details):
+        self.details = details
+        print("test")
 
     # sets preferred name of user as inputted
     def set_preferred_name(self, preferred_name):
@@ -88,9 +93,6 @@ class User(UserMixin, db.Model):
     def set_admin(self, admin):
         self.admin = admin
     
-    #sets details as inputted
-    def set_details(self, profile_details):
-        self.details = profile_details
 
     # sets mobile number to blank
     def no_mobile(self):
