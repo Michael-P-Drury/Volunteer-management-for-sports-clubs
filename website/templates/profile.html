@@ -19,7 +19,7 @@
                 <textarea name="new_details" class="form-control" rows="5">{{ current_user.details }}</textarea>
                 <div>{{ current_user.details }}</div>
             </div>
-            {{ details_form.submit5(class="btn btn-primary") }}
+            {{ details_form.submit(class="btn btn-primary") }}
         </form>
     </div>
 
@@ -76,33 +76,6 @@
     </div>
 
     <div class="profile-qualifications-box profile-box">
-        <p class="profile-box-title">Qualifications</p>
-        <p class = "profile-box-text">
-                {% for qualification in current_user.qualifications %}
-                    {{ qualification.qualification_name }}
-                {% endfor %}
-        </p>
-
-    </div>
-
-    <div class="profile-qualifications-box profile-box">
-        <p class="profile-box-title">Add Qualifications</p>
-        <form action="" method="POST">
-            {{ email_form.csrf_token }}
-            {% for qualification in qualifications %}
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="qualification_ids" value="{{ qualification.qualifications_id }}" {% if qualification.qualifications_id in user_qualifications %} checked {% endif %}>
-                        <strong>{{ qualification.qualification_name }}</strong><br>
-                        <span style="margin-left: 22px;">{{ qualification.qualification_description }}</span>
-                    </label>
-                </div>
-            {% endfor %}
-            <input type="submit" value="Update Qualifications">
-        </form>
-    </div>
-
-    <div class="profile-qualifications-box profile-box">
         <p class="profile-box-title">Assigned Jobs</p>
         {% if assigned_jobs %}
             {% for job in assigned_jobs %}
@@ -116,6 +89,23 @@
             <p>No assigned jobs currently.</p>
         {% endif %}
     </div>
+
+    <div class="profile-qualifications-box profile-box">
+        <p class="profile-box-title">My Qualifications</p>
+        <form action="" method="POST">
+            {% for qualification in qualifications %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="qualification_ids" value="{{ qualification.qualifications_id }}" id="qualification_{{ qualification.qualifications_id }}" {% if qualification.qualifications_id in user_qualifications %} checked {% endif %}>
+                    <label class="form-check-label" for="qualification_{{ qualification.qualifications_id }}">
+                        {{ qualification.qualification_name }}
+                    </label>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Update Qualifications</button>
+        </form>
+    </div>
+
+
 
     <div class="profile-qualifications-box profile-box">
         <p class="profile-box-title">My Pending Requests</p>

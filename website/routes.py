@@ -408,7 +408,6 @@ def profile():
         db.session.commit()
         return redirect(url_for('profile'))
 
-
     if remove_email.submit3.data and remove_email.validate():
         for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
             user.no_email()
@@ -427,8 +426,12 @@ def profile():
 
     if request.method == 'POST':
 
-        selected_qualification_ids = request.form.getlist('qualification_ids')  #correctly retrieves list of selected qualification IDs
-        current_user.qualifications = [Qualification.query.get(id) for id in selected_qualification_ids]
+        #selected_qualification_ids = request.form.getlist('qualification_ids')  #correctly retrieves list of selected qualification IDs
+        #current_user.qualifications = [Qualification.query.get(id) for id in selected_qualification_ids]
+        #db.session.commit()
+
+        selected_qualification_ids = request.form.getlist('qualification_ids')
+        current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
         db.session.commit()
         return redirect(url_for('profile'))
     
