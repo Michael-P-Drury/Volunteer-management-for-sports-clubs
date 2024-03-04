@@ -68,8 +68,7 @@
         <form action="" method="POST">
             {{ details_form.csrf_token }}
                 <textarea name="new_details" class="form-control" rows="5">{{ current_user.details }}</textarea>
-                <p class='profile-box-text'>{{ current_user.details }}</p>
-            {{ details_form.submit5() }}
+            <div>{{ details_form.submit5() }}</div>
         </form>
     </div>
 

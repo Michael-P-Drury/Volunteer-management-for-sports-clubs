@@ -513,6 +513,9 @@ input[type='submit' i]:hover {
 
 .form-control {
     margin: 0.5rem 0rem 0rem 3rem;
+    width: 800px;
+    height: 400px;
+    resize: none;
 }
 
 /* Mobile Section */
