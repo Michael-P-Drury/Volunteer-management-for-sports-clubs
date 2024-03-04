@@ -32,7 +32,7 @@ class removeEmail(FlaskForm):
     submit3 = SubmitField('Remove Email')
 
 class removeMobile(FlaskForm):
-    submit4 = SubmitField('Remove mobile?')
+    submit4 = SubmitField('Remove Mobile')
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)

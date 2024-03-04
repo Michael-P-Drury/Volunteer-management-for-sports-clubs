@@ -408,41 +408,96 @@ body {
     margin-bottom: 25px;
 }
 
-.profile-personal-box {
-    width: 48%;
-    float: left;
-}
-
-.profile-details-box {
-    width: 48%;
-    float: right;
-}
-
-.profile-experience-box {
-    width: 100%;
-    clear: both;
-}
-
-.profile-box {
-    background-color:#ffffff;
-    box-shadow:0 5px 5px #9e9d9d;
-    border-radius: 5px;
-    padding: 0.5%;
-    margin-bottom: 30px;
-}
-
-.profile-box-title {
-    text-decoration: underline;
-    font-size: 1.2vw;
-}
-
 .profile-box-text {
-    font-size: 1vw;
+    font-size: 4vh;
+    margin: 1.5rem 0.5rem 1rem 3rem;
 }
 
+.inline {
+    display: inline-block;
+}
 
-.profile-qualifications-box {
-    clear: both;
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: auto;
+    border: 1px solid black;
+    padding: 0;
+}
+
+.tab-container {
+    display: flex;
+    flex-direction: row;
+}
+  
+.profile-tab {
+    flex: 30%;
+    background-color: #013A63;
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 2.5vw;
+    width: 25%;
+    margin: 0;
+    padding: 1rem 0 1rem 0;
+}
+  
+.profile-tab:hover {
+    background-color: #555;
+}
+  
+.profile-tab-content {
+    flex: 70%;
+    color: white;
+    height: 100%;
+    display: none;
+    background-color: #71b9c9;
+}
+  
+.edit-container > * {
+    line-height: normal;
+    vertical-align: middle;
+}
+
+.Edit {
+    display: inline-block;
+    margin: 1rem 0rem 1rem 3rem;
+    background-color: #013A63;
+    color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 0;
+    font-size: 3vh;
+    padding: 0.5rem;
+}
+
+.Edit:hover {
+    background-color: #555;
+}
+
+.button-container {
+    display: flex;
+}
+
+input[type='submit' i] {
+    display: inline-block;
+    margin: 1rem 0rem 1rem 1rem;
+    background-color: #013A63;
+    color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 0;
+    font-size: 3vh;
+    padding: 0.5rem;
+}
+
+input[type='submit' i]:hover {
+    background-color: #555;
 }
 
 

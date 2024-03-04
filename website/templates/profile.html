@@ -8,41 +8,49 @@
     <h1 class = 'profile-title'>My Profile</h1>
 </div>
 
-<div style="background-color: #ececec; border-radius: 10px; padding: 20px; margin: 10px; position: static;">
-    <div class="profile-details-box profile-box">
-        <p class = "profile-box-title">Details</p>
+<div class='profile-container'>
+
+    <div class='tab-container'>
+        <button class="profile-tab" onclick="showTab('PersonalDetails', this)" id="defaultOpen">Personal Details</button>
+        <button class="profile-tab" onclick="showTab('AboutMe', this)">About Me</button>
+        <button class="profile-tab" onclick="showTab('Jobs', this)">Jobs</button>
+        <button class="profile-tab" onclick="showTab('Qualifications', this)">Qualifications</button>
     </div>
 
-    <div class="profile-personal-box profile-box">
-        <p class = "profile-box-title">Personal Information</p>
+    <div id="PersonalDetails" class="profile-tab-content">
+
         <p class = "profile-box-text">Username: {{ current_user.username }}</p>
 
-        <p class = "profile-box-text">
-            Email: {{ current_user.email }}
-            <button class="Edit" onclick= "editEmails()"> Edit </button>
-            <form action="" method="POST">
-                <div>
-                    {{ email_form.csrf_token }}
-                    <p class = "profile-box-text" id = "profile-box-email" style = "display:none">
-                        {{ email_form.new_email.label }} {{ email_form.new_email() }} {{ email_form.submit1() }}
-                    </p>
-                </div>
-            </form>
-        </p>
-        <p class = "profile-box-text">
-            <form action="" method="POST">
-                <div>
-                    {{ remove_email.csrf_token }}
-                    <p>
-                        {{ remove_email.submit3() }}
-                    </p>
-                </div>
-            </form>
-        </p>
+        <div class="edit-container">
 
-        <p class = "profile-box-text">
-            Mobile: {{ current_user.mobile }}
-            <button class="Edit" onclick = "editMobile()"> Edit </button>
+            <p class = "profile-box-text">
+                Email: {{ current_user.email }}
+            </p>
+            <div class='button-container'>
+                <button class="Edit" onclick="editEmails()">Edit</button>
+                <form action="" method="POST">
+                    {{ remove_email.csrf_token }}
+                    {{ remove_email.submit3() }}
+                </form>
+            </div>
+            <form action="" method="POST">
+                {{ email_form.csrf_token }}
+                <div class="profile-box-text" id="profile-box-email" style="display:none">
+                    {{ email_form.new_email.label }} {{ email_form.new_email() }} {{ email_form.submit1() }}
+                </div>
+            </form>
+        </div>
+        <div class='edit-container'>
+            <p class = "profile-box-text">
+                Mobile: {{ current_user.mobile }}
+            </p>
+            <div class='button-container'>
+                <button class="Edit" onclick = "editMobile()"> Edit </button>
+                <form action="" method="POST">
+                    {{ remove_mobile.csrf_token }}
+                    {{ remove_mobile.submit4() }}
+                </form>
+            </div>
             <form action = "" method = "POST">
                 <div>
                     {{ mobile_form.csrf_token }}
@@ -50,33 +58,47 @@
                         {{ mobile_form.new_mobile.label }} {{ mobile_form.new_mobile() }} {{ mobile_form.submit2() }}
                     </p>
                 </div>
-                
             </form>
-        </p>
-        <p class = "profile-box-text">
-            <form action="" method="POST">
-                <div>
-                    {{ remove_mobile.csrf_token }}
-                    <p>
-                        {{ remove_mobile.submit4() }}
-                    </p>
-                </div>
-            </form>
-        </p>
+        </div>
+    </div>
+    
+    <div id="AboutMe" class="profile-tab-content">
+        <p class='profile-box-text'>About {{ current_user.username }}:</p>
     </div>
 
-    <div class="profile-qualifications-box profile-box">
-        <p class="profile-box-title">Qualifications</p>
-        <p class = "profile-box-text">
-                {% for qualification in current_user.qualifications %}
-                    {{ qualification.qualification_name }}
-                {% endfor %}
-        </p>
+    <div id="Jobs" class="profile-tab-content">
+        <p class='profile-box-text'>Current number of jobs completed: {{ current_user.jobs_completed }}</p>
+        <p class="profile-box-text">My Pending Requests:</p>
 
+        {% if my_requests %}
+
+        {% for my_request in my_requests %}
+            <p class='profile-box-text'> Job name: {{ my_request.job_id[0].job_name }} </p>
+        {% endfor %}
+
+        {% else %}
+            <p class='profile-box-text'  style='font-size: 3vh;'> No current requests for jobs </p>
+        {% endif %}
+
+        <p class="profile-box-text">Remove from Job Requests:</p>
+
+        {% if my_remove_requests %}
+
+        {% for my_remove_request in my_remove_requests %}
+            <p class='profile-box-text'> Job name: {{ my_remove_request.job_id[0].job_name }} </p>
+        {% endfor %}
+
+        {% else %}
+            <p class='profile-box-text' style='font-size: 3vh;'> No current remove requests for jobs </p>
+        {% endif %}
     </div>
 
-    <div class="profile-qualifications-box profile-box">
-        <p class="profile-box-title">Add Qualifications</p>
+    <div id="Qualifications" class="profile-tab-content">
+        <p class = "profile-box-text">
+            {% for qualification in current_user.qualifications %}
+                {{ qualification.qualification_name }}
+            {% endfor %}
+        </p>
         <form action="" method="POST">
             {{ email_form.csrf_token }}
             {% for qualification in qualifications %}
@@ -90,34 +112,6 @@
             {% endfor %}
             <input type="submit" value="Update Qualifications">
         </form>
-    </div>
-
-    <div class="profile-qualifications-box profile-box">
-        <p class="profile-box-title">My Pending Requests</p>
-
-        <p class="profile-box-subtitle">Volunteering requests:</p>
-
-        {% if my_requests %}
-
-        {% for my_request in my_requests %}
-            <p> Job name: {{ my_request.job_id[0].job_name }} </p>
-        {% endfor %}
-
-        {% else %}
-            <p> No current requests for jobs </p>
-        {% endif %}
-
-        <p class="profile-box-subtitle">Remove from job requests:</p>
-
-        {% if my_remove_requests %}
-
-        {% for my_remove_request in my_remove_requests %}
-            <p> Job name: {{ my_remove_request.job_id[0].job_name }} </p>
-        {% endfor %}
-
-        {% else %}
-            <p> No current remove requests for jobs </p>
-        {% endif %}
     </div>
 
 </div>
