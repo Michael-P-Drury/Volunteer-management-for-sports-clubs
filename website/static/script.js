@@ -1,24 +1,21 @@
-document.getElementById("defaultOpen").click();
-
 var slideIndex = 0;
-showSlides();
 
 function showSlides() {
     var i;
     var slides = document.getElementsByClassName("mySlides");
-    
+
     for (i = 0; i < slides.length; i++) {
-        /*slides[i].style.display = 'none';*/
         slides[i].style.opacity = 0;
     }
+
+    if (slideIndex >= slides.length) {
+        slideIndex = 0}
+    
+    slides[slideIndex].style.opacity = 1;
     slideIndex++;
 
-    if (slideIndex > slides.length) {
-        slideIndex = 1}
-
-    /*slides[slideIndex-1].style.display = 'block';*/
-    slides[slideIndex-1].style.opacity = 1;
     setTimeout(showSlides, 3000);
+    return 'Slideshow is running'
 }
 
 function expand(button) {
@@ -32,7 +29,7 @@ function expand(button) {
 }
 
 function showTab (tab, element) {
-	const colour = '#71b9c9';
+	const colour = '#468FAF';
   
   //Removes all content divs initially
 	tabContent = document.getElementsByClassName("profile-tab-content");
@@ -48,5 +45,18 @@ function showTab (tab, element) {
   
   document.getElementById(tab).style.display = "block";
   element.style.backgroundColor = colour;
+}
+
+function showEdits () {
+
+  var divs = document.getElementsByClassName("toggleEdit");
+
+  for (var i = 0; i < divs.length; i++) {
+    if (divs[i].style.display === "none") {
+        divs[i].style.display = "block";
+    } else {
+        divs[i].style.display = "none";
+    }
+  }
 }
 
