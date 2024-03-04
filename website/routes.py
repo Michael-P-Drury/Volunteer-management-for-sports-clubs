@@ -187,35 +187,39 @@ def admin():
         i = 0
 
         while needed_left > 0:
+            try:
 
-            current_volunteer = volunteers[i]
-            assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_volunteer.user_id).all()
+                current_volunteer = volunteers[i]
+                assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_volunteer.user_id).all()
 
-            assigned_job_ids = []
-            for assigned_job in assigned_jobs:
-                assigned_job_ids.append(assigned_job.job_id)
+                assigned_job_ids = []
+                for assigned_job in assigned_jobs:
+                    assigned_job_ids.append(assigned_job.job_id)
 
-            user_qualifications_ids = {q.qualifications_id for q in current_volunteer.qualifications}
+                user_qualifications_ids = {q.qualifications_id for q in current_volunteer.qualifications}
 
-            qualified_jobs_ids = []
+                qualified_jobs_ids = []
 
-            for loopjob in jobs:
-                job_requirement_ids = {qr.qualifications_id for qr in loopjob.job_qualifications}
-                if job_requirement_ids.issubset(user_qualifications_ids):
-                    qualified_jobs_ids.append(loopjob.job_id)
+                for loopjob in jobs:
+                    job_requirement_ids = {qr.qualifications_id for qr in loopjob.job_qualifications}
+                    if job_requirement_ids.issubset(user_qualifications_ids):
+                        qualified_jobs_ids.append(loopjob.job_id)
 
-            if job.job_id not in assigned_job_ids and job.job_id in qualified_jobs_ids:
+                if job.job_id not in assigned_job_ids and job.job_id in qualified_jobs_ids:
 
-                new_link = UserJobLink(user_id=current_volunteer.user_id, job_id=job_id)
-                db.session.add(new_link)
+                    new_link = UserJobLink(user_id=current_volunteer.user_id, job_id=job_id)
+                    db.session.add(new_link)
 
-                job.decrease_needed_left()
+                    job.decrease_needed_left()
 
-                db.session.commit()
+                    db.session.commit()
 
-                needed_left = needed_left - 1
+                    needed_left = needed_left - 1
 
-            i = i + 1
+                i = i + 1
+
+            except:
+                needed_left = 0
 
         return redirect(url_for('admin'))
 
@@ -272,6 +276,7 @@ def admin():
             return redirect(url_for('admin'))
 
     if new_job_form.validate_on_submit():
+
         new_job_name = new_job_form.job_name.data
         new_job_date = new_job_form.date.data
         new_job_start = new_job_form.start_time.data
@@ -295,6 +300,7 @@ def admin():
         start_time_insert = f'{new_job_start_hour}:{new_job_start_minute}'
         end_time_insert = f'{new_job_end_hour}:{new_job_end_minute}'
 
+
         new_job = Jobs(
             #volunteers_assigned='',
             volunteers_needed=new_job_volunteers_needed,
@@ -315,8 +321,9 @@ def admin():
             new_job.job_qualifications.append(qualification)
 
         db.session.commit()
+
         return redirect(url_for('admin'))
-    
+
     if qualification_form.validate_on_submit():
         new_qualification = Qualification(
             qualification_name=qualification_form.qualification_name.data,
@@ -325,6 +332,7 @@ def admin():
 
         db.session.add(new_qualification)
         db.session.commit()
+
         return redirect(url_for('admin'))
 
 
