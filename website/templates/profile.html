@@ -88,7 +88,7 @@
         {% if my_requests %}
 
         {% for my_request in my_requests %}
-            <p class='profile-box-text'> Job name: {{ my_request.job_id[0].job_name }} </p>
+            <p class='profile-box-text'> Job name: {{ job_table.query.filter_by(job_id = my_request.job_id).first().job_name }} </p>
         {% endfor %}
 
         {% else %}
@@ -100,7 +100,7 @@
         {% if my_remove_requests %}
 
         {% for my_remove_request in my_remove_requests %}
-            <p class='profile-box-text'> Job name: {{ my_remove_request.job_id[0].job_name }} </p>
+            <p class='profile-box-text'> Job name: {{ job_table.query.filter_by(job_id = my_remove_request.job_id).first().job_name }} </p>
         {% endfor %}
 
         {% else %}

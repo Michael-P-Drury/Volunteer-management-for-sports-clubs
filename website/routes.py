@@ -399,11 +399,12 @@ def profile():
     my_requests = Requests.query.filter_by(user_id=current_user.get_id()).all()
     my_remove_requests = RemoveRequests.query.filter_by(user_id=current_user.get_id()).all()
 
+    print(my_requests)
+
     current_user_id = current_user.get_id()
     assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_user_id).all()
 
     details_form = ProfileDetailsForm()
-
 
     if mobile_form.validate_on_submit() and mobile_form.validate():
         new_mobile = mobile_form.new_mobile.data
@@ -453,9 +454,9 @@ def profile():
         return redirect(url_for('profile'))
     
     return render_template('profile.html', assigned_jobs=assigned_jobs, email_form=email_form, mobile_form=mobile_form,
-                           remove_mobile=remove_mobile, remove_email=remove_email, qualifications=Qualification.query.all(),
+                           remove_mobile=remove_mobile, remove_email=remove_email, qualifications=qualifications,
                            user_qualifications=[q.qualifications_id for q in current_user.qualifications], my_requests=my_requests,
-                           my_remove_requests=my_remove_requests, details_form=details_form)
+                           my_remove_requests=my_remove_requests, details_form=details_form, job_table = Jobs)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
