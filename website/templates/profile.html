@@ -7,6 +7,11 @@
         document.getElementById("defaultOpen").click();
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("defaultOpen").click();
+    });
+</script>
 
 <div class="p-title-box">
     <h1 class = 'profile-title'>{{ current_user.username }}'s Profile</h1>
@@ -60,8 +65,7 @@
         <form action="" method="POST">
             {{ details_form.csrf_token }}
                 <textarea name="new_details" class="form-control" rows="5">{{ current_user.details }}</textarea>
-                <p class='profile-box-text'>{{ current_user.details }}</p>
-            {{ details_form.submit5(style='margin: 0rem 0rem 1rem 3rem') }}
+            <div>{{ details_form.submit5(style='margin: 0rem 0rem 1rem 3rem') }}</div>
         </form>
     </div>
 
