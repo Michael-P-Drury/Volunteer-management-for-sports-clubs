@@ -22,10 +22,10 @@
             {% endif %}
             <form action="" method="POST">
                 {{ form.csrf_token }}
-                <p>
+                <p class="signup-username">
                 {{ form.username.label }} {{ form.username() }}
                 </p>
-                <p>
+                <p class="signup-password">
                 {{ form.password.label }} {{ form.password() }}
                 </p>
                 <p>
@@ -39,7 +39,7 @@
                 </p>
 
             </form>
-            <a class = 'to_signup' href="{{ url_for('login') }}">to login</a>
+            <a class = 'to_signup' href="{{ url_for('login') }}">Login</a>
         </div>
     </div>
 </div>

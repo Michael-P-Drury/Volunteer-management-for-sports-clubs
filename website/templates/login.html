@@ -23,14 +23,14 @@
                 {{ form.username.label }} {{ form.username() }}
                 </p>
                 <p>
-                {{ form.password.label }} {{ form.password() }}
+                {{ form.password.label }} {{ form.password(class="login-password") }}
                 </p>
                 <p>
                 {{ form.submit() }}
                 </p>
 
             </form>
-            <a class = 'to_signup' href="{{ url_for('signup') }}"><p>to sign up</p></a>
+            <a class = 'to_signup' href="{{ url_for('signup') }}"><p>Sign up</p></a>
         </div>
     </div>
 </div>
