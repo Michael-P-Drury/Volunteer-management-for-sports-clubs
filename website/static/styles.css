@@ -252,6 +252,7 @@ li {
 .what-we-do {
     background-color: #f9f9f9;
     padding: 60px 0;
+    margin: 0px 20px;
   }
 
 .section-heading {
@@ -310,7 +311,7 @@ li {
     padding: 50px;
     width: 300px;
     background: #F5F5F5;
-    border: 4px solid black;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .login_logo{
@@ -354,6 +355,14 @@ li {
 
 body {
     font-family: 'Roboto', sans-serif;
+}
+
+.login-password {
+    margin-left:5px;
+}
+
+.signup-username, .signup-password {
+    margin-left: 40px;
 }
 
 /* Terms and Conditions Section */
@@ -686,6 +695,15 @@ input[type='submit' i]:hover {
     border-radius: 20px; 
 }
 
+.popup-info ul {
+    margin: 0px 20px; 
+    padding: 0;
+}
+
+.popup-requirements {
+    margin: 0px;
+}
+
 .no-jobs {
     text-align: center; 
     position: relative; 
@@ -721,6 +739,93 @@ input[type='submit' i]:hover {
 .admin-box h2 {
     color: #333;
     margin-bottom: 15px;
+}
+
+.admin-job-request {
+    display: flex; 
+    justify-content:flex-start;
+}
+
+.admin-job-request form {
+    margin-right: 10px;
+}
+
+.admin-new-job div, .admin-new-qual div{
+    padding-top:5px;
+}
+
+.admin-new-job-name, .admin-new-job-desc {
+    width: 40%; 
+    margin-left:146px; 
+    max-width:40%;
+}
+
+.admin-new-job-desc{
+    margin-left:109px; 
+}
+
+.admin-new-job-vol, .admin-new-qual-name {
+    margin-left: 6px;
+}
+
+.admin-new-job-stime {
+    margin-left:148px;
+}
+
+.admin-new-job-etime {
+    margin-left:153px;
+}
+
+.admin-new-job-date {
+    margin-left:183px;
+}
+
+.admin-csv-file {
+    margin-top:30px;
+}
+
+.admin-club-member tr:nth-child(n+1) {
+    text-align: center;
+}
+
+.admin-club-member div {
+    display: inline-block;
+}
+
+.admin-club-table th {
+    padding:0px 10px;
+}
+
+.admin-new-qualdesc {
+    margin-left: 61px;
+}
+
+.admin-qual hr, .admin-jobs hr{
+    border: 0.1px solid #e8e8e8;
+}
+
+.admin-qual p, .admin-jobs p{
+    width: 80%; 
+    word-wrap: break-word; 
+    margin-top:10px;
+}
+
+.admin-jobs p {
+    width: 70%; 
+}
+
+.admin-qual div, .admin-jobs div{
+    display: flex;
+}
+
+.admin-qual div:nth-last-child(-n+1), .admin-jobs div:nth-child(3){
+    justify-content: flex-end;  
+    margin-top:7px; 
+    padding-top:3px;
+}
+
+.admin-jobs form:nth-last-child(-n+1){
+    margin-left:5px;
 }
 
 /* For smaller screens */

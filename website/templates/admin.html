@@ -13,14 +13,16 @@
         {% for request in requests %}
         <div>
             <p>Volunteer name: {{ request.user.username }} | Job name: {{ request.job.job_name }}</p>
-            <form method="post">
-                <input type="hidden" name="accept_request" value="{{ request.user_id }},{{ request.job_id }}">
-                <input type="submit" value="Accept Request?" class="btn">
-            </form>
-            <form method="post" onclick="return confirm('Are you sure you want to delete this request?');">
-                <input type="hidden" name="delete_request" value="{{ request.user_id }},{{ request.job_id }}">
-                <input type="submit" value="Delete Request?" class="btn">
-            </form>
+            <div class="admin-job-request">
+                <form method="post">
+                    <input type="hidden" name="accept_request" value="{{ request.user_id }},{{ request.job_id }}">
+                    <input type="submit" value="Accept Request?" class="btn">
+                </form>
+                <form method="post" onclick="return confirm('Are you sure you want to delete this request?');">
+                    <input type="hidden" name="delete_request" value="{{ request.user_id }},{{ request.job_id }}">
+                    <input type="submit" value="Delete Request?" class="btn">
+                </form>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -30,39 +32,42 @@
         {% for remove_request in remove_requests %}
         <div>
             <p>Volunteer name: {{ remove_request.user.username }} | Job name: {{ remove_request.job.job_name }}</p>
-            <form method="post">
-                <input type="hidden" name="accept_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">
-                <input type="submit" value="Accept Request?" class="btn">
-            </form>
-            <form method="post" onclick="return confirm('Are you sure you want to delete this request?');">
-                <input type="hidden" name="delete_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">
-                <input type="submit" value="Delete Request?" class="btn">
-            </form>
+            <div class="admin-job-request">
+                <form method="post">
+                    <input type="hidden" name="accept_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">
+                    <input type="submit" value="Accept Request?" class="btn">
+                </form>
+                <form method="post" onclick="return confirm('Are you sure you want to delete this request?');">
+                    <input type="hidden" name="delete_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">
+                    <input type="submit" value="Delete Request?" class="btn">
+                </form>
+            </div>
         </div>
         {% endfor %}
     </div>
 
     <div class="admin-box">
         <h2>Add New Job</h2>
+        <div class="admin-new-job">
         <form action="" method="POST">
             {{ new_job_form.csrf_token }}
             <div>
-                {{ new_job_form.job_name.label }} {{ new_job_form.job_name() }}
+                {{ new_job_form.job_name.label }} {{ new_job_form.job_name(class="admin-new-job-name") }}
             </div>
             <div>
-                {{ new_job_form.job_description.label }} {{ new_job_form.job_description() }}
+                {{ new_job_form.job_description.label }} {{ new_job_form.job_description(class="admin-new-job-desc") }}
             </div>
             <div>
-                {{ new_job_form.volunteers_needed.label }} {{ new_job_form.volunteers_needed() }}
+                {{ new_job_form.volunteers_needed.label }} {{ new_job_form.volunteers_needed(class="admin-new-job-vol") }}
             </div>
             <div>
-                {{ new_job_form.start_time.label }} {{ new_job_form.start_time() }}
+                {{ new_job_form.date.label }} {{ new_job_form.date(class="admin-new-job-date") }}
             </div>
             <div>
-                {{ new_job_form.end_time.label }} {{ new_job_form.end_time() }}
+                {{ new_job_form.start_time.label }} {{ new_job_form.start_time(class="admin-new-job-stime") }}
             </div>
             <div>
-                {{ new_job_form.date.label }} {{ new_job_form.date() }}
+                {{ new_job_form.end_time.label }} {{ new_job_form.end_time(class="admin-new-job-etime") }}
             </div>
             <div>
                 {{ new_job_form.job_requirements.label }}
@@ -76,20 +81,22 @@
                 {{ new_job_form.submit() }}
             </div>
         </form>
+        </div>
     </div>
 
     <div class="admin-box">
         <h2>Upload Jobs CSV File</h2>
         <form method="POST" action="/upload_jobs" enctype="multipart/form-data">
             <input type="file" name="file">
+            <br>
             <input type="submit" value="Upload" class="btn">
         </form>
     </div>
 
     <div class="admin-box admin-scrollable-box">
         <h2>Club Members</h2>
-        <table>
-            <thead>
+        <table class="admin-club-member">
+            <thead class="admin-club-table">
                 <tr>
                     <th>Username</th>
                     <th>Preferred Name</th>
@@ -112,14 +119,14 @@
                 <td>{{ user.events }}</td>
                 <td>{{ user.jobs_completed }}</td>
                 <td>
-                    <div style="display: inline-block;">
+                    <div>
                         <form method="post">
                             <input type="hidden" name="increase_user_id" value="{{ user.user_id }}">
                             <input type="submit" value="+">
                         </form>
                     </div>
                     {% if user.jobs_completed >= 1 %}
-                    <div style="display: inline-block;">
+                    <div>
                         <form method="post">
                             <input type="hidden" name="decrease_user_id" value="{{ user.user_id }}">
                             <input type="submit" value="-">
@@ -138,46 +145,58 @@
         <h3>Add New Qualification</h3>
         <form action="" method="POST">
             {{ qualification_form.csrf_token }}
-            <div>
-                {{ qualification_form.qualification_name.label }} {{ qualification_form.qualification_name() }}
-            </div>
-            <div>
-                {{ qualification_form.qualification_description.label }} {{ qualification_form.qualification_description() }}
-            </div>
-            <div>
-                {{ qualification_form.submit() }}
+            <div class="admin-new-qual">
+                <div>
+                    {{ qualification_form.qualification_name.label }} {{ qualification_form.qualification_name(class="admin-new-qual-name") }}
+                </div>
+                <div>
+                    {{ qualification_form.qualification_description.label }} {{ qualification_form.qualification_description(class="admin-new-qualdesc") }}
+                </div>
+                <div>
+                    {{ qualification_form.submit() }}
+                </div>
             </div>
         </form>
     </div>
 
     <div class="admin-box admin-scrollable-box">
-        <h3>Existing Qualifications</h3>
-        <ul>
+        <h2>Existing Qualifications</h2>
         {% for qualification in qualifications %}
-            <li>{{ qualification.qualification_name }}: {{ qualification.qualification_description }}</li>
-            <form method = "post" action="{{ url_for('delete_qualification', qualifications_id=qualification.qualifications_id) }}" onclick="return confirm('Are you sure you want to delete this qualification?');">
-                <input type = "hidden" name = "delete_qualification_id" value = {{ qualification.qualifications_id }}>
-                <input type = "submit" value = "Delete Qualification">
-            </form>
+        <div class="admin-qual">
+        <hr>
+        <div>
+            <p>{{ qualification.qualification_name }}: {{ qualification.qualification_description }}</p>
+            <div>
+                <form method = "post" action="{{ url_for('delete_qualification', qualifications_id=qualification.qualifications_id) }}" onclick="return confirm('Are you sure you want to delete this qualification?');">
+                    <input type = "hidden" name = "delete_qualification_id" value = {{ qualification.qualifications_id }}>
+                    <input type = "submit" value = "Delete Qualification">
+                </form>
+            </div>
+        </div>
+        </div>
         {% endfor %}
-        </ul>
     </div>
 
     <div class="admin-box admin-scrollable-box">
         <h3>Existing Jobs</h3>
-        <ul>
-            {% for job in jobs %}
-                <li>{{ job.job_name }}</li>
-                <form method = "post" action="{{ url_for('delete_job', job_id=job.job_id) }}" onclick="return confirm('Are you sure you want to delete this job?');">
-                    <input type = "hidden" name = "delete_job_id" value = {{ job.job_id }}>
-                    <input type = "submit" value = "Delete Job">
-                </form>
-                <form method = "post">
-                    <input type = "hidden" name = "auto_assign_job_id" value = {{ job.job_id }}>
-                    <input type = "submit" value = "Auto Assign Volunteers">
-                </form>
+        {% for job in jobs %}
+            <div class="admin-jobs">
+            <hr>
+            <div>
+                <p>{{ job.job_name }}</p>
+                <div>
+                    <form method = "post">
+                        <input type = "hidden" name = "auto_assign_job_id" value = {{ job.job_id }}>
+                        <input type = "submit" value = "Auto Assign Volunteers">
+                    </form>
+                    <form method = "post" action="{{ url_for('delete_job', job_id=job.job_id) }}" onclick="return confirm('Are you sure you want to delete this job?');">
+                        <input type = "hidden" name = "delete_job_id" value = {{ job.job_id }}>
+                        <input type = "submit" value = "Delete Job">
+                    </form>
+                </div>
+            </div>
+            </div>
             {% endfor %}
-        </ul>
     </div>
 </div>
 {% endblock %}
