@@ -410,7 +410,7 @@ body {
 
 .profile-box-text {
     font-size: 4vh;
-    margin: 1.5rem 0.5rem 1rem 3rem;
+    margin: 1.5rem 0rem 1.5rem 3rem;
 }
 
 .inline {
@@ -434,7 +434,7 @@ body {
 .profile-tab {
     flex: 30%;
     background-color: #013A63;
-    color: white;
+    color: #F2F2F2;
     float: left;
     border: none;
     outline: none;
@@ -450,11 +450,12 @@ body {
 }
   
 .profile-tab-content {
+    position: relative;
     flex: 70%;
-    color: white;
+    color: #F2F2F2;
     height: 100%;
     display: none;
-    background-color: #71b9c9;
+    background-color: #468FAF;
 }
   
 .edit-container > * {
@@ -464,9 +465,9 @@ body {
 
 .Edit {
     display: inline-block;
-    margin: 1rem 0rem 1rem 1rem;
-    background-color: #013A63;
-    color: white;
+    margin: 1rem 0.5rem 0rem 0rem;
+    background-color: #013A63 ;
+    color: #F2F2F2;
     border: none;
     outline: none;
     cursor: pointer;
@@ -474,6 +475,9 @@ body {
     font-size: 3vh;
     padding: 0.5rem;
     border-radius: 15px;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .Edit:hover {
@@ -486,9 +490,9 @@ body {
 
 input[type='submit' i] {
     display: inline-block;
-    margin: 1rem 0rem 1rem 3rem;
+    margin: 5px;
     background-color: #013A63;
-    color: white;
+    color: #F2F2F2;
     border: none;
     outline: none;
     cursor: pointer;

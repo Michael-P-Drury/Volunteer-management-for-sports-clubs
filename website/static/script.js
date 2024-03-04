@@ -32,7 +32,7 @@ function expand(button) {
 }
 
 function showTab (tab, element) {
-	const colour = '#71b9c9';
+	const colour = '#468FAF';
   
   //Removes all content divs initially
 	tabContent = document.getElementsByClassName("profile-tab-content");
@@ -48,5 +48,18 @@ function showTab (tab, element) {
   
   document.getElementById(tab).style.display = "block";
   element.style.backgroundColor = colour;
+}
+
+function showEdits () {
+
+  var divs = document.getElementsByClassName("toggleEdit");
+
+  for (var i = 0; i < divs.length; i++) {
+    if (divs[i].style.display === "none") {
+        divs[i].style.display = "block";
+    } else {
+        divs[i].style.display = "none";
+    }
+  }
 }
 
