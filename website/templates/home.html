@@ -2,6 +2,12 @@
 
 {% block page_content %}
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        showSlides();
+    });
+</script>
+
 <div class="main-content">
     <div class="image-container">
         <img class="mySlides fade" src="{{ url_for('static', filename='images/image_3.1.jpg')}}">

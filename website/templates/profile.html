@@ -2,7 +2,11 @@
 
 {% block page_content %}
 
-<script src="../static/edit-buttons.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("defaultOpen").click();
+    });
+</script>
 
 <div class="p-title-box">
     <h1 class = 'profile-title'>{{ current_user.username }}'s Profile</h1>
