@@ -1,10 +1,12 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
-from .databases import User, Jobs, Qualification, Requests, RemoveRequests
+from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink
 from . import lm, db, app
-from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, QualificationForm
+from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, \
+    QualificationForm, ProfileDetailsForm
 import pandas as pd
 import io
+from sqlalchemy import desc
 
 # from .forms import ... (if you want to import a form)
 # routing for the pages in the website
@@ -38,88 +40,92 @@ def home():
 @app.route('/timetable', methods=['GET', 'POST'])
 def timetable():
     jobs = Jobs.query.all()
-
     current_user_id = current_user.get_id()
+    user_job_link = UserJobLink.query.all()
+    user = User.query.get(current_user_id)
 
-    if request.method == 'POST':
-        try:
-            current_user_id = current_user.get_id()
-            job_id_request = request.form['job_id_request']
+    user_qualifications_ids = {q.qualifications_id for q in user.qualifications}
 
-            user = User.query.get(current_user_id)
-            job = Jobs.query.get(job_id_request)
+    qualified_jobs_ids = []
 
-            new_request = Requests()
+    for job in jobs:
+        job_requirement_ids = {qr.qualifications_id for qr in job.job_qualifications}
+        if job_requirement_ids.issubset(user_qualifications_ids):
+            qualified_jobs_ids.append(job.job_id)
 
-            new_request.user_id.append(user)
-            new_request.job_id.append(job)
+    if 'job_id_request' in request.form:
+        job_id_request = request.form['job_id_request']
+        new_request = Requests(user_id=current_user_id, job_id=job_id_request)
+        db.session.add(new_request)
+        db.session.commit()
+        return redirect(url_for('timetable'))
 
-            db.session.add(new_request)
-            db.session.commit()
 
-        except:
-            try:
+    elif 'remove_request_job_id' in request.form:
+        job_id_request = request.form['remove_request_job_id']
+        new_request = RemoveRequests(user_id=current_user_id, job_id=job_id_request)
+        db.session.add(new_request)
+        db.session.commit()
+        return redirect(url_for('timetable'))
 
-                job_request_remove = request.form['remove_request_job_id']
+    assigned_job_ids = []
+    assigned_jobs = UserJobLink.query.filter_by(user_id=current_user_id).all()
+    for assigned_job in assigned_jobs:
+        assigned_job_ids.append(assigned_job.job_id)
 
-                user = User.query.get(current_user.get_id())
-                job = Jobs.query.get(job_request_remove)
+    requested_job_ids = []
+    requested_jobs = Requests.query.filter_by(user_id=current_user_id).all()
+    for requested in requested_jobs:
+        requested_job_ids.append(requested.job_id)
 
-                new_remove_request = RemoveRequests()
+    requested_removals = RemoveRequests.query.filter_by(user_id=current_user_id).all()
+    requested_removal_job_ids = {rem.job_id for rem in requested_removals}
 
-                new_remove_request.user_id.append(user)
-                new_remove_request.job_id.append(job)
-
-                db.session.add(new_remove_request)
-                db.session.commit()
-
-            except:
-                pass
-            pass
-
-        redirect(url_for('timetable'))
-
-    return render_template('timetable.html', jobs=jobs, current_user_id = current_user_id, Requests = Requests, RemoveRequests = RemoveRequests)
+    return render_template('timetable.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
+                           requested_job_ids=requested_job_ids, requested_removal_job_ids=requested_removal_job_ids,
+                           user_job_link = user_job_link, all_users = User, assigned_job_ids = assigned_job_ids)
 
 
 @app.route('/upload_jobs', methods=['POST'])
 def upload_file():
-    #Check if the file is in the request.
     if 'file' not in request.files:
         return redirect(request.url)
 
     file = request.files['file']
 
-    #If the user does not select a file, error.
     if file.filename == '':
         return redirect(request.url)
 
-    if file:
-        #Ensure the file is a CSV before processing.
-        if file.filename.endswith('.csv'):
-            #Convert the file stream to a panda
-            stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
-            csv_input = pd.read_csv(stream)
+    if file and file.filename.endswith('.csv'):
+        stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
+        csv_input = pd.read_csv(stream)
 
-            #Iterate over the rows in the csv file and create new jobs intsance of each row.
-            for loopcount, row in csv_input.iterrows():
-                new_job = Jobs(
-                    volunteers_assigned=row.get('volunteers_assigned', ''),
-                    volunteers_needed=row.get('volunteers_needed', 0),
-                    start_time=row.get('start_time', ''),
-                    end_time=row.get('end_time', ''),
-                    date=row.get('date', ''),
-                    job_description=row.get('job_description', ''),
-                    job_requirements=row.get('job_requirements', '')
-                )
-                # Add each new job to the session
-                db.session.add(new_job)
+        expected_headers = ['volunteers_needed', 'start_time', 'end_time', 'date', 'job_description', 'job_requirements']
 
-            # Commit the session to save all new Jobs to the database
-            db.session.commit()
-            return redirect(url_for('timetable'))  # Redirect to the admin page to display jobs.
-        else:
+        if not all(header in csv_input.columns for header in expected_headers):
             return redirect(request.url)
+
+        errors = []
+        for index, row in csv_input.iterrows():
+            try:
+                new_job = Jobs(
+                    volunteers_needed=row['volunteers_needed'],
+                    start_time=row['start_time'],
+                    end_time=row['end_time'],
+                    date=row['date'],
+                    job_description=row['job_description'],
+                    job_requirements=row['job_requirements']
+                )
+                db.session.add(new_job)
+            except Exception as e:
+                errors.append(f"Error in row {index}: {e}")
+
+        if errors:
+            for error in errors:
+                db.session.rollback()  ##rollback the session in case of errors
+        else:
+            db.session.commit()  #only commit if all rows are processed successfully
+            return redirect(url_for('timetable'))
     else:
         return redirect(request.url)
     
@@ -127,162 +133,219 @@ def upload_file():
 # routing for the admin page which takes you to the home page and the URL of the base URL/admin
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    users = User.query.all()
+    users = User.query.order_by(desc(User.jobs_completed)).all()
     qualifications = Qualification.query.all()
     new_job_form = newJobForm()
+    jobs = Jobs.query.all()
 
-    requests = Requests.query.all()
+    requests = Requests.query.join(User).order_by(User.jobs_completed).all()
 
-    remove_requests = RemoveRequests.query.all()
+    remove_requests = RemoveRequests.query.join(User).order_by(User.jobs_completed).all()
 
     new_job_form.job_requirements.choices = [(q.qualifications_id, q.qualification_name) for q in qualifications]
 
     qualification_form = QualificationForm()
 
-    if request.method == 'POST':
-        try:
-            out_list = request.form['accept_request']
+    if 'accept_request' in request.form:
+            user_id, job_id = request.form['accept_request'].split(',')
 
-            out_list = out_list.split(',')
+            new_link = UserJobLink(user_id=user_id, job_id=job_id)
+            db.session.add(new_link)
 
-            user_accept = out_list[0]
-            job_accept = out_list[1]
+            job = Jobs.query.filter_by(job_id=job_id).first()
+            job.decrease_needed_left()
 
-            current_job = Jobs.query.filter_by(job_id=job_accept).first()
-
-            current_job.add_volunteer(user_accept)
-
-            request_to_delete = Requests.query.filter(Requests.user_id.any(user_id=user_accept),
-                                                      Requests.job_id.any(job_id=job_accept)).first()
-
+            request_to_delete = Requests.query.filter_by(user_id=user_id, job_id=job_id).first()
             if request_to_delete:
                 db.session.delete(request_to_delete)
-
+            
             db.session.commit()
-
             return redirect(url_for('admin'))
 
-        except:
+    elif 'increase_user_id' in request.form:
 
-            try:
-                out_list = request.form['delete_request']
+        user_id = request.form['increase_user_id']
 
-                out_list = out_list.split(',')
+        user = User.query.filter_by(user_id = user_id).first()
 
-                user_delete = out_list[0]
-                job_delete = out_list[1]
+        user.increase_jobs()
 
-                request_to_delete = Requests.query.filter(Requests.user_id.any(user_id=user_delete), Requests.job_id.any(job_id=job_delete)).first()
+        db.session.commit()
 
-                if request_to_delete:
+        return redirect(url_for('admin'))
 
-                    db.session.delete(request_to_delete)
-                    db.session.commit()
+    elif 'auto_assign_job_id' in request.form:
 
-                return redirect(url_for('admin'))
+        job_id = request.form['auto_assign_job_id']
 
-            except:
-                try:
-                    out_list = request.form['delete_remove_request']
+        volunteers = User.query.order_by(User.jobs_completed).all()
 
-                    out_list = out_list.split(',')
+        job = Jobs.query.filter_by(job_id = job_id).first()
 
-                    user_delete = out_list[0]
-                    job_delete = out_list[1]
+        needed_left = job.volunteers_needed_left
 
-                    request_to_delete = RemoveRequests.query.filter(RemoveRequests.user_id.any(user_id=user_delete),
-                                                              RemoveRequests.job_id.any(job_id=job_delete)).first()
+        i = 0
 
-                    if request_to_delete:
-                        db.session.delete(request_to_delete)
-                        db.session.commit()
+        while needed_left > 0:
 
-                    return redirect(url_for('admin'))
+            current_volunteer = volunteers[i]
+            assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_volunteer.user_id).all()
 
-                except:
-                    try:
-                        out_list = request.form['accept_remove_request']
+            assigned_job_ids = []
+            for assigned_job in assigned_jobs:
+                assigned_job_ids.append(assigned_job.job_id)
 
-                        out_list = out_list.split(',')
+            user_qualifications_ids = {q.qualifications_id for q in current_volunteer.qualifications}
 
-                        user_accept = out_list[0]
-                        job_accept = out_list[1]
+            qualified_jobs_ids = []
 
-                        current_job = Jobs.query.filter_by(job_id=job_accept).first()
+            for loopjob in jobs:
+                job_requirement_ids = {qr.qualifications_id for qr in loopjob.job_qualifications}
+                if job_requirement_ids.issubset(user_qualifications_ids):
+                    qualified_jobs_ids.append(loopjob.job_id)
 
-                        current_job.remove_volunteer(user_accept)
+            if job.job_id not in assigned_job_ids and job.job_id in qualified_jobs_ids:
+
+                new_link = UserJobLink(user_id=current_volunteer.user_id, job_id=job_id)
+                db.session.add(new_link)
+
+                job.decrease_needed_left()
+
+                db.session.commit()
+
+                needed_left = needed_left - 1
+
+            i = i + 1
+
+        return redirect(url_for('admin'))
 
 
-                        request_to_delete = RemoveRequests.query.filter(RemoveRequests.user_id.any(user_id=user_accept),
-                                                                        RemoveRequests.job_id.any(
-                                                                            job_id=job_accept)).first()
+    elif 'decrease_user_id' in request.form:
 
-                        if request_to_delete:
-                            db.session.delete(request_to_delete)
+        user_id = request.form['decrease_user_id']
 
-                        db.session.commit()
-                        return redirect(url_for('admin'))
+        user = User.query.filter_by(user_id=user_id).first()
 
-                    except:
+        user.decrease_jobs()
 
-                        if new_job_form.validate_on_submit():
-                            new_job_name = new_job_form.job_name.data
-                            new_job_date = new_job_form.date.data
-                            new_job_start = new_job_form.start_time.data
-                            new_job_end = new_job_form.end_time.data
-                            # new_job_requirements = new_job_form.job_requirements.data
-                            selected_qualifications = new_job_form.job_requirements.data #NEW
-                            new_job_volunteers_needed = new_job_form.volunteers_needed.data
-                            new_job_description = new_job_form.job_description.data
+        db.session.commit()
 
-                            new_job_start_hour = new_job_start.hour
-                            new_job_start_minute = new_job_start.minute
+        return redirect(url_for('admin'))
 
-                            new_job_end_hour = new_job_end.hour
-                            new_job_end_minute = new_job_end.minute
+    elif 'delete_request' in request.form:
+            user_id, job_id = request.form['delete_request'].split(',')
 
-                            new_job_year = new_job_date.year
-                            new_job_month = new_job_date.month
-                            new_job_day = new_job_date.day
+            request_to_delete = Requests.query.filter_by(user_id=user_id, job_id=job_id).first()
+            if request_to_delete:
+                db.session.delete(request_to_delete)
+            
+            db.session.commit()
+            return redirect(url_for('admin'))
 
-                            date_insert = f'{new_job_day}/{new_job_month}/{new_job_year}'
-                            start_time_insert = f'{new_job_start_hour}:{new_job_start_minute}'
-                            end_time_insert = f'{new_job_end_hour}:{new_job_end_minute}'
+    elif 'accept_remove_request' in request.form:
+            user_id, job_id = request.form['accept_remove_request'].split(',')
+ 
+            link_to_delete = UserJobLink.query.filter_by(user_id=user_id, job_id=job_id).first()
+            if link_to_delete:
+                db.session.delete(link_to_delete)
 
-                            new_job = Jobs(
-                                volunteers_assigned='',
-                                volunteers_needed=new_job_volunteers_needed,
-                                start_time=start_time_insert,
-                                end_time=end_time_insert,
-                                date=date_insert,
-                                job_description=new_job_description,
-                                #job_requirements='',
-                                job_name = new_job_name
-                            )
+            job = Jobs.query.filter_by(job_id = job_id).first()
+            job.increase_needed_left()
 
-                            db.session.add(new_job)
-                            db.session.flush()
+            remove_request_to_delete = RemoveRequests.query.filter_by(user_id=user_id, job_id=job_id).first()
+            if remove_request_to_delete:
+                db.session.delete(remove_request_to_delete)
+                
+            db.session.commit()
+            return redirect(url_for('admin'))
 
-                            for qual_id in selected_qualifications:
-                                qualification = Qualification.query.get(qual_id)
-                                new_job.job_qualifications.append(qualification)
+    elif 'delete_remove_request' in request.form:
+            user_id, job_id = request.form['delete_remove_request'].split(',')
+            
+            #find and delete the remove request without unlinking user and job
+            #remove_request_to_delete = RemoveRequests.query.filter_by(user_id=user_id, job_id=job_id).first()
+            remove_request_to_delete = RemoveRequests.query.filter_by(user_id=int(user_id), job_id=int(job_id)).first()
+            if remove_request_to_delete:
+                db.session.delete(remove_request_to_delete)
+            
+            db.session.commit()
+            return redirect(url_for('admin'))
 
-                            db.session.commit()
-                            return redirect(url_for('admin'))
+    if new_job_form.validate_on_submit():
+        new_job_name = new_job_form.job_name.data
+        new_job_date = new_job_form.date.data
+        new_job_start = new_job_form.start_time.data
+        new_job_end = new_job_form.end_time.data
+        # new_job_requirements = new_job_form.job_requirements.data
+        selected_qualifications = new_job_form.job_requirements.data #NEW
+        new_job_volunteers_needed = new_job_form.volunteers_needed.data
+        new_job_description = new_job_form.job_description.data
 
-                        if qualification_form.validate_on_submit():
-                            new_qualification = Qualification(
-                                qualification_name=qualification_form.qualification_name.data,
-                                qualification_description=qualification_form.qualification_description.data,
-                            )
+        new_job_start_hour = new_job_start.hour
+        new_job_start_minute = new_job_start.minute
 
-                            db.session.add(new_qualification)
-                            db.session.commit()
-                            return redirect(url_for('admin'))
+        new_job_end_hour = new_job_end.hour
+        new_job_end_minute = new_job_end.minute
+
+        new_job_year = new_job_date.year
+        new_job_month = new_job_date.month
+        new_job_day = new_job_date.day
+
+        date_insert = f'{new_job_day}/{new_job_month}/{new_job_year}'
+        start_time_insert = f'{new_job_start_hour}:{new_job_start_minute}'
+        end_time_insert = f'{new_job_end_hour}:{new_job_end_minute}'
+
+        new_job = Jobs(
+            #volunteers_assigned='',
+            volunteers_needed=new_job_volunteers_needed,
+            volunteers_needed_left = new_job_volunteers_needed,
+            start_time=start_time_insert,
+            end_time=end_time_insert,
+            date=date_insert,
+            job_description=new_job_description,
+            #job_requirements='',
+            job_name = new_job_name
+        )
+
+        db.session.add(new_job)
+        db.session.flush()
+
+        for qual_id in selected_qualifications:
+            qualification = Qualification.query.get(qual_id)
+            new_job.job_qualifications.append(qualification)
+
+        db.session.commit()
+        return redirect(url_for('admin'))
+    
+    if qualification_form.validate_on_submit():
+        new_qualification = Qualification(
+            qualification_name=qualification_form.qualification_name.data,
+            qualification_description=qualification_form.qualification_description.data,
+        )
+
+        db.session.add(new_qualification)
+        db.session.commit()
+        return redirect(url_for('admin'))
+
 
     return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form,
-                           qualifications=qualifications, requests = requests, remove_requests = remove_requests)
+                           qualifications=qualifications, requests = requests, remove_requests = remove_requests, jobs = jobs)
 
+@app.route('/delete_job/<int:job_id>', methods=['POST'])
+def delete_job(job_id):
+    delete_job = Jobs.query.get(job_id)
+    if delete_job:
+        db.session.delete(delete_job)
+        db.session.commit()
+    return redirect(url_for('admin'))
+
+@app.route('/delete_qualification/<int:qualifications_id>', methods=['POST'])
+def delete_qualification(qualifications_id):
+    delete_qualification = Qualification.query.get(qualifications_id)
+    if delete_qualification:
+        db.session.delete(delete_qualification)
+        db.session.commit()
+    return redirect(url_for('admin'))
 
 # route for the signup page which takes you to the home page and the URL of the base URL/signup
 @app.route('/signup', methods=['GET', 'POST'])
@@ -316,8 +379,14 @@ def profile():
     remove_email = removeEmail()
     remove_mobile = removeMobile()
 
-    my_requests = Requests.query.filter(Requests.user_id.any(user_id=current_user.get_id())).all()
-    my_remove_requests = RemoveRequests.query.filter(RemoveRequests.user_id.any(user_id=current_user.get_id())).all()
+    my_requests = Requests.query.filter_by(user_id=current_user.get_id()).all()
+    my_remove_requests = RemoveRequests.query.filter_by(user_id=current_user.get_id()).all()
+
+    current_user_id = current_user.get_id()
+    assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_user_id).all()
+
+    details_form = ProfileDetailsForm()
+
 
     if mobile_form.validate_on_submit() and mobile_form.validate():
         new_mobile = mobile_form.new_mobile.data
@@ -339,26 +408,37 @@ def profile():
         db.session.commit()
         return redirect(url_for('profile'))
 
-
     if remove_email.submit3.data and remove_email.validate():
         for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
             user.no_email()
         db.session.commit()
         return redirect(url_for('profile'))
-
     
+    if details_form.submit5.data:
+        # Update user's profile details
+        new_details = details_form.new_details.data
+        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
+            user.details = new_details
+        db.session.commit()
+        return redirect(url_for('profile'))
+
     qualifications = Qualification.query.all()
 
     if request.method == 'POST':
 
-        selected_qualification_ids = request.form.getlist('qualification_ids')  # Correctly retrieves list of selected qualification IDs
-        current_user.qualifications = [Qualification.query.get(id) for id in selected_qualification_ids]
+        #selected_qualification_ids = request.form.getlist('qualification_ids')  #correctly retrieves list of selected qualification IDs
+        #current_user.qualifications = [Qualification.query.get(id) for id in selected_qualification_ids]
+        #db.session.commit()
+
+        selected_qualification_ids = request.form.getlist('qualification_ids')
+        current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
         db.session.commit()
         return redirect(url_for('profile'))
     
-    return render_template('profile.html', email_form=email_form, mobile_form=mobile_form, remove_mobile=remove_mobile,
-                           remove_email=remove_email, qualifications=qualifications, user_qualifications=[q.qualifications_id for q in current_user.qualifications],
-                           my_requests = my_requests, my_remove_requests = my_remove_requests)
+    return render_template('profile.html', assigned_jobs=assigned_jobs, email_form=email_form, mobile_form=mobile_form,
+                           remove_mobile=remove_mobile, remove_email=remove_email, qualifications=Qualification.query.all(),
+                           user_qualifications=[q.qualifications_id for q in current_user.qualifications], my_requests=my_requests,
+                           my_remove_requests=my_remove_requests, details_form=details_form)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')

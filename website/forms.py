@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TimeField, SelectMultipleField, widgets
-from wtforms.validators import input_required, Length, EqualTo, Regexp
-
+from wtforms.validators import input_required, Length, EqualTo, Regexp, NumberRange
+from .databases import User
 
 # creates the signup form to be used by routes
 class SignupForm(FlaskForm):
@@ -41,7 +41,7 @@ class MultiCheckboxField(SelectMultipleField):
 class newJobForm(FlaskForm):
     job_name = StringField('Job name', validators=[input_required()])
     job_description = StringField('Job description', validators=[input_required()])
-    volunteers_needed = IntegerField('Number of volunteers needed', validators=[input_required()])
+    volunteers_needed = IntegerField('Number of volunteers needed', validators=[input_required(), NumberRange(min=0)])
     start_time = TimeField('Start time', validators=[input_required()])
     end_time = TimeField('End time', validators=[input_required()])
     date = DateField('Date', validators=[input_required()], format='%Y-%m-%d')
@@ -52,3 +52,9 @@ class QualificationForm(FlaskForm):
     qualification_name = StringField('Qualification Name', validators=[input_required()])
     qualification_description = StringField('Description', validators=[input_required()])
     submit = SubmitField('Add Qualification')
+
+
+class ProfileDetailsForm(FlaskForm):
+    new_details = StringField('Detail Text')
+    submit5 = SubmitField('Save Details')
+

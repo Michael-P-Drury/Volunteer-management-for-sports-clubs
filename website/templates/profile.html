@@ -8,6 +8,7 @@
     <h1 class = 'profile-title'>My Profile</h1>
 </div>
 
+
 <div class='profile-container'>
 
     <div class='tab-container'>
@@ -15,7 +16,6 @@
         <button class="profile-tab" onclick="showTab('AboutMe', this)">About Me</button>
         <button class="profile-tab" onclick="showTab('Jobs', this)">Jobs</button>
         <button class="profile-tab" onclick="showTab('Qualifications', this)">Qualifications</button>
-    </div>
 
     <div id="PersonalDetails" class="profile-tab-content">
 
@@ -64,10 +64,30 @@
     
     <div id="AboutMe" class="profile-tab-content">
         <p class='profile-box-text'>About {{ current_user.username }}:</p>
+        <form action="" method="POST">
+            {{ details_form.csrf_token }}
+            <div class="detail-box" contenteditable="true">
+                <textarea name="new_details" class="form-control" rows="5">{{ current_user.details }}</textarea>
+                <div>{{ current_user.details }}</div>
+            </div>
+            {{ details_form.submit5(class="btn btn-primary") }}
+        </form>
     </div>
 
     <div id="Jobs" class="profile-tab-content">
         <p class='profile-box-text'>Current number of jobs completed: {{ current_user.jobs_completed }}</p>
+        <p class="profile-box-title">Assigned Jobs</p>
+        {% if assigned_jobs %}
+            {% for job in assigned_jobs %}
+                <div>
+                    <p>Job Name: {{ job.job_name }}</p>
+                    <p>Job Description: {{ job.job_description }}</p>
+                    <!-- Add more job details as needed -->
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No assigned jobs currently.</p>
+        {% endif %}
         <p class="profile-box-text">My Pending Requests:</p>
 
         {% if my_requests %}
@@ -100,17 +120,15 @@
             {% endfor %}
         </p>
         <form action="" method="POST">
-            {{ email_form.csrf_token }}
             {% for qualification in qualifications %}
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="qualification_ids" value="{{ qualification.qualifications_id }}" {% if qualification.qualifications_id in user_qualifications %} checked {% endif %}>
-                        <strong>{{ qualification.qualification_name }}</strong><br>
-                        <span style="margin-left: 22px;">{{ qualification.qualification_description }}</span>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="qualification_ids" value="{{ qualification.qualifications_id }}" id="qualification_{{ qualification.qualifications_id }}" {% if qualification.qualifications_id in user_qualifications %} checked {% endif %}>
+                    <label class="form-check-label" for="qualification_{{ qualification.qualifications_id }}">
+                        {{ qualification.qualification_name }}
                     </label>
                 </div>
             {% endfor %}
-            <input type="submit" value="Update Qualifications">
+            <button type="submit" class="btn btn-primary">Update Qualifications</button>
         </form>
     </div>
 
