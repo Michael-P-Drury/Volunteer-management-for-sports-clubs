@@ -464,7 +464,7 @@ body {
 
 .Edit {
     display: inline-block;
-    margin: 1rem 0rem 1rem 3rem;
+    margin: 1rem 0rem 1rem 1rem;
     background-color: #013A63;
     color: white;
     border: none;
@@ -473,6 +473,7 @@ body {
     border-radius: 0;
     font-size: 3vh;
     padding: 0.5rem;
+    border-radius: 15px;
 }
 
 .Edit:hover {
@@ -485,7 +486,7 @@ body {
 
 input[type='submit' i] {
     display: inline-block;
-    margin: 1rem 0rem 1rem 1rem;
+    margin: 1rem 0rem 1rem 3rem;
     background-color: #013A63;
     color: white;
     border: none;
@@ -494,12 +495,16 @@ input[type='submit' i] {
     border-radius: 0;
     font-size: 3vh;
     padding: 0.5rem;
+    border-radius: 15px;
 }
 
 input[type='submit' i]:hover {
     background-color: #555;
 }
 
+.form-control {
+    margin: 0.5rem 0rem 0rem 3rem;
+}
 
 /* Mobile Section */
 
