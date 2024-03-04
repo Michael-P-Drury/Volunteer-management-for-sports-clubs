@@ -265,9 +265,7 @@ def admin():
 
     elif 'delete_remove_request' in request.form:
             user_id, job_id = request.form['delete_remove_request'].split(',')
-            
-            #find and delete the remove request without unlinking user and job
-            #remove_request_to_delete = RemoveRequests.query.filter_by(user_id=user_id, job_id=job_id).first()
+
             remove_request_to_delete = RemoveRequests.query.filter_by(user_id=int(user_id), job_id=int(job_id)).first()
             if remove_request_to_delete:
                 db.session.delete(remove_request_to_delete)
@@ -342,7 +340,18 @@ def admin():
 @app.route('/delete_job/<int:job_id>', methods=['POST'])
 def delete_job(job_id):
     delete_job = Jobs.query.get(job_id)
+
     if delete_job:
+
+        remove_requests_to_delete = RemoveRequests.query.filter_by(job_id=int(job_id)).all()
+
+        for remove_request_to_delete in remove_requests_to_delete:
+            db.session.delete(remove_request_to_delete)
+
+        requests_to_delete = Requests.query.filter_by(job_id=int(job_id)).all()
+        for request_to_delete in requests_to_delete:
+            db.session.delete(request_to_delete)
+
         db.session.delete(delete_job)
         db.session.commit()
     return redirect(url_for('admin'))
