@@ -169,6 +169,7 @@ li {
 .welcome-message {
     text-align: Center;
     font-family: "Roboto", sans-serif;
+    margin: 5px;
 }
 
 .welcome-message h1 {
