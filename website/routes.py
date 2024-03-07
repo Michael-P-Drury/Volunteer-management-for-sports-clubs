@@ -36,9 +36,9 @@ def home():
     return render_template('home.html')
 
 
-# routing for the timetable page which takes you to the home page and the URL of the base URL/timetable
-@app.route('/timetable', methods=['GET', 'POST'])
-def timetable():
+# routing for the current jobs page which takes you to the home page and the URL of the base URL/current_jobs
+@app.route('/current_jobs', methods=['GET', 'POST'])
+def current_jobs():
     jobs = Jobs.query.all()
     current_user_id = current_user.get_id()
     user_job_link = UserJobLink.query.all()
@@ -58,7 +58,7 @@ def timetable():
         new_request = Requests(user_id=current_user_id, job_id=job_id_request)
         db.session.add(new_request)
         db.session.commit()
-        return redirect(url_for('timetable'))
+        return redirect(url_for('current_jobs'))
 
 
     elif 'remove_request_job_id' in request.form:
@@ -66,7 +66,7 @@ def timetable():
         new_request = RemoveRequests(user_id=current_user_id, job_id=job_id_request)
         db.session.add(new_request)
         db.session.commit()
-        return redirect(url_for('timetable'))
+        return redirect(url_for('current_jobs'))
 
     assigned_job_ids = []
     assigned_jobs = UserJobLink.query.filter_by(user_id=current_user_id).all()
@@ -81,7 +81,7 @@ def timetable():
     requested_removals = RemoveRequests.query.filter_by(user_id=current_user_id).all()
     requested_removal_job_ids = {rem.job_id for rem in requested_removals}
 
-    return render_template('timetable.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
+    return render_template('current_jobs.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
                            requested_job_ids=requested_job_ids, requested_removal_job_ids=requested_removal_job_ids,
                            user_job_link = user_job_link, all_users = User, assigned_job_ids = assigned_job_ids)
 
@@ -125,7 +125,7 @@ def upload_file():
                 db.session.rollback()  ##rollback the session in case of errors
         else:
             db.session.commit()  #only commit if all rows are processed successfully
-            return redirect(url_for('timetable'))
+            return redirect(url_for('current_jobs'))
     else:
         return redirect(request.url)
     
