@@ -137,6 +137,7 @@ def admin():
     qualifications = Qualification.query.all()
     new_job_form = newJobForm()
     jobs = Jobs.query.all()
+    user_job_link = UserJobLink.query.all()
 
     requests = Requests.query.join(User).order_by(User.jobs_completed).all()
 
@@ -335,7 +336,8 @@ def admin():
 
 
     return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form,
-                           qualifications=qualifications, requests = requests, remove_requests = remove_requests, jobs = jobs)
+                           qualifications=qualifications, requests = requests, remove_requests = remove_requests,
+                           jobs = jobs, user_job_link = user_job_link, all_users = User)
 
 @app.route('/delete_job/<int:job_id>', methods=['POST'])
 def delete_job(job_id):
