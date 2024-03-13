@@ -39,8 +39,10 @@
         <button class="Edit" onclick="showEdits(event)">Edit</button>
         
         <!-- <button class='Edit Save toggleEdit'>Save Changes</button> -->
-        {{ profile_form.save_changes(class='Edit Save toggleEdit') }}
-                
+        <div class='toggleEdit'>
+            {{ profile_form.save_changes(class='Edit Save') }}
+        </div>
+
         <div class='details-section'>
             <p class = "profile-box-text">Username: </p>
             <p class='profile-box-text profile-data-text'>{{ current_user.username }}</p>

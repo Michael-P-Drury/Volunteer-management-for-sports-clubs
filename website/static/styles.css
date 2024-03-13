@@ -515,8 +515,9 @@ body {
 }
 
 .Save {
-    bottom: 0;
-    right: 50px;
+    margin: 0;
+    bottom: 4px;
+    right: 55px;
 }
 
 
