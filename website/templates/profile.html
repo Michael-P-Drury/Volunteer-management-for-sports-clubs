@@ -7,6 +7,11 @@
         document.getElementById("defaultOpen").click();
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("defaultOpen").click();
+    });
+</script>
 
 <div class="p-title-box">
     <h1 class = 'profile-title'>{{ current_user.username }}'s Profile</h1>
@@ -102,8 +107,7 @@
             {{ details_form.hidden_tag() }}
 
                 <textarea name="new_details" class="form-control" rows="5">{{ current_user.details }}</textarea>
-                <p class='profile-box-text'>{{ current_user.details }}</p>
-            {{ details_form.submit5(style='margin: 0rem 0rem 1rem 3rem') }}
+            <div>{{ details_form.submit5(style='margin: 0rem 0rem 1rem 3rem') }}</div>
         </form>
     </div>
 
@@ -126,7 +130,7 @@
         {% if my_requests %}
 
         {% for my_request in my_requests %}
-            <p class='profile-box-text'> Job name: {{ my_request.job_id[0].job_name }} </p>
+            <p class='profile-box-text'> Job name: {{ job_table.query.filter_by(job_id = my_request.job_id).first().job_name }} </p>
         {% endfor %}
 
         {% else %}
@@ -138,7 +142,7 @@
         {% if my_remove_requests %}
 
         {% for my_remove_request in my_remove_requests %}
-            <p class='profile-box-text'> Job name: {{ my_remove_request.job_id[0].job_name }} </p>
+            <p class='profile-box-text'> Job name: {{ job_table.query.filter_by(job_id = my_remove_request.job_id).first().job_name }} </p>
         {% endfor %}
 
         {% else %}
