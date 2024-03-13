@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TimeField, SelectMultipleField, widgets
-from wtforms.validators import input_required, Length, EqualTo, Regexp, NumberRange
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TimeField, SelectMultipleField, widgets, HiddenField
+from wtforms.validators import input_required, Length, EqualTo, Regexp, NumberRange, Optional
 from .databases import User
 
 # creates the signup form to be used by routes
@@ -17,22 +17,20 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[input_required()])
     submit = SubmitField('Submit')
 
-# form for changing/ adding email
-class emailChangeForm(FlaskForm):
-    new_email = StringField('Enter a new email:', validators=[Regexp(regex="[^@]+@[^@]+.[^@]+", message = 'has to be a valid email')])
-    submit1 = SubmitField('Submit')
-
-# form for changing/ adding mobile number
-class mobileChangeForm(FlaskForm):
-    new_mobile = StringField('Enter a new mobile:', validators=[Regexp(regex='^[+-]?[0-9]+$', message = 'only integers allowed'), Length(11, 11)])
-    submit2 = SubmitField('Submit')
-
-
-class removeEmail(FlaskForm):
-    submit3 = SubmitField('Remove Email')
-
-class removeMobile(FlaskForm):
-    submit4 = SubmitField('Remove Mobile')
+#Uses one form for all change fields on profile.
+class profileEditForm(FlaskForm):
+    form_name = HiddenField(default='profileEditForm')
+    new_email = StringField('Enter a new email:', validators=[Optional(),Regexp(regex="[^@]+@[^@]+.[^@]+", message = 'Invalid Email - incorrect format')])
+    new_mobile = StringField('Enter a new mobile:', validators=[Optional(),Regexp(regex='^[+-]?[0-9]+$', message = 'Invalid Mobile - integers only'), Length(11, 11)])
+    new_dob = StringField('Enter a new date of birth:', validators=[Optional(),Regexp(regex='^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/(19|20)\d\d$', message = 'Invalid Date of Birth - incorrect format'), Length(10, 10)])
+    new_address = StringField('Enter a new address:', validators=[Optional(),Regexp(regex="^[a-zA-Z0-9\s.,\-/&]+$", message = 'Invalid Address')])
+    new_gender = StringField('Enter a new gender:', validators=[Optional(),Regexp(regex='^[a-zA-Z]+$', message = 'Invalid Gender')])
+    remove_email = SubmitField('Remove Email')
+    remove_mobile = SubmitField('Remove Mobile')
+    remove_dob = SubmitField('Remove DOB')
+    remove_address = SubmitField('Remove Address')
+    remove_gender = SubmitField('Remove Gender')    
+    save_changes = SubmitField('Save Changes')
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
@@ -53,8 +51,8 @@ class QualificationForm(FlaskForm):
     qualification_description = StringField('Description', validators=[input_required()])
     submit = SubmitField('Add Qualification')
 
-
 class ProfileDetailsForm(FlaskForm):
+    form_name = HiddenField(default='ProfileDetailsForm')
     new_details = StringField('Detail Text')
     submit5 = SubmitField('Save Details')
 

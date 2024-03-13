@@ -2,8 +2,7 @@ from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink
 from . import lm, db, app
-from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, \
-    QualificationForm, ProfileDetailsForm
+from .forms import LoginForm, profileEditForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm
 import pandas as pd
 import io
 from sqlalchemy import desc
@@ -373,11 +372,8 @@ def signup():
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
 
-    email_form = emailChangeForm()
-    mobile_form = mobileChangeForm()
-
-    remove_email = removeEmail()
-    remove_mobile = removeMobile()
+    user = db.session.query(User).filter_by(user_id=current_user.get_id()).first()
+    profile_form = profileEditForm()
 
     my_requests = Requests.query.filter_by(user_id=current_user.get_id()).all()
     my_remove_requests = RemoveRequests.query.filter_by(user_id=current_user.get_id()).all()
@@ -387,58 +383,78 @@ def profile():
 
     details_form = ProfileDetailsForm()
 
-
-    if mobile_form.validate_on_submit() and mobile_form.validate():
-        new_mobile = mobile_form.new_mobile.data
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.mobile = new_mobile
-        db.session.commit()
-        return redirect(url_for('profile'))
-
-    if email_form.validate_on_submit() and email_form.validate():
-        new_email = email_form.new_email.data
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.email = new_email
-        db.session.commit()
-        return redirect(url_for('profile'))
-
-    if remove_mobile.submit4.data and remove_mobile.validate():
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.no_mobile()
-        db.session.commit()
-        return redirect(url_for('profile'))
-
-    if remove_email.submit3.data and remove_email.validate():
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.no_email()
-        db.session.commit()
-        return redirect(url_for('profile'))
-    
-    if details_form.submit5.data:
-        # Update user's profile details
-        new_details = details_form.new_details.data
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.details = new_details
-        db.session.commit()
-        return redirect(url_for('profile'))
-
     qualifications = Qualification.query.all()
 
     if request.method == 'POST':
+        print('POST condition met')
+        print(request.form)
+        #Runs code for the profile form
+        if request.form['form_name'] == 'profileEditForm':
+            if profile_form.save_changes.data and profile_form.validate_on_submit():
+                print('Changes saved and form validated')
+                new_mobile = profile_form.new_mobile.data
+                new_email = profile_form.new_email.data
+                new_dob = profile_form.new_dob.data
+                new_address = profile_form.new_address.data
+                new_gender = profile_form.new_gender.data
+                if new_mobile : user.mobile = new_mobile
+                if new_email: user.email = new_email
+                if new_dob: user.dob = new_dob
+                if new_address: user.address = new_address
+                if new_gender: user.gender = new_gender
+                db.session.commit()
+                return redirect(url_for('profile'))
+            else:
+                print('Form did not validate')
+                print(profile_form.errors)    
 
-        #selected_qualification_ids = request.form.getlist('qualification_ids')  #correctly retrieves list of selected qualification IDs
-        #current_user.qualifications = [Qualification.query.get(id) for id in selected_qualification_ids]
-        #db.session.commit()
-
-        selected_qualification_ids = request.form.getlist('qualification_ids')
-        current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
-        db.session.commit()
-        return redirect(url_for('profile'))
+            if profile_form.remove_mobile.data:
+                user.mobile = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            if profile_form.remove_email.data:
+                user.email = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            if profile_form.remove_dob.data:
+                user.dob = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            if profile_form.remove_address.data:
+                user.address = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            if profile_form.remove_gender.data:
+                user.gender = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            
+        #Runs the code for the details form
+        elif request.form['form_name'] == 'ProfileDetailsForm':
+            if details_form.submit5.data:
+                # Update user's profile details
+                new_details = details_form.new_details.data
+                for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
+                    user.details = new_details
+                db.session.commit()
+                return redirect(url_for('profile'))
+            
+        #Runs whatever is left, not sure how to structure this bit
+        else:
+            selected_qualification_ids = request.form.getlist('qualification_ids')
+            current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
+            db.session.commit()
+            return redirect(url_for('profile'))
     
-    return render_template('profile.html', assigned_jobs=assigned_jobs, email_form=email_form, mobile_form=mobile_form,
-                           remove_mobile=remove_mobile, remove_email=remove_email, qualifications=Qualification.query.all(),
+    return render_template('profile.html', assigned_jobs=assigned_jobs, profile_form=profile_form, qualifications=qualifications,
                            user_qualifications=[q.qualifications_id for q in current_user.qualifications], my_requests=my_requests,
                            my_remove_requests=my_remove_requests, details_form=details_form)
+
+                        # email_form=email_form, mobile_form=mobile_form,
+                        # remove_mobile=remove_mobile, remove_email=remove_email
+                        # dob_form=dob_form, address_form=address_form,
+                        # gender_form=gender_form, remove_dob=remove_dob, 
+                        # remove_address=remove_address, remove_gender=remove_gender
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')

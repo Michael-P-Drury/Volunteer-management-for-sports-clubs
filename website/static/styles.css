@@ -17,7 +17,6 @@ body {
     z-index: 1;
 }
 
-
 .navbar_box_logo {
     height: 50px;
     width: 140px;
@@ -420,7 +419,13 @@ body {
 
 .profile-box-text {
     font-size: 4vh;
-    margin: 1.5rem 0rem 1.5rem 3rem;
+    margin: 1rem 1.5rem 1rem 1.5rem;
+    width: auto;
+}
+
+.profile-data-text {
+    color: #515151;
+    font-style: italic;
 }
 
 .inline {
@@ -460,12 +465,30 @@ body {
 }
   
 .profile-tab-content {
+    flex-direction: column;
     position: relative;
     flex: 70%;
     color: #F2F2F2;
     height: 100%;
     display: none;
     background-color: #468FAF;
+}
+
+.profile-flex {
+    justify-content: space-between;
+    align-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.details-section {
+    margin: 1.5rem;
+    flex: 40%;
+    width: auto;
+    border: 1px solid black;
+    border-radius: 15px;
+    background-color: #e6e6e6;
+    color: black;
 }
   
 .edit-container > * {
@@ -475,7 +498,7 @@ body {
 
 .Edit {
     display: inline-block;
-    margin: 1.5rem 1rem 0rem 0rem;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
     background-color: #013A63 ;
     color: #F2F2F2;
     border: none;
@@ -486,9 +509,15 @@ body {
     padding: 0.5rem;
     border-radius: 15px;
     position: absolute;
-    top: 0;
+    bottom: 0;
     right: 0;
 }
+
+.Save {
+    bottom: 0;
+    right: 50px;
+}
+
 
 .Edit:hover {
     background-color: #555;
@@ -497,6 +526,16 @@ body {
 .button-container {
     display: flex;
 }
+
+.toggleEdit {
+    display: none;
+}
+
+.errors {
+    color: red;
+    margin: 0 0 1rem 1.5rem;
+}
+
 
 input[type='submit' i] {
     display: inline-block;

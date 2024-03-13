@@ -43,20 +43,24 @@ function showTab (tab, element) {
     profileTabs[i].style.backgroundColor = "";
   }
   
-  document.getElementById(tab).style.display = "block";
+  document.getElementById(tab).style.display = "flex";
   element.style.backgroundColor = colour;
 }
 
-function showEdits () {
+function showEdits (event) {
+
+  event.preventDefault();
 
   var divs = document.getElementsByClassName("toggleEdit");
 
   for (var i = 0; i < divs.length; i++) {
-    if (divs[i].style.display === "none") {
+    
+    if (divs[i].style.display === "none" || divs[i].style.display === "") {
         divs[i].style.display = "block";
     } else {
         divs[i].style.display = "none";
     }
+    
   }
 }
 
