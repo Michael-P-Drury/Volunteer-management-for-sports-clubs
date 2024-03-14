@@ -18,13 +18,20 @@ def login():
     # form is the variable for the logins form
     login_form = LoginForm()
 
+
     # if the form is submitted the checks if user is in database and checks password
     # if user is verified takes to home page and log ins the current user as the current user
     if login_form.validate_on_submit():
         user = User.query.filter_by(username=login_form.username.data).first()
-        if user is None or not user.verify_password(login_form.password.data):
-            return redirect(url_for('login', **request.args))
+
+        if user is None:
+            return render_template('login.html', form=login_form, error = 'invalid username')
+
+        if not user.verify_password(login_form.password.data):
+            return render_template('login.html', form=login_form, error = 'invalid password')
+
         login_user(user)
+
         return redirect(url_for('home'))
     return render_template('login.html', form=login_form)
 
