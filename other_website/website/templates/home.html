@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block page_content %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        showSlides();
+    });
+</script>
+
+<div class="main-content">
+    <div class="image-container">
+        <img class="mySlides fade" src="{{ url_for('static', filename='images/image_3.1.jpg')}}">
+        <img class="mySlides fade" src="{{ url_for('static', filename='images/image_3.2.jpg')}}">
+        <img class="mySlides fade" src="{{ url_for('static', filename='images/image_3.3.jpg')}}">
+    </div>
+    <div class="side-text">
+        <h1 class="welcome-message">Welcome to Student Volunteer Management</h1>
+        <p class="small-text">A new way to organize your club</p>
+        <a href="/current_jobs" class="btn">View Current Jobs &#8594;</a>
+    </div>
+</div>
+
+<div class ="welcome-message">
+    <p class="small-text">Get started with Student Volunteers today</p>
+</div>
+
+<div class="about-us-title">
+    <h1 class="about-us-header">About us</h1>
+    <div class="about-us">
+        <p>
+            Streamline the management of diverse sports volunteers with our comprehensive solution.
+            Effectively organize and manage responsibilities with ease, transforming the challenges of coordinating volunteers into a seamless process.
+            Say goodbye to cancelled events and experience a new era of efficiency. Try our solution today and elevate your volunteer management to unprecedented levels!
+        </p>
+    </div>
+</div>
+
+<section class="what-we-do">
+    <div class="container">
+        <h2 class="about-us-header">What Do We Do?</h2>
+    
+        <button type='button' class='collapsible' onclick=expand(this)>
+            Volunteer Recruitment
+        </button>
+        <div class='content'>
+            <p>We connect organizations with enthusiastic volunteers who are passionate about making a difference.</p>
+        </div>
+        
+        <button type='button' class='collapsible' onclick=expand(this)>
+            Event Management
+        </button>
+        <div class='content'>
+            <p>Our system helps you efficiently manage volunteer schedules, tasks, and communication for events and projects.</p>
+        </div>
+        
+        <button type='button' class='collapsible' onclick=expand(this)>
+            Real-time Updates
+        </button>
+        <div class='content'>
+            <p>We give you updates as soon as they are posted so that you are always informed.</p>
+        </div>
+        
+        <button type='button' class='collapsible' onclick=expand(this)>
+            Training and Development
+        </button>
+        <div class='content'>
+            <p>We provide resources and support to train volunteers and help them develop skills for their roles.</p>
+        </div>
+            
+    </div>
+</section>
+
+{% endblock %}

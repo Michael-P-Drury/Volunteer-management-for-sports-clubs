@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% import "bootstrap/wtf.html" as wtf %}
+
+<head>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+
+<div id="page-container">
+
+    <ul class="navbar">
+        <li>
+            <div class="navbar_box_logo">
+                <a class="navbar_item" href="{{ url_for('home') }}">
+                    <img class="top_logo"
+                        src="{{ url_for('static', filename='images/darker_logo.png') }}"
+                        onmouseover="this.src='{{ url_for('static', filename='images/light_logo.png') }}'"
+                        onmouseout="this.src='{{ url_for('static', filename='images/darker_logo.png') }}'"
+                        alt="logo image" /> 
+                </a>
+            </div>
+        </li>
+
+        <li style="margin-left: 10px">
+            <div class="navbar_box">
+                <a class="navbar_item" href="{{ url_for('home') }}">Home</a>
+            </div>
+        </li>
+
+    </ul>
+
+
+    <div id = "content-wrap">
+        {% block page_content %}{% endblock %}
+    </div>
+    
+</div>
+
+<footer class="footer">
+    <p class = 'footer_text'>for more infomation click on the following links:</p>
+    <p><a href="{{ url_for('terms') }}" class = 'footer_link'>→ Terms & Conditions</a></p>
+    <p><a href="{{ url_for('privacy')}}" class = 'footer_link'>→ Privacy Policy</a></p>
+</footer>
