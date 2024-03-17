@@ -105,8 +105,8 @@ def upload_file():
     if file and file.filename.endswith('.csv'):
         stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
         csv_input = pd.read_csv(stream)
-
-        expected_headers = ['volunteers_needed', 'start_time', 'end_time', 'date', 'job_description', 'job_requirements']
+        
+        expected_headers = ['job_name', 'volunteers_needed', 'start_time', 'end_time', 'date', 'job_description', 'qualifications']
 
         if not all(header in csv_input.columns for header in expected_headers):
             return redirect(request.url)
@@ -114,15 +114,20 @@ def upload_file():
         errors = []
         for index, row in csv_input.iterrows():
             try:
+                qualifications_list = row['qualifications'].split(';')
+                qualification_objects = Qualification.query.filter(Qualification.qualification_name.in_(qualifications_list)).all()
+
                 new_job = Jobs(
+                    job_name=row['job_name'],
                     volunteers_needed=row['volunteers_needed'],
                     start_time=row['start_time'],
                     end_time=row['end_time'],
                     date=row['date'],
                     job_description=row['job_description'],
-                    job_requirements=row['job_requirements']
+                    job_qualifications=qualification_objects
                 )
                 db.session.add(new_job)
+
             except Exception as e:
                 errors.append(f"Error in row {index}: {e}")
 
