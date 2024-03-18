@@ -6,6 +6,16 @@ from . import app
 def home():
     return render_template('home.html')
 
+# routing for the pricing page which takes you to the home page and the URL of the base URL/pricing
+@app.route('/pricing')
+def pricing():
+    return render_template('pricing.html')
+
+# routing for the contact page which takes you to the home page and the URL of the base URL/contact
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
 def privacy():

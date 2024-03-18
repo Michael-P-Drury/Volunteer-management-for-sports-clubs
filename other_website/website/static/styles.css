@@ -308,6 +308,43 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+
+/* Features Section */
+.features-box, .reviews-box {
+    margin: 0px 50px; 
+    text-align: center;
+}
+
+.features-job-box, .features-admin-box, .features-profile-box,
+.reviews-box1, .reviews-box2, .reviews-box3 {
+    display: inline-block; 
+    margin-right: 20px; 
+    width: 300px;
+    height:300px;
+    border-radius: 10px; 
+    background-color: #efefef;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.features-job-box p, .features-admin-box p, .features-profile-box p,
+.reviews-box1 p, .reviews-box2 p, .reviews-box3 p {
+    font-size:15px; 
+    color:rgb(91, 91, 91);
+    margin:10px 15px;
+}
+
+/* Reviews Section */
+.reviews-box {
+    margin: 0px 50px; 
+    text-align: center;
+}
+
+.reviews-box1, .reviews-box2, .reviews-box3 {
+    width: 500px;
+    height:200px;
+}
+
 /* Terms and Conditions Section */
 
 .terms-container {
@@ -357,4 +394,41 @@ body {
         height: auto;
     }
 
+}
+
+/* Pricing Page */
+.pricing-title, .contact-title {
+    text-align: center;
+    font-size: 3vw;
+    color: white;
+}
+
+.pricing-title-box, .contact-title-box {
+    background-color: #013A63;
+    padding: 1px;
+    margin-bottom: 25px;
+}
+
+.pricing-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 0px 250px; 
+    margin-top: 60px;
+}
+
+.paid-box, .free-box {
+    width: 300px;
+    padding: 0px 50px 150px 50px;
+    text-align: center;
+    transition: transform 1s ease; 
+    border-radius: 10px; 
+    background-color: #efefef;
+    margin-bottom: 100px;
+}
+
+.free-box:hover, .paid-box:hover {
+    transform: scale(1.1);
+    transform-origin: center;
+    box-shadow: 0px 4px 30px -3px rgb(164, 164, 164);
 }
