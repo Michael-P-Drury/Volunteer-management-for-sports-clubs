@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TimeField, SelectMultipleField, widgets, HiddenField
 from wtforms.validators import input_required, Length, EqualTo, Regexp, NumberRange, Optional
-from .databases import User
 
 # creates the signup form to be used by routes
 class SignupForm(FlaskForm):
@@ -9,6 +8,7 @@ class SignupForm(FlaskForm):
     password = PasswordField('Password', validators=[input_required()])
     verify_password = PasswordField('Verify password', validators=[input_required(), EqualTo('password', message='Passwords must match')])
     admin = BooleanField('Admin')
+    admin_key = PasswordField('Admin key')
     submit = SubmitField('Submit')
 
 # creates the login form to be used by routes

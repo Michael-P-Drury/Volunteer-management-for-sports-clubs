@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink
-from . import lm, db, app
+from . import lm, db, app, admin_key
 from .forms import LoginForm, profileEditForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm
 import pandas as pd
 import io
@@ -65,7 +65,6 @@ def current_jobs():
         db.session.add(new_request)
         db.session.commit()
         return redirect(url_for('current_jobs'))
-
 
     elif 'remove_request_job_id' in request.form:
         job_id_request = request.form['remove_request_job_id']
@@ -389,10 +388,15 @@ def signup():
         password_in = str(signup_form.password.data)
         username_in = str(signup_form.username.data)
         admin_in = bool(signup_form.admin.data)
+        admin_key_in = str(signup_form.admin_key.data)
+
 
         if User.query.filter_by(username=username_in).first() is None:
-            User.register(username_in, password_in, admin_in)
-            return redirect(url_for('login'))
+            if admin_in and admin_key_in == admin_key:
+                User.register(username_in, password_in, admin_in)
+                return redirect(url_for('login'))
+            else:
+                return render_template('signup.html', form=signup_form, error_text = True)
         else:
             return render_template('signup.html', form=signup_form, exists=True)
 
