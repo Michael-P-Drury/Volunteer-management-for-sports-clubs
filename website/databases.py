@@ -95,7 +95,6 @@ class User(UserMixin, db.Model):
     # sets admin statas as inputted
     def set_admin(self, admin):
         self.admin = admin
-    
 
     # sets mobile number to blank
     def no_mobile(self):

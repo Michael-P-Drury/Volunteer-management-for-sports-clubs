@@ -110,6 +110,7 @@
                     <th>Preferred Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
+                    <th>Promote to admin?</th>
                     <th>Qualifications</th>
                     <th>Events</th>
                     <th>Num Jobs Completed</th>
@@ -123,6 +124,19 @@
                 <td>{{ user.preferred_name }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.mobile }}</td>
+
+                {% if not user.admin %}
+                <td>
+                    <div>
+                        <form method="post" onclick="return confirm('Are you sure you want to promote user to an admin?');">
+                            <input type="hidden" name="add_admin_user_id" value="{{ user.user_id }}">
+                            <input type="submit" value="Promote to admin?" class="btn">
+                        </form>
+                    </div>
+                </td>
+                {% else %}
+                <td>user already admin</td>
+                {% endif %}
 
                 <td>{{ user.qualifications }}</td>
                 <td>{{ user.events }}</td>

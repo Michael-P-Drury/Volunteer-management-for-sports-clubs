@@ -32,7 +32,7 @@ def login():
 
         login_user(user)
 
-        return redirect(url_for('home'))
+        return redirect(url_for('current_jobs'))
     return render_template('login.html', form=login_form)
 
 
@@ -172,6 +172,18 @@ def admin():
             
             db.session.commit()
             return redirect(url_for('admin'))
+
+    elif 'add_admin_user_id' in request.form:
+
+        user_id = request.form['add_admin_user_id']
+
+        user = User.query.filter_by(user_id = user_id).first()
+
+        user.set_admin(True)
+
+        db.session.commit()
+
+        return redirect(url_for('admin'))
 
     elif 'increase_user_id' in request.form:
 
