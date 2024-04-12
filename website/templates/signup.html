@@ -20,6 +20,9 @@
             {% if exists %}
                 <p class = 'already_exists'>User already exists</p>
             {% endif %}
+            {% if error_text %}
+                <p class = 'already_exists'>incorrect admin password</p>
+            {% endif %}
             <form action="" method="POST">
                 {{ form.csrf_token }}
                 <p class="signup-username">
@@ -33,6 +36,9 @@
                 </p>
                 <p>
                 {{ form.admin.label }} {{ form.admin() }}
+                </p>
+                <p>
+                {{ form.admin_key.label }} {{ form.admin_key() }}
                 </p>
                 <p>
                 {{ form.submit() }}

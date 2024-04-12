@@ -1,9 +1,8 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink
-from . import lm, db, app
-from .forms import removeMobile, removeEmail, mobileChangeForm, emailChangeForm, LoginForm, SignupForm, newJobForm, \
-    QualificationForm, ProfileDetailsForm
+from . import lm, db, app, admin_key
+from .forms import LoginForm, profileEditForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm
 import pandas as pd
 import io
 from sqlalchemy import desc
@@ -19,14 +18,21 @@ def login():
     # form is the variable for the logins form
     login_form = LoginForm()
 
+
     # if the form is submitted the checks if user is in database and checks password
     # if user is verified takes to home page and log ins the current user as the current user
     if login_form.validate_on_submit():
         user = User.query.filter_by(username=login_form.username.data).first()
-        if user is None or not user.verify_password(login_form.password.data):
-            return redirect(url_for('login', **request.args))
+
+        if user is None:
+            return render_template('login.html', form=login_form, error = 'invalid username')
+
+        if not user.verify_password(login_form.password.data):
+            return render_template('login.html', form=login_form, error = 'invalid password')
+
         login_user(user)
-        return redirect(url_for('home'))
+
+        return redirect(url_for('current_jobs'))
     return render_template('login.html', form=login_form)
 
 
@@ -36,9 +42,9 @@ def home():
     return render_template('home.html')
 
 
-# routing for the timetable page which takes you to the home page and the URL of the base URL/timetable
-@app.route('/timetable', methods=['GET', 'POST'])
-def timetable():
+# routing for the current jobs page which takes you to the home page and the URL of the base URL/current_jobs
+@app.route('/current_jobs', methods=['GET', 'POST'])
+def current_jobs():
     jobs = Jobs.query.all()
     current_user_id = current_user.get_id()
     user_job_link = UserJobLink.query.all()
@@ -58,15 +64,14 @@ def timetable():
         new_request = Requests(user_id=current_user_id, job_id=job_id_request)
         db.session.add(new_request)
         db.session.commit()
-        return redirect(url_for('timetable'))
-
+        return redirect(url_for('current_jobs'))
 
     elif 'remove_request_job_id' in request.form:
         job_id_request = request.form['remove_request_job_id']
         new_request = RemoveRequests(user_id=current_user_id, job_id=job_id_request)
         db.session.add(new_request)
         db.session.commit()
-        return redirect(url_for('timetable'))
+        return redirect(url_for('current_jobs'))
 
     assigned_job_ids = []
     assigned_jobs = UserJobLink.query.filter_by(user_id=current_user_id).all()
@@ -81,7 +86,7 @@ def timetable():
     requested_removals = RemoveRequests.query.filter_by(user_id=current_user_id).all()
     requested_removal_job_ids = {rem.job_id for rem in requested_removals}
 
-    return render_template('timetable.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
+    return render_template('current_jobs.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
                            requested_job_ids=requested_job_ids, requested_removal_job_ids=requested_removal_job_ids,
                            user_job_link = user_job_link, all_users = User, assigned_job_ids = assigned_job_ids)
 
@@ -99,8 +104,8 @@ def upload_file():
     if file and file.filename.endswith('.csv'):
         stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
         csv_input = pd.read_csv(stream)
-
-        expected_headers = ['volunteers_needed', 'start_time', 'end_time', 'date', 'job_description', 'job_requirements']
+        
+        expected_headers = ['job_name', 'volunteers_needed', 'start_time', 'end_time', 'date', 'job_description', 'qualifications']
 
         if not all(header in csv_input.columns for header in expected_headers):
             return redirect(request.url)
@@ -108,15 +113,20 @@ def upload_file():
         errors = []
         for index, row in csv_input.iterrows():
             try:
+                qualifications_list = row['qualifications'].split(';')
+                qualification_objects = Qualification.query.filter(Qualification.qualification_name.in_(qualifications_list)).all()
+
                 new_job = Jobs(
+                    job_name=row['job_name'],
                     volunteers_needed=row['volunteers_needed'],
                     start_time=row['start_time'],
                     end_time=row['end_time'],
                     date=row['date'],
                     job_description=row['job_description'],
-                    job_requirements=row['job_requirements']
+                    job_qualifications=qualification_objects
                 )
                 db.session.add(new_job)
+
             except Exception as e:
                 errors.append(f"Error in row {index}: {e}")
 
@@ -125,7 +135,7 @@ def upload_file():
                 db.session.rollback()  ##rollback the session in case of errors
         else:
             db.session.commit()  #only commit if all rows are processed successfully
-            return redirect(url_for('timetable'))
+            return redirect(url_for('current_jobs'))
     else:
         return redirect(request.url)
     
@@ -137,6 +147,7 @@ def admin():
     qualifications = Qualification.query.all()
     new_job_form = newJobForm()
     jobs = Jobs.query.all()
+    user_job_link = UserJobLink.query.all()
 
     requests = Requests.query.join(User).order_by(User.jobs_completed).all()
 
@@ -161,6 +172,18 @@ def admin():
             
             db.session.commit()
             return redirect(url_for('admin'))
+
+    elif 'add_admin_user_id' in request.form:
+
+        user_id = request.form['add_admin_user_id']
+
+        user = User.query.filter_by(user_id = user_id).first()
+
+        user.set_admin(True)
+
+        db.session.commit()
+
+        return redirect(url_for('admin'))
 
     elif 'increase_user_id' in request.form:
 
@@ -335,7 +358,8 @@ def admin():
 
 
     return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form,
-                           qualifications=qualifications, requests = requests, remove_requests = remove_requests, jobs = jobs)
+                           qualifications=qualifications, requests = requests, remove_requests = remove_requests,
+                           jobs = jobs, user_job_link = user_job_link, all_users = User)
 
 @app.route('/delete_job/<int:job_id>', methods=['POST'])
 def delete_job(job_id):
@@ -376,10 +400,15 @@ def signup():
         password_in = str(signup_form.password.data)
         username_in = str(signup_form.username.data)
         admin_in = bool(signup_form.admin.data)
+        admin_key_in = str(signup_form.admin_key.data)
+
 
         if User.query.filter_by(username=username_in).first() is None:
-            User.register(username_in, password_in, admin_in)
-            return redirect(url_for('login'))
+            if admin_in and admin_key_in == admin_key:
+                User.register(username_in, password_in, admin_in)
+                return redirect(url_for('login'))
+            else:
+                return render_template('signup.html', form=signup_form, error_text = True)
         else:
             return render_template('signup.html', form=signup_form, exists=True)
 
@@ -390,11 +419,8 @@ def signup():
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
 
-    email_form = emailChangeForm()
-    mobile_form = mobileChangeForm()
-
-    remove_email = removeEmail()
-    remove_mobile = removeMobile()
+    user = db.session.query(User).filter_by(user_id=current_user.get_id()).first()
+    profile_form = profileEditForm()
 
     my_requests = Requests.query.filter_by(user_id=current_user.get_id()).all()
     my_remove_requests = RemoveRequests.query.filter_by(user_id=current_user.get_id()).all()
@@ -406,57 +432,78 @@ def profile():
 
     details_form = ProfileDetailsForm()
 
-    if mobile_form.validate_on_submit() and mobile_form.validate():
-        new_mobile = mobile_form.new_mobile.data
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.mobile = new_mobile
-        db.session.commit()
-        return redirect(url_for('profile'))
-
-    if email_form.validate_on_submit() and email_form.validate():
-        new_email = email_form.new_email.data
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.email = new_email
-        db.session.commit()
-        return redirect(url_for('profile'))
-
-    if remove_mobile.submit4.data and remove_mobile.validate():
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.no_mobile()
-        db.session.commit()
-        return redirect(url_for('profile'))
-
-    if remove_email.submit3.data and remove_email.validate():
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.no_email()
-        db.session.commit()
-        return redirect(url_for('profile'))
-    
-    if details_form.submit5.data:
-        # Update user's profile details
-        new_details = details_form.new_details.data
-        for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-            user.details = new_details
-        db.session.commit()
-        return redirect(url_for('profile'))
-
     qualifications = Qualification.query.all()
 
     if request.method == 'POST':
+        print('POST condition met')
+        print(request.form)
+        #Runs code for the profile form
+        if request.form['form_name'] == 'profileEditForm':
+            if profile_form.save_changes.data and profile_form.validate_on_submit():
+                print('Changes saved and form validated')
+                new_mobile = profile_form.new_mobile.data
+                new_email = profile_form.new_email.data
+                new_dob = profile_form.new_dob.data
+                new_address = profile_form.new_address.data
+                new_gender = profile_form.new_gender.data
+                if new_mobile : user.mobile = new_mobile
+                if new_email: user.email = new_email
+                if new_dob: user.dob = new_dob
+                if new_address: user.address = new_address
+                if new_gender: user.gender = new_gender
+                db.session.commit()
+                return redirect(url_for('profile'))
+            else:
+                print('Form did not validate')
+                print(profile_form.errors)    
 
-        #selected_qualification_ids = request.form.getlist('qualification_ids')  #correctly retrieves list of selected qualification IDs
-        #current_user.qualifications = [Qualification.query.get(id) for id in selected_qualification_ids]
-        #db.session.commit()
-
-        selected_qualification_ids = request.form.getlist('qualification_ids')
-        current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
-        db.session.commit()
-        return redirect(url_for('profile'))
+            if profile_form.remove_mobile.data:
+                user.mobile = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            if profile_form.remove_email.data:
+                user.email = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            if profile_form.remove_dob.data:
+                user.dob = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            if profile_form.remove_address.data:
+                user.address = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            if profile_form.remove_gender.data:
+                user.gender = None
+                db.session.commit()
+                return redirect(url_for('profile'))
+            
+        #Runs the code for the details form
+        elif request.form['form_name'] == 'ProfileDetailsForm':
+            if details_form.submit5.data:
+                # Update user's profile details
+                new_details = details_form.new_details.data
+                for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
+                    user.details = new_details
+                db.session.commit()
+                return redirect(url_for('profile'))
+            
+        #Runs whatever is left, not sure how to structure this bit
+        else:
+            selected_qualification_ids = request.form.getlist('qualification_ids')
+            current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
+            db.session.commit()
+            return redirect(url_for('profile'))
     
-    return render_template('profile.html', assigned_jobs=assigned_jobs, email_form=email_form, mobile_form=mobile_form,
-                           remove_mobile=remove_mobile, remove_email=remove_email, qualifications=qualifications,
+    return render_template('profile.html', assigned_jobs=assigned_jobs, profile_form=profile_form, qualifications=qualifications,
                            user_qualifications=[q.qualifications_id for q in current_user.qualifications], my_requests=my_requests,
-                           my_remove_requests=my_remove_requests, details_form=details_form, job_table = Jobs)
+                           my_remove_requests=my_remove_requests, details_form=details_form)
+
+                        # email_form=email_form, mobile_form=mobile_form,
+                        # remove_mobile=remove_mobile, remove_email=remove_email
+                        # dob_form=dob_form, address_form=address_form,
+                        # gender_form=gender_form, remove_dob=remove_dob, 
+                        # remove_address=remove_address, remove_gender=remove_gender
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')

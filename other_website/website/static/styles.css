@@ -1,0 +1,434 @@
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+/* Navbar Section */
+
+.navbar {
+    list-style-type: none;
+    padding: 0;
+    overflow: hidden;
+    background-color: #012A4A;
+    position: sticky;
+    top: 0px;
+    margin: 0px;
+    z-index: 1;
+}
+
+.navbar_box_logo {
+    height: 50px;
+    width: 140px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.navbar_box {
+    height: 50px;
+    width: 170px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.navbar_box:hover {
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+    width: 168px;
+}
+
+li {
+  float: left;
+}
+
+.navbar_right {
+    float: right;
+    margin-right: 30px;
+}
+
+.navbar_far_right {
+    float: right;
+    margin-right: 10px;
+}
+
+.navbar_item:hover {
+    color: #A3A3A3;
+    font-weight: 550;
+}
+
+.navbar_item {
+  display: block;
+  text-decoration: none;
+  font-family: Andale Mono, monospace;
+  color: #F3F3F3;
+  font-size: 120%;
+  text-align: center;
+  padding: 10% 10%;
+}
+
+/* Page Content */
+
+#page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+#content-wrap {
+    overflow: auto;
+}
+
+/* Logo */
+
+.top_logo {
+    height: 80px;
+    width: 80px;
+    text-align: center;
+    display: flex;
+    margin-left: 15px;
+    margin-top: -30px;
+}
+
+/* Footer Section */
+
+.footer {
+    width: 100%;
+    height: 115px;
+    background-color: #012A4A;
+    text-align: center;
+    margin-top: auto;
+}
+
+.footer_text, .footer_link{
+    color: white;
+    text-decoration: none;
+    font-family: Andale Mono, monospace;
+    font-size: 16px;
+    text-align: center;
+}
+
+.footer_text{
+    padding-top: 12px;
+}
+
+.footer a:hover {
+    color: #A3A3A3;
+}
+
+/* Homepage Main Section */
+
+.main-content {
+    display: flex;
+    flex-direction: row;
+    background-color:#013A63;
+    margin: auto;
+    max-width: 100%;
+    height: 80vh;    
+}
+
+.image-container {
+    position: relative;
+    flex: 65%;
+    display: block;
+    margin: 0;
+    padding: 0;
+    max-width: 65%;
+    height: auto;
+    overflow: hidden;
+}
+
+/* Home page img slideshow */
+
+.mySlides {
+    position: absolute;
+    display: block;
+    margin: 0;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+}
+
+.fade {
+    transition: opacity 1s ease-in-out;
+}
+
+.side-text {
+    flex: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: auto;
+    max-width: 35%;
+    color: white;
+}
+
+/* Welcome Message */
+
+.welcome-message {
+    text-align: Center;
+    font-family: "Roboto", sans-serif;
+    margin: 5px;
+}
+
+.welcome-message h1 {
+    font-size: 36px;
+}
+/* About Us Section */
+
+.collapsible {
+    background-color: #012A4A;
+    color: white;
+    border: none;
+    border-radius: 35px;
+    outline: none;
+    cursor: pointer;
+    padding: 1rem;
+    width: 70%;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    margin: 1rem;
+}
+  
+  .active,
+  .collapsible:hover {
+    background-color: #555;
+  }
+  
+  .content {
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.25s ease-out;
+    text-align: center;
+  }
+  
+  .collapsible:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+  }
+  
+  .active:after {
+    content: "\2212";
+  }
+
+.about-us-header {
+    text-align: Left;
+    font-family: "Roboto", sans-serif;
+    font-size: 40px;
+    color: #333;
+    text-align: center;
+}
+
+.btn{
+    display: inline-block;
+    background: #3bb4ff;
+    color: #fff;
+    padding: 8px 30px;
+    margin: 30px 0;
+    border-radius: 30px;
+    transition: background 0.5s;
+}
+.btn:hover{
+    background: #3bb4ff92;
+}
+
+.welcome-message p.small-text,
+.about-us, .row {
+    font-size: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #f9f9f9;
+    padding: 50px;
+    text-align: center
+}
+
+/* What We Do Section */
+
+.what-we-do {
+    background-color: #f9f9f9;
+    padding: 60px 0;
+    margin: 0px 20px;
+  }
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #333;
+  }
+  
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+  
+.row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+.col-md-4 {
+    flex: 0 0 33.33%;
+    max-width: 33.33%;
+    padding: 0 15px;
+}
+  
+.container-2 {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  
+.service h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+  
+.service p {
+    color: #666;
+    font-size: 16px;
+}
+
+.already_exists {
+    color: red;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+
+/* Features Section */
+.features-box, .reviews-box {
+    margin: 0px 50px; 
+    text-align: center;
+}
+
+.features-job-box, .features-admin-box, .features-profile-box,
+.reviews-box1, .reviews-box2, .reviews-box3 {
+    display: inline-block; 
+    margin-right: 20px; 
+    width: 300px;
+    height:300px;
+    border-radius: 10px; 
+    background-color: #efefef;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.features-job-box p, .features-admin-box p, .features-profile-box p,
+.reviews-box1 p, .reviews-box2 p, .reviews-box3 p {
+    font-size:15px; 
+    color:rgb(91, 91, 91);
+    margin:10px 15px;
+}
+
+/* Reviews Section */
+.reviews-box {
+    margin: 0px 50px; 
+    text-align: center;
+}
+
+.reviews-box1, .reviews-box2, .reviews-box3 {
+    width: 500px;
+    height:200px;
+}
+
+/* Terms and Conditions Section */
+
+.terms-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.terms-container h1,
+.terms-container h2,
+.terms-container h3 {
+    font-family: 'Roboto', sans-serif;
+    color: #012A4A;
+}
+
+.terms-container h2 {
+    font-size: 20x;
+}
+
+.terms-container p {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+}
+
+.terms-container ul {
+    font-family: 'Roboto', sans-serif;
+    padding-left: 20px;
+}
+
+.terms-container li {
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: 8px;
+}
+
+.terms-container h3 {
+    font-size: 18px;
+}
+
+@media only screen and (max-width: 1000px) {
+
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .text-box {
+        height: auto;
+    }
+
+}
+
+/* Pricing Page */
+.pricing-title, .contact-title {
+    text-align: center;
+    font-size: 3vw;
+    color: white;
+}
+
+.pricing-title-box, .contact-title-box {
+    background-color: #013A63;
+    padding: 1px;
+    margin-bottom: 25px;
+}
+
+.pricing-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 0px 250px; 
+    margin-top: 60px;
+}
+
+.paid-box, .free-box {
+    width: 300px;
+    padding: 0px 50px 150px 50px;
+    text-align: center;
+    transition: transform 1s ease; 
+    border-radius: 10px; 
+    background-color: #efefef;
+    margin-bottom: 100px;
+}
+
+.free-box:hover, .paid-box:hover {
+    transform: scale(1.1);
+    transform-origin: center;
+    box-shadow: 0px 4px 30px -3px rgb(164, 164, 164);
+}

@@ -17,6 +17,9 @@
     <div class="big_right">
         <div class="login_box">
             <h1>Login</h1>
+            {% if error %}
+            <p class = 'already_exists'>{{ error }}</p>
+            {% endif %}
             <form action="" method="POST">
                 {{ form.csrf_token }}
                 <p>

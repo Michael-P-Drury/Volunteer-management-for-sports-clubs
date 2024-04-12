@@ -29,27 +29,13 @@
 
         <li>
             <div class="navbar_box">
-                <a class="navbar_item" href="{{ url_for('current_jobs') }}">Current Jobs</a>
+                <a class="navbar_item" href="{{ url_for('pricing') }}">Pricing</a>
             </div>
         </li>
 
         <li>
             <div class="navbar_box">
-                <a class="navbar_item" href="{{ url_for('profile') }}">Profile</a>
-            </div>
-        </li>
-
-        {% if current_user.admin %}
-            <li>
-            <div class="navbar_box">
-                <a class="navbar_item" href="{{ url_for('admin') }}">Admin</a>
-            </div>
-        </li>
-        {% endif %}
-
-        <li class = "navbar_right">
-            <div class="navbar_box">
-                <a class="navbar_item" href="{{ url_for('logout') }}">Logout</a>
+                <a class="navbar_item" href="{{ url_for('contact') }}">Contact</a>
             </div>
         </li>
     </ul>
