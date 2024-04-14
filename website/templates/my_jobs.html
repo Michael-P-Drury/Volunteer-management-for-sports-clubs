@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block page_content %}
+
+<div class="p-title-box">
+    <h1 class = 'profile-title'>{{ current_user.username }}'s Jobs  </h1>
+</div>
+
+<div class="timetable-boxes">
+{% if assigned_jobs %}
+    <p class='profile-box-text' style='font-size: 3vh;'>Assigned Jobs</p>
+    {% for job in assigned_jobs %}
+    <div class="job-content">
+        <element onclick="togglePopup('{{ job.job_id }}')">
+            <div class="job-box">
+                <div class="job-name-box">
+                    <div class="job-name"><b>{{ job.job_name }}</b></div>
+                </div>
+                <div>Date: <span>{{ job.date }}</span></div>
+                <div>Start time: <span>{{ job.start_time }}</span></div>
+                <div>End time: <span>{{ job.end_time }}</span></div>
+            </div>
+        </element>
+        
+        <div class="popup" id="popup-{{ job.job_id }}">
+            <div class="popup-overlay"></div>
+            <div class="popup-content">
+                <div class="popup-close-btn" onclick="togglePopup('{{ job.job_id }}')">&times;</div>
+                <div class="popup-job-name-box">
+                    <p class="job-name"><b>{{ job.job_name }}</b></p>
+                </div>
+                <div class="popup-info">
+                    <p>Date: {{ job.date }}</p>
+                    <p>Time: {{ job.start_time }} - {{ job.end_time }}</p>
+                    <p>Description: {{ job.job_description }}</p>
+                    <div>
+                        <p class="popup-requirements">Requirements:</p>
+                        <ul>
+                            {% for qualification in job.job_qualifications %}
+                                <li>{{ qualification.qualification_name }}</li>
+                            {% endfor %}
+                        </ul>
+                        <br>
+                    </div>
+
+                    {% if job.job_id in requested_removal_job_ids %}
+                        <div>You have requested to be removed from this job</div>
+                    {% elif job.job_id in assigned_job_ids %}
+                        <div>You are assigned to this job</div>
+                        {% if job.job_id not in requested_removal_job_ids %}
+                        <form method="post">
+                            <input type="hidden" name="remove_request_job_id" value="{{ job.job_id }}">
+                            <input type="submit" value="Request to remove from job">
+                        </form>
+                        {% endif %}
+                    {% elif job.job_id in requested_job_ids %}
+                        <div>You have requested this job</div>
+                    {% endif %}                    
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <p class='profile-box-text' style='font-size: 3vh;'>No assigned jobs currently.</p>
+{% endif %}  
+</div>
+
+{% if requested_job_ids %}
+    <p class='profile-box-text' style='font-size: 3vh;'>Requested Jobs</p>   
+    {% for my_request in requested_job_ids %}
+        <p class='profile-box-text'> Job name: {{ job_table.query.filter_by(job_id=my_request).first().job_name }} </p>
+    {% endfor %}
+{% endif %}                    
+
+{% if my_remove_requests %}
+    <p class='profile-box-text' style='font-size: 3vh;'>Remove Requests</p>   
+    {% for remove_request in my_remove_requests %}
+        <p class='profile-box-text'> Job name: {{ job_table.query.filter_by(job_id=remove_request.job_id).first().job_name }} </p>
+    {% endfor %}
+{% endif %}                    
+
+
+
+<p class='profile-box-text'>Current number of jobs completed: {{ current_user.jobs_completed }}</p>
+ 
+<script>
+    function togglePopup(jobId) {
+        document.getElementById("popup-" + jobId).classList.toggle("job_active");
+    }
+</script>
+
+{% endblock %}

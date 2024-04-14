@@ -41,13 +41,41 @@ def login():
 def home():
     return render_template('home.html')
 
+@app.route('/my_jobs', methods=['GET', 'POST'])
+def my_jobs():
+
+    current_user_id = current_user.get_id()
+    
+    assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_user_id).all()
+    
+    my_remove_requests = RemoveRequests.query.filter_by(user_id=current_user_id).all()
+    requested_removal_job_ids = [rem.job_id for rem in my_remove_requests]
+    
+    assigned_job_ids = []
+    for assigned_job in assigned_jobs:
+        assigned_job_ids.append(assigned_job.job_id)
+
+    requested_job_ids = []
+    requested_jobs = Requests.query.filter_by(user_id=current_user_id).all()
+    for requested in requested_jobs:
+        requested_job_ids.append(requested.job_id)
+
+    if 'remove_request_job_id' in request.form:
+        job_id_request = request.form['remove_request_job_id']
+        new_request = RemoveRequests(user_id=current_user_id, job_id=job_id_request)
+        db.session.add(new_request)
+        db.session.commit()
+        return redirect(url_for('my_jobs'))
+    
+    return render_template('my_jobs.html',assigned_jobs=assigned_jobs, assigned_job_ids=assigned_job_ids, requested_job_ids=requested_job_ids,
+                           my_remove_requests=my_remove_requests, requested_removal_job_ids=requested_removal_job_ids, current_user_id=current_user_id, job_table=Jobs)
 
 # routing for the current jobs page which takes you to the home page and the URL of the base URL/current_jobs
 @app.route('/current_jobs', methods=['GET', 'POST'])
 def current_jobs():
+
     jobs = Jobs.query.all()
     current_user_id = current_user.get_id()
-    user_job_link = UserJobLink.query.all()
     user = User.query.get(current_user_id)
 
     user_qualifications_ids = {q.qualifications_id for q in user.qualifications}
@@ -59,20 +87,6 @@ def current_jobs():
         if job_requirement_ids.issubset(user_qualifications_ids):
             qualified_jobs_ids.append(job.job_id)
 
-    if 'job_id_request' in request.form:
-        job_id_request = request.form['job_id_request']
-        new_request = Requests(user_id=current_user_id, job_id=job_id_request)
-        db.session.add(new_request)
-        db.session.commit()
-        return redirect(url_for('current_jobs'))
-
-    elif 'remove_request_job_id' in request.form:
-        job_id_request = request.form['remove_request_job_id']
-        new_request = RemoveRequests(user_id=current_user_id, job_id=job_id_request)
-        db.session.add(new_request)
-        db.session.commit()
-        return redirect(url_for('current_jobs'))
-
     assigned_job_ids = []
     assigned_jobs = UserJobLink.query.filter_by(user_id=current_user_id).all()
     for assigned_job in assigned_jobs:
@@ -83,12 +97,15 @@ def current_jobs():
     for requested in requested_jobs:
         requested_job_ids.append(requested.job_id)
 
-    requested_removals = RemoveRequests.query.filter_by(user_id=current_user_id).all()
-    requested_removal_job_ids = {rem.job_id for rem in requested_removals}
+    if 'job_id_request' in request.form:
+        job_id_request = request.form['job_id_request']
+        new_request = Requests(user_id=current_user_id, job_id=job_id_request)
+        db.session.add(new_request)
+        db.session.commit()
+        return redirect(url_for('current_jobs'))
 
     return render_template('current_jobs.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
-                           requested_job_ids=requested_job_ids, requested_removal_job_ids=requested_removal_job_ids,
-                           user_job_link = user_job_link, all_users = User, assigned_job_ids = assigned_job_ids)
+                           requested_job_ids=requested_job_ids, assigned_job_ids=assigned_job_ids)
 
 
 @app.route('/upload_jobs', methods=['POST'])
@@ -424,8 +441,7 @@ def profile():
 
     my_requests = Requests.query.filter_by(user_id=current_user.get_id()).all()
     my_remove_requests = RemoveRequests.query.filter_by(user_id=current_user.get_id()).all()
-
-    print(my_requests)
+    job_table = Jobs
 
     current_user_id = current_user.get_id()
     assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_user_id).all()
@@ -497,7 +513,7 @@ def profile():
     
     return render_template('profile.html', assigned_jobs=assigned_jobs, profile_form=profile_form, qualifications=qualifications,
                            user_qualifications=[q.qualifications_id for q in current_user.qualifications], my_requests=my_requests,
-                           my_remove_requests=my_remove_requests, details_form=details_form)
+                           my_remove_requests=my_remove_requests, details_form=details_form, job_table=job_table)
 
                         # email_form=email_form, mobile_form=mobile_form,
                         # remove_mobile=remove_mobile, remove_email=remove_email

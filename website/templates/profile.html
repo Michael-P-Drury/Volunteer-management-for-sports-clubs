@@ -23,11 +23,8 @@
     <div class='tab-container'>
         <button class="profile-tab" onclick="showTab('PersonalDetails', this)" id="defaultOpen">Personal Details</button>
         <button class="profile-tab" onclick="showTab('AboutMe', this)">About Me</button>
-        <button class="profile-tab" onclick="showTab('Jobs', this)">Jobs</button>
         <button class="profile-tab" onclick="showTab('Qualifications', this)">Qualifications</button>
     </div>
-
-    <!-- <div id="PersonalDetails" class="profile-tab-content profile-flex"> -->
 
     <form id="PersonalDetails" class="profile-tab-content profile-flex" action="" method="POST">
         
@@ -111,45 +108,6 @@
                 <textarea name="new_details" class="form-control" rows="5">{{ current_user.details }}</textarea>
             <div>{{ details_form.submit5(style='margin: 0rem 0rem 1rem 3rem') }}</div>
         </form>
-    </div>
-
-    <div id="Jobs" class="profile-tab-content">
-        <p class='profile-box-text'>Current number of jobs completed: {{ current_user.jobs_completed }}</p>
-        <p class="profile-box-text">Assigned Jobs:</p>
-        {% if assigned_jobs %}
-            {% for job in assigned_jobs %}
-                <div class='job-details'>
-                    <p class='profile-box-text' style='font-size: 3vh;'>Job Name: {{ job.job_name }}</p>
-                    <p class='profile-box-text' style='font-size: 3vh;'>Job Description: {{ job.job_description }}</p>
-                    <!-- Add more job details as needed -->
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class='profile-box-text' style='font-size: 3vh;'>No assigned jobs currently.</p>
-        {% endif %}
-        <p class="profile-box-text">My Pending Requests:</p>
-
-        {% if my_requests %}
-
-        {% for my_request in my_requests %}
-            <p class='profile-box-text'> Job name: {{ job_table.query.filter_by(job_id = my_request.job_id).first().job_name }} </p>
-        {% endfor %}
-
-        {% else %}
-            <p class='profile-box-text'  style='font-size: 3vh;'> No current requests for jobs </p>
-        {% endif %}
-
-        <p class="profile-box-text">Remove from Job Requests:</p>
-
-        {% if my_remove_requests %}
-
-        {% for my_remove_request in my_remove_requests %}
-            <p class='profile-box-text'> Job name: {{ job_table.query.filter_by(job_id = my_remove_request.job_id).first().job_name }} </p>
-        {% endfor %}
-
-        {% else %}
-            <p class='profile-box-text' style='font-size: 3vh;'> No current remove requests for jobs </p>
-        {% endif %}
     </div>
 
     <div id="Qualifications" class="profile-tab-content">

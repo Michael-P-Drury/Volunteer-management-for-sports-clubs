@@ -456,7 +456,7 @@ body {
     outline: none;
     cursor: pointer;
     font-size: 2.5vw;
-    width: 25%;
+    width: 33%;
     margin: 0;
     padding: 1rem 0 1rem 0;
 }
@@ -536,25 +536,6 @@ body {
 .errors {
     color: red;
     margin: 0 0 1rem 1.5rem;
-}
-
-
-input[type='submit' i] {
-    display: inline-block;
-    margin: 5px;
-    background-color: #013A63;
-    color: #F2F2F2;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    border-radius: 0;
-    font-size: 3vh;
-    padding: 0.5rem;
-    border-radius: 15px;
-}
-
-input[type='submit' i]:hover {
-    background-color: #555;
 }
 
 .form-control {
@@ -780,6 +761,27 @@ input[type='submit' i]:hover {
     padding: 20px;
 }
 
+.admin-button {
+    display: block;
+    margin-top: 10px;
+    font-size: 1.5vh;
+    background-color: #013A63;
+    color: #F2F2F2;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 15px;
+}
+
+.upload-instructions-li {
+    margin-bottom: 0.5rem;
+}
+
+.admin-button:hover {
+    background-color: #555;
+}
+
 .admin-scrollable-box{
     max-height: 400px;
     overflow: auto;
@@ -875,6 +877,10 @@ input[type='submit' i]:hover {
 
 .admin-jobs form:nth-last-child(-n+1){
     margin-left:5px;
+}
+
+.upload-instructions {
+    margin-bottom: 1rem;
 }
 
 /* For smaller screens */
