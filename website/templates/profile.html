@@ -126,7 +126,14 @@
                     </label>
                 </div>
             {% endfor %}
-            <button type="submit" class="Edit">Update Qualifications</button>
+            {% if qualifications %}
+                <button type="submit" class="Edit">Update Qualifications</button>
+            {% else %}
+            <p class="profile-box-text">
+                <i>There are no current possible qualifications</i>
+            </p>
+            {% endif %}
+
         </form>
     </div>
 
