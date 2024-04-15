@@ -33,7 +33,7 @@
 
         <!-- Pass in event so that it can be ignored in the js function
         Was default submitting the form when the button was clicked. -->
-        <button class="Edit" onclick="showEdits(event)">Edit</button>
+        <button class="Edit" style onclick="showEdits(event)">Edit</button>
         
         <!-- <button class='Edit Save toggleEdit'>Save Changes</button> -->
         <div class='toggleEdit'>
@@ -96,9 +96,8 @@
                 {{ profile_form.remove_gender }}
             </div>
         </div>
-
     </form>
-    
+
     <div id="AboutMe" class="profile-tab-content">
         <p class='profile-box-text'>About {{ current_user.username }}:</p>
         <form action="" method="POST">

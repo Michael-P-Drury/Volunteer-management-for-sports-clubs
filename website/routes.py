@@ -450,62 +450,63 @@ def profile():
 
     qualifications = Qualification.query.all()
 
-    if request.method == 'POST':
-        print('POST condition met')
-        print(request.form)
-        # Runs code for the profile form
-        if request.form['form_name'] == 'profileEditForm':
-            if profile_form.save_changes.data and profile_form.validate_on_submit():
-                print('Changes saved and form validated')
-                new_mobile = profile_form.new_mobile.data
-                new_email = profile_form.new_email.data
-                new_dob = profile_form.new_dob.data
-                new_address = profile_form.new_address.data
-                new_gender = profile_form.new_gender.data
-                if new_mobile : user.mobile = new_mobile
-                if new_email: user.email = new_email
-                if new_dob: user.dob = new_dob
-                if new_address: user.address = new_address
-                if new_gender: user.gender = new_gender
-                db.session.commit()
-                return redirect(url_for('profile'))
-            else:
-                print('Form did not validate')
-                print(profile_form.errors)    
 
-            if profile_form.remove_mobile.data:
-                user.mobile = None
-                db.session.commit()
-                return redirect(url_for('profile'))
-            if profile_form.remove_email.data:
-                user.email = None
-                db.session.commit()
-                return redirect(url_for('profile'))
-            if profile_form.remove_dob.data:
-                user.dob = None
-                db.session.commit()
-                return redirect(url_for('profile'))
-            if profile_form.remove_address.data:
-                user.address = None
-                db.session.commit()
-                return redirect(url_for('profile'))
-            if profile_form.remove_gender.data:
-                user.gender = None
-                db.session.commit()
-                return redirect(url_for('profile'))
-            
-        # Runs the code for the details form
-        elif request.form['form_name'] == 'ProfileDetailsForm':
-            if details_form.submit5.data:
-                # Update user's profile details
-                new_details = details_form.new_details.data
-                for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
-                    user.details = new_details
-                db.session.commit()
-                return redirect(url_for('profile'))
-            
-        # Runs whatever is left, not sure how to structure this bit
-        else:
+    if request.method == 'POST':
+        try:
+            print('POST condition met')
+            print(request.form)
+            # Runs code for the profile form
+            if request.form['form_name'] == 'profileEditForm':
+                if profile_form.save_changes.data and profile_form.validate_on_submit():
+                    print('Changes saved and form validated')
+                    new_mobile = profile_form.new_mobile.data
+                    new_email = profile_form.new_email.data
+                    new_dob = profile_form.new_dob.data
+                    new_address = profile_form.new_address.data
+                    new_gender = profile_form.new_gender.data
+                    if new_mobile : user.mobile = new_mobile
+                    if new_email: user.email = new_email
+                    if new_dob: user.dob = new_dob
+                    if new_address: user.address = new_address
+                    if new_gender: user.gender = new_gender
+                    db.session.commit()
+                    return redirect(url_for('profile'))
+                else:
+                    print('Form did not validate')
+                    print(profile_form.errors)
+
+                if profile_form.remove_mobile.data:
+                    user.mobile = None
+                    db.session.commit()
+                    return redirect(url_for('profile'))
+                if profile_form.remove_email.data:
+                    user.email = None
+                    db.session.commit()
+                    return redirect(url_for('profile'))
+                if profile_form.remove_dob.data:
+                    user.dob = None
+                    db.session.commit()
+                    return redirect(url_for('profile'))
+                if profile_form.remove_address.data:
+                    user.address = None
+                    db.session.commit()
+                    return redirect(url_for('profile'))
+                if profile_form.remove_gender.data:
+                    user.gender = None
+                    db.session.commit()
+                    return redirect(url_for('profile'))
+
+            # Runs the code for the details form
+            elif request.form['form_name'] == 'ProfileDetailsForm':
+                if details_form.submit5.data:
+                    # Update user's profile details
+                    new_details = details_form.new_details.data
+                    for user in db.session.query(User).filter_by(user_id=current_user.get_id()):
+                        user.details = new_details
+                    db.session.commit()
+                    return redirect(url_for('profile'))
+
+        except:
             selected_qualification_ids = request.form.getlist('qualification_ids')
             current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
             db.session.commit()
