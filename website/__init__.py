@@ -14,5 +14,6 @@ lm = LoginManager(app)
 lm.login_view = 'login'
 app.app_context().push()
 admin_key = 'admin1234'
+prescription_level = 'free'
 
 from . import routes
