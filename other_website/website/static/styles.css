@@ -390,6 +390,10 @@ body {
 }
 
 /* Pricing Page */
+.pricing-page {
+    background-color: #efefef;
+}
+
 .pricing-title, .contact-title {
     text-align: center;
     font-size: 3vw;
@@ -412,18 +416,107 @@ body {
 
 .paid-box, .free-box {
     width: 300px;
-    padding: 0px 50px 150px 50px;
+    padding: 0px 50px 40px 50px;
     text-align: center;
     transition: transform 1s ease; 
     border-radius: 10px; 
-    background-color: #efefef;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
+    background-color: white;
+    border: 1px solid transparent;
+    border-top: 20px solid transparent;
 }
 
 .free-box:hover, .paid-box:hover {
     transform: scale(1.1);
     transform-origin: center;
     box-shadow: 0px 4px 30px -3px rgb(164, 164, 164);
+    border: 1px solid #012A4A;
+    border-top: 20px solid #012A4A;
+}
+
+.pricing-join {
+    padding: 20px 50px; 
+    background-color: #012A4A;
+    color:white;    
+    border-radius: 5px;
+}
+
+.box-features {
+    text-align: left;
+}
+
+.box-features span{
+    font-size: 20px; 
+    color:green;
+}
+
+.pricing-suit-you h1, .pricing-feature h1{
+    margin-top: 50px; 
+    margin-bottom: 50px; 
+    text-align: center; 
+    font-family: Roboto, sans-serif;
+    font-size: 40px; 
+    color: #333;
+}
+
+.pricing-suit-you p{
+    text-align: center;  
+    margin: 0 150px; 
+    font-size: 18px;
+}
+
+.pricing-feature {
+    text-align:center;
+}
+
+.pricing-feature hr {
+    width:50%; 
+    height:2px;
+    border-width:0;
+    color:#012A4A;
+    background-color:#012A4A
+}
+.pricing-premium {
+    align-items: center; 
+    display: flex; 
+    justify-content: center; 
+    flex-wrap: wrap;
+}
+
+.feature-free {
+    display: inline-block; 
+    margin-right: 20px; 
+    width: 400px; 
+    height:110px; 
+    border-radius: 5px; 
+    margin-bottom: 20px;
+    overflow: hidden; 
+}
+
+.feature-free p{
+    font-size: 13px;
+    color:rgb(91, 91, 91);
+}
+
+.feature-premium {
+    background-color: rgb(255, 255, 255); 
+    display: inline-block; 
+    margin-right: 20px; 
+    width: 200px; 
+    height:150px; 
+    border-radius: 5px; 
+    margin-bottom: 20px;
+    overflow: hidden; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.feature-premium p{
+    margin-top:70px;
+}
+
+.pricing-descriptions {
+    text-align: center; 
+    margin-bottom: 100px;
 }
 
 /* Contact page */
@@ -445,7 +538,6 @@ body {
     height: 200px;
     border-radius: 10px; 
     background-color: #ffffff;
-
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
     padding: 20px;
