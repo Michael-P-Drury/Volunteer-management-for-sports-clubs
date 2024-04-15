@@ -117,6 +117,12 @@
             {% endfor %}
         </p>
         <form action="" method="POST">
+            <p class="profile-box-text">
+                <i>Select qualifications that you have and press update qualifications to save changes</i>
+            </p>
+            <p class="profile-box-text">
+                <i>-----------------------</i>
+            </p>
             {% for qualification in qualifications %}
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="qualification_ids" value="{{ qualification.qualifications_id }}" id="qualification_{{ qualification.qualifications_id }}" {% if qualification.qualifications_id in user_qualifications %} checked {% endif %}>
