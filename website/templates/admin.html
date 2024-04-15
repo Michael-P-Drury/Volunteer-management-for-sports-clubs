@@ -7,7 +7,7 @@
 </div>
 
 <div class="admin-container">
-
+    
     <div class="admin-box admin-scrollable-box">
         <h2>Job Requests</h2>
         {% for request in requests %}
@@ -50,6 +50,11 @@
         <h2>Add New Job</h2>
         <div class="admin-new-job">
         <form action="" method="POST">
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    checkTime();
+                });
+            </script>
             {{ new_job_form.csrf_token }}
             <div>
                 {{ new_job_form.job_name.label }} {{ new_job_form.job_name(class="admin-new-job-name") }}

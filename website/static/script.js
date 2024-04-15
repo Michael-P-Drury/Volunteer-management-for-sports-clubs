@@ -64,3 +64,28 @@ function showEdits (event) {
   }
 }
 
+function checkTime() {
+  var startTimeInput = document.querySelector('.admin-new-job-stime');
+  var endTimeInput = document.querySelector('.admin-new-job-etime');
+
+  // Update the end time input's min attribute whenever the start time changes
+  startTimeInput.addEventListener('change', function() {
+      endTimeInput.setAttribute('min', startTimeInput.value);
+      endTimeInput.setCustomValidity(''); // Clear custom validity to prevent double messages
+  });
+
+  // Check the end time when the end time input changes
+  endTimeInput.addEventListener('change', function() {
+      if (startTimeInput.value && endTimeInput.value < startTimeInput.value) {
+          // If invalid, set a custom validity message
+          endTimeInput.setCustomValidity('End time cannot be before start time.');
+      } else {
+          // If valid, clear any custom validity messages
+          endTimeInput.setCustomValidity('');
+      }
+      // This will trigger the browser's default handling of the custom validity message
+      endTimeInput.reportValidity();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', checkTime);
