@@ -202,6 +202,21 @@ def admin():
 
         return redirect(url_for('admin'))
 
+    elif 'remove_volunteer' in request.form:
+
+        user_id, job_id = request.form['remove_volunteer'].split(',')
+
+        link_to_delete = UserJobLink.query.filter_by(user_id=user_id, job_id=job_id).first()
+        if link_to_delete:
+            db.session.delete(link_to_delete)
+
+        job = Jobs.query.filter_by(job_id=job_id).first()
+        job.increase_needed_left()
+
+        db.session.commit()
+        return redirect(url_for('admin'))
+
+
     elif 'increase_user_id' in request.form:
 
         user_id = request.form['increase_user_id']

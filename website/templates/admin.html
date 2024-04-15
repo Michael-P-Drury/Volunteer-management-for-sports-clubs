@@ -223,7 +223,11 @@
                         </form>
                     </div>
                 </div>
-                    <p>Volunteers assigned: {% for user_job in user_job_link %}{% if user_job.job_id == job.job_id %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}, {% endif %}{% endfor %}</p>
+                    <p>Volunteers assigned: {% for user_job in user_job_link %}{% if user_job.job_id == job.job_id %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}
+                <form method="post" onclick="return confirm('Are you sure you want remove this volunteer from the job?');">
+                    <input type="hidden" name="remove_volunteer" value="{{ user_job.user_id }},{{ user_job.job_id }}">
+                    <input type="submit" value="Remove Volunteer" class='admin-button'>,
+                </form>{% endif %}{% endfor %}</p>
             </div>
             {% endfor %}
     </div>
