@@ -63,3 +63,22 @@ function showEdits (event) {
     
   }
 }
+
+function scrollToSection(sectionId) {
+  var section = document.getElementById(sectionId);
+  section.scrollIntoView({ behavior: 'smooth' });
+}
+function toggleDescription(descriptionId) {
+  var defaultDescription = document.getElementById('pricing-description1');
+  defaultDescription.style.display = 'block';
+  };
+
+function toggleDescription(descriptionId) {
+  var descriptions = document.querySelectorAll('.pricing-description');
+  descriptions.forEach(function(description) {
+      description.style.display = 'none'; 
+  });
+
+  var description = document.getElementById(descriptionId);
+  description.style.display = 'block'; 
+  }

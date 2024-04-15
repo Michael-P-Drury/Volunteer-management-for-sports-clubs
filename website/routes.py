@@ -453,7 +453,7 @@ def profile():
     if request.method == 'POST':
         print('POST condition met')
         print(request.form)
-        #Runs code for the profile form
+        # Runs code for the profile form
         if request.form['form_name'] == 'profileEditForm':
             if profile_form.save_changes.data and profile_form.validate_on_submit():
                 print('Changes saved and form validated')
@@ -494,7 +494,7 @@ def profile():
                 db.session.commit()
                 return redirect(url_for('profile'))
             
-        #Runs the code for the details form
+        # Runs the code for the details form
         elif request.form['form_name'] == 'ProfileDetailsForm':
             if details_form.submit5.data:
                 # Update user's profile details
@@ -504,7 +504,7 @@ def profile():
                 db.session.commit()
                 return redirect(url_for('profile'))
             
-        #Runs whatever is left, not sure how to structure this bit
+        # Runs whatever is left, not sure how to structure this bit
         else:
             selected_qualification_ids = request.form.getlist('qualification_ids')
             current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
