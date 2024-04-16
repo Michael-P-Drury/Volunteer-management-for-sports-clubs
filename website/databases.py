@@ -23,6 +23,11 @@ job_request = db.Table('job_request',
     db.Column('request_id', db.Integer, db.ForeignKey('requests.request_id'), primary_key=True)
 )
 
+qualification_request = db.Table('qualification_request',
+    db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
+)
+
 user_remove_request = db.Table('user_remove_request',
     db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
     db.Column('remove_request_id', db.Integer, db.ForeignKey('remove_requests.remove_request_id'), primary_key=True)
@@ -285,11 +290,11 @@ class Qualification(UserMixin, db.Model):
     qualification_name = db.Column(db.String(300))
     qualification_description = db.Column(db.String(300))
 
-class QualificationRequests(UserMixin, db.Mode):
+class QualificationRequests(UserMixin, db.Model):
     __tablename__ = 'qualification_requests'
     qualification_request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    qualification_id = db.Column(db.Integer, db.ForeignKey('qualification.qualification_id'))
+    qualification_id = db.Column(db.Integer, db.ForeignKey('qualification.qualifications_id'))
 
     user = db.relationship('User', backref=db.backref('requests', lazy='subquery'))
     qualification = db.relationship('Qualification', backref=db.backref('requests', lazy='subquery'))
@@ -301,8 +306,8 @@ class Requests(UserMixin, db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     job_id = db.Column(db.Integer, db.ForeignKey('jobs.job_id'))
 
-    user = db.relationship('User', backref=db.backref('requests', lazy='subquery'))
-    job = db.relationship('Jobs', backref=db.backref('requests', lazy='subquery'))
+    user = db.relationship('User', backref=db.backref('users', lazy='subquery'))
+    job = db.relationship('Jobs', backref=db.backref('jobs', lazy='subquery'))
 
 class RemoveRequests(UserMixin, db.Model):
     __tablename__ = 'remove_requests'
