@@ -17,6 +17,12 @@
     <h1 class = 'profile-title'>{{ current_user.username }}'s Profile</h1>
 </div>
 
+{% if prescription_level == 'free' %}
+<div class="ad_top">
+    <h1 class='ad_text'>[ad]</h1>
+</div>
+{% endif %}
+
 
 <div class='profile-container'>
 

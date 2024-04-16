@@ -894,3 +894,10 @@ body {
     font-size: 1.1vw;
     font-weight: bold;
 }
+
+.ad_top{
+    background-color: white;
+    margin-bottom: 25px;
+    text-align: center;
+    border-style: solid;
+ }

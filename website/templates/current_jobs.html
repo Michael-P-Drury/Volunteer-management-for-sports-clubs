@@ -5,6 +5,12 @@
     <h1 class='timetable-title'>Current Jobs</h1>
 </div>
 
+{% if prescription_level == 'free' %}
+<div class="ad_top">
+    <h1 class='ad_text'>[ad]</h1>
+</div>
+{% endif %}
+
 {% if jobs %}
 <p class="timetable-guide">Click on jobs to see more details and request to volunteer for jobs</p>
 

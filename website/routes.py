@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink
-from . import lm, db, app, admin_key
+from . import lm, db, app, admin_key, prescription_level
 from .forms import LoginForm, profileEditForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm
 import pandas as pd
 import io
@@ -68,7 +68,8 @@ def my_jobs():
         return redirect(url_for('my_jobs'))
     
     return render_template('my_jobs.html',assigned_jobs=assigned_jobs, assigned_job_ids=assigned_job_ids, requested_job_ids=requested_job_ids,
-                           my_remove_requests=my_remove_requests, requested_removal_job_ids=requested_removal_job_ids, current_user_id=current_user_id, job_table=Jobs)
+                           my_remove_requests=my_remove_requests, requested_removal_job_ids=requested_removal_job_ids,
+                           current_user_id=current_user_id, job_table=Jobs, prescription_level = prescription_level)
 
 # routing for the current jobs page which takes you to the home page and the URL of the base URL/current_jobs
 @app.route('/current_jobs', methods=['GET', 'POST'])
@@ -105,7 +106,7 @@ def current_jobs():
         return redirect(url_for('current_jobs'))
 
     return render_template('current_jobs.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
-                           requested_job_ids=requested_job_ids, assigned_job_ids=assigned_job_ids)
+                           requested_job_ids=requested_job_ids, assigned_job_ids=assigned_job_ids, prescription_level = prescription_level)
 
 
 @app.route('/upload_jobs', methods=['POST'])
@@ -391,7 +392,7 @@ def admin():
 
     return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form,
                            qualifications=qualifications, requests = requests, remove_requests = remove_requests,
-                           jobs = jobs, user_job_link = user_job_link, all_users = User)
+                           jobs = jobs, user_job_link = user_job_link, all_users = User, prescription_level = prescription_level)
 
 @app.route('/delete_job/<int:job_id>', methods=['POST'])
 def delete_job(job_id):
@@ -529,7 +530,8 @@ def profile():
     
     return render_template('profile.html', assigned_jobs=assigned_jobs, profile_form=profile_form, qualifications=qualifications,
                            user_qualifications=[q.qualifications_id for q in current_user.qualifications], my_requests=my_requests,
-                           my_remove_requests=my_remove_requests, details_form=details_form, job_table=job_table)
+                           my_remove_requests=my_remove_requests, details_form=details_form, job_table=job_table,
+                           prescription_level = prescription_level)
 
                         # email_form=email_form, mobile_form=mobile_form,
                         # remove_mobile=remove_mobile, remove_email=remove_email

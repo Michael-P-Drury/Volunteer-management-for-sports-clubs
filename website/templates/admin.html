@@ -6,6 +6,12 @@
     <h1 class = 'profile-title'>Admin Dashboard</h1>
 </div>
 
+{% if prescription_level == 'free' %}
+<div class="ad_top">
+    <h1 class='ad_text'>[ad]</h1>
+</div>
+{% endif %}
+
 <div class="admin-container">
     
     <div class="admin-box admin-scrollable-box">
