@@ -97,6 +97,11 @@
 
     <div class="admin-box">
         <h2>Upload Jobs CSV File</h2>
+        {% if prescription_level == 'free' %}
+        upgrade to premium to unlock this feature
+
+        {% else %}
+
         <div class="upload-instructions">
             <p>Please ensure your CSV file meets the following format requirements before uploading:</p>
             <ul>
@@ -109,6 +114,7 @@
                 <input type="submit" value="Upload" class="admin-button">
             </form>
         </div>
+        {% endif %}
         
     </div>
 
