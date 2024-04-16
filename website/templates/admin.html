@@ -244,7 +244,7 @@
         <h3>Qualification requests</h3>
         {% for qualification_request in qualification_requests %}
         <div>
-            <p>Volunteer username: {{ qualification_request.user.username }} | Qualification: {{ qualification_request.job.job_name }}</p>
+            <p>Volunteer username: {{ qualification_request.user.username }} | Qualification: {{ qualification_request.qualification.qualification_name }}</p>
             <div class="admin-job-request">
                 <form method="post">
                     <input type="hidden" name="accept_request" value="{{ request.user_id }},{{ request.job_id }}">
