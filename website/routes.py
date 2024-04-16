@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
-from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink
+from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink, QualificationRequests
 from . import lm, db, app, admin_key, prescription_level
 from .forms import LoginForm, profileEditForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm
 import pandas as pd
@@ -168,6 +168,8 @@ def admin():
     user_job_link = UserJobLink.query.all()
 
     requests = Requests.query.join(User).order_by(User.jobs_completed).all()
+
+    qualification_requests = QualificationRequests.query.join(User).all()
 
     remove_requests = RemoveRequests.query.join(User).order_by(User.jobs_completed).all()
 
@@ -392,7 +394,8 @@ def admin():
 
     return render_template('admin.html', users=users, new_job_form=new_job_form, qualification_form=qualification_form,
                            qualifications=qualifications, requests = requests, remove_requests = remove_requests,
-                           jobs = jobs, user_job_link = user_job_link, all_users = User, prescription_level = prescription_level)
+                           jobs = jobs, user_job_link = user_job_link, all_users = User,
+                           prescription_level = prescription_level, qualification_requests = qualification_requests)
 
 @app.route('/delete_job/<int:job_id>', methods=['POST'])
 def delete_job(job_id):
