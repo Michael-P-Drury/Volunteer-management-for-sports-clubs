@@ -285,6 +285,16 @@ class Qualification(UserMixin, db.Model):
     qualification_name = db.Column(db.String(300))
     qualification_description = db.Column(db.String(300))
 
+class QualificationRequests(UserMixin, db.Mode):
+    __tablename__ = 'qualification_requests'
+    qualification_request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    qualification_id = db.Column(db.Integer, db.ForeignKey('qualification.qualification_id'))
+
+    user = db.relationship('User', backref=db.backref('requests', lazy='subquery'))
+    qualification = db.relationship('Qualification', backref=db.backref('requests', lazy='subquery'))
+
+
 class Requests(UserMixin, db.Model):
     __tablename__ = 'requests'
     request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
