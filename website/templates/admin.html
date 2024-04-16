@@ -247,11 +247,11 @@
             <p>Volunteer username: {{ qualification_request.user.username }} | Qualification: {{ qualification_request.qualification.qualification_name }}</p>
             <div class="admin-job-request">
                 <form method="post">
-                    <input type="hidden" name="accept_qualification_request" value="{{ request.user_id }},{{ request.qualification_id }}">
+                    <input type="hidden" name="accept_qualification_request" value="{{ qualification_request.user_id }},{{ qualification_request.qualification_id }}">
                     <input type="submit" value="Accept Request?" class='admin-button'>
                 </form>
                 <form method="post" onclick="return confirm('Are you sure you want to delete this request?');">
-                    <input type="hidden" name="delete_qualification_request" value="{{ request.user_id }},{{ request.qualification_id }}">
+                    <input type="hidden" name="delete_qualification_request" value="{{ qualification_request.user_id }},{{ qualification_request.qualification_id }}">
                     <input type="submit" value="Delete Request?" class='admin-button'>
                 </form>
             </div>
