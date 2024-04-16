@@ -193,6 +193,22 @@ def admin():
             db.session.commit()
             return redirect(url_for('admin'))
 
+    elif 'accept_qualification_request' in request.form:
+        user_id, qualification_id = request.form['accept_qualification_request'].split(',')
+
+        new_link = UserJobLink(user_id=user_id, qualification_id=qualification_id)
+        db.session.add(new_link)
+
+        job = Jobs.query.filter_by(qualification_id=qualification_id).first()
+        job.decrease_needed_left()
+
+        request_to_delete = Requests.query.filter_by(user_id=user_id, qualification_id=qualification_id).first()
+        if request_to_delete:
+            db.session.delete(request_to_delete)
+
+        db.session.commit()
+        return redirect(url_for('admin'))
+
     elif 'add_admin_user_id' in request.form:
 
         user_id = request.form['add_admin_user_id']
@@ -467,8 +483,20 @@ def profile():
 
     details_form = ProfileDetailsForm()
 
-    qualifications = Qualification.query.all()
+    all_qualifications = Qualification.query.all()
 
+    qualifications = []
+
+    user_qualification_ids = []
+
+    user_qualifications = user.qualifications
+
+    for qualification in user_qualifications:
+        user_qualification_ids.append(qualification.qualifications_id)
+
+    for qualification in all_qualifications:
+        if not qualification.qualifications_id in user_qualification_ids:
+            qualifications.append(qualification)
 
     if request.method == 'POST':
         try:
@@ -527,8 +555,13 @@ def profile():
 
         except:
             selected_qualification_ids = request.form.getlist('qualification_ids')
-            current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
+            # current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
+            # db.session.commit()
+            for qualification_id in selected_qualification_ids:
+                new_qualification_request = QualificationRequests(user_id=current_user_id, qualification_id =qualification_id)
+                db.session.add(new_qualification_request)
             db.session.commit()
+
             return redirect(url_for('profile'))
     
     return render_template('profile.html', assigned_jobs=assigned_jobs, profile_form=profile_form, qualifications=qualifications,
