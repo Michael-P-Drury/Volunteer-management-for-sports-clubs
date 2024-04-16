@@ -223,6 +223,18 @@ def admin():
 
         return redirect(url_for('admin'))
 
+    elif 'delete_qualification_request' in request.form:
+        user_id, qualification_id = request.form['delete_qualification_request'].split(',')
+
+        request_to_delete = QualificationRequests.query.filter_by(user_id=user_id, qualification_id=qualification_id).first()
+
+        if request_to_delete:
+            db.session.delete(request_to_delete)
+
+        db.session.commit()
+
+        return redirect(url_for('admin'))
+
     elif 'remove_volunteer' in request.form:
 
         user_id, job_id = request.form['remove_volunteer'].split(',')
