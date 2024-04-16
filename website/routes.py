@@ -196,17 +196,19 @@ def admin():
     elif 'accept_qualification_request' in request.form:
         user_id, qualification_id = request.form['accept_qualification_request'].split(',')
 
-        new_link = UserJobLink(user_id=user_id, qualification_id=qualification_id)
-        db.session.add(new_link)
+        user = User.query.filter_by(user_id = user_id).first()
 
-        job = Jobs.query.filter_by(qualification_id=qualification_id).first()
-        job.decrease_needed_left()
+        new_qualification = Qualification.query.filter_by(qualifications_id = qualification_id).first()
 
-        request_to_delete = Requests.query.filter_by(user_id=user_id, qualification_id=qualification_id).first()
+        user.qualifications.append(new_qualification)
+
+        request_to_delete = QualificationRequests.query.filter_by(user_id=user_id, qualification_id=qualification_id).first()
+
         if request_to_delete:
             db.session.delete(request_to_delete)
 
         db.session.commit()
+
         return redirect(url_for('admin'))
 
     elif 'add_admin_user_id' in request.form:
@@ -262,7 +264,6 @@ def admin():
 
         while needed_left > 0:
             try:
-
                 current_volunteer = volunteers[i]
                 assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_volunteer.user_id).all()
 
