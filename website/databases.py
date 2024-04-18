@@ -290,6 +290,12 @@ class Qualification(UserMixin, db.Model):
     qualification_name = db.Column(db.String(300))
     qualification_description = db.Column(db.String(300))
 
+class Announcements(UserMixin, db.Model):
+    __tablename__ = 'announcements'
+    announcement_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    announcement_name = db.Column(db.String(40))
+    announcement_text = db.Column(db.String(1000))
+
 class QualificationRequests(UserMixin, db.Model):
     __tablename__ = 'qualification_requests'
     qualification_request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)

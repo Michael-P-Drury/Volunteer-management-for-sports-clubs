@@ -38,6 +38,12 @@
             </div>
         </li>
 
+        <li>
+            <div class="navbar_box">
+                <a class="navbar_item" href="{{ url_for('announcements') }}">Announcements</a>
+            </div>
+        </li>
+
         {% if current_user.admin %}
             <li>
             <div class="navbar_box">

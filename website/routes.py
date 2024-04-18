@@ -1,8 +1,8 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
-from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink, QualificationRequests
+from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink, QualificationRequests, Announcements
 from . import lm, db, app, admin_key, prescription_level
-from .forms import LoginForm, profileEditForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm
+from .forms import LoginForm, profileEditForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm, AnouncmentForm
 import pandas as pd
 import io
 from sqlalchemy import desc
@@ -587,6 +587,43 @@ def profile():
                         # dob_form=dob_form, address_form=address_form,
                         # gender_form=gender_form, remove_dob=remove_dob, 
                         # remove_address=remove_address, remove_gender=remove_gender
+
+# routing for the announcements page which takes you to the home page and the URL of the base URL/announcements
+@app.route('/announcements', methods=['GET', 'POST'])
+def announcements():
+    all_announcements = Announcements.query.all()
+    new_announcement_form = AnouncmentForm()
+
+    if request.method == 'POST':
+
+        if 'announcement_id_delete' in request.form:
+
+            id_delete = request.form['announcement_id_delete']
+
+            to_delete = Announcements.query.filter_by(announcement_id=id_delete).first()
+
+            if to_delete:
+                db.session.delete(to_delete)
+
+            db.session.commit()
+
+            return redirect(url_for('announcements'))
+
+        elif new_announcement_form.validate_on_submit():
+
+            new_ann_name = new_announcement_form.announcement_name.data
+            new_ann_text = new_announcement_form.announcement_text.data
+
+            new_announcement = Announcements(announcement_name = new_ann_name, announcement_text = new_ann_text)
+
+            db.session.add(new_announcement)
+            db.session.commit()
+
+            return redirect(url_for('announcements'))
+
+
+    return render_template('announcements.html', announcements = all_announcements, form = new_announcement_form,
+                           current_user = current_user)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
