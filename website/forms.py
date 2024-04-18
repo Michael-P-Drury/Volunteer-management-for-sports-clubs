@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TimeField, SelectMultipleField, widgets, HiddenField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TimeField, \
+    SelectMultipleField, widgets, HiddenField, TextAreaField
 from wtforms.validators import input_required, Length, EqualTo, Regexp, NumberRange, Optional
 
 # creates the signup form to be used by routes
@@ -15,6 +16,12 @@ class SignupForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[input_required(), Length(1, 20)])
     password = PasswordField('Password', validators=[input_required()])
+    submit = SubmitField('Submit')
+
+# add new announcements form
+class AnouncmentForm(FlaskForm):
+    announcement_text = TextAreaField('Announcement text', validators=[input_required(), Length(1, 1000)])
+    announcement_name = StringField('Announcement name', validators=[input_required(), Length(1, 40)])
     submit = SubmitField('Submit')
 
 #Uses one form for all change fields on profile.

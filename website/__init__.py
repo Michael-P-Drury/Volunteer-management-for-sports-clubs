@@ -14,6 +14,8 @@ lm = LoginManager(app)
 lm.login_view = 'login'
 app.app_context().push()
 admin_key = 'admin1234'
+
+# 'free' if free presription and anything else if premium
 prescription_level = 'free'
 
 from . import routes

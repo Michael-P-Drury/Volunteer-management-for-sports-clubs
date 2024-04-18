@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block page_content %}
+
+<div class="p-title-box">
+    <h1 class = 'profile-title'> Announcements </h1>
+</div>
+
+
+{% for announcement in announcements %}
+
+<div class="announcement_box">
+    <p>announcement name: {{announcement.announcement_name}}</p>
+
+    <p>{{announcement.announcement_text}}</p>
+
+    {% if current_user.admin %}
+    <form method="post">
+        <input type="hidden" name="announcement_id_delete" value="{{ announcement.announcement_id }}">
+        <input type="submit" value="Delete Announcement">
+    </form>
+    {% endif %}
+
+</div>
+
+{% endfor %}
+
+
+{% if current_user.admin %}
+
+
+<div class = 'new_announcement_box'>
+
+    <p class = 'add_announcemenet_title'>Add new announcement:</p>
+
+    <form action="" method="POST">
+        {{ form.csrf_token }}
+        <p>
+        {{ form.announcement_name.label }}: {{ form.announcement_name() }}
+
+        <p></p>
+
+        {{ form.announcement_text.label }}: {{ form.announcement_text(class = "announcement_text_input") }}
+
+        {{ form.submit() }}
+        </p>
+    </form>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% if current_user.admin %}
+
+
+<div class = 'new_announcement_box'>
+
+    <p class = 'add_announcemenet_title'>Add new announcement:</p>
+
+    <form action="" method="POST">
+        {{ form.csrf_token }}
+        <p>
+        {{ form.announcement_name.label }}: {{ form.announcement_name() }}
+
+        <p></p>
+
+        {{ form.announcement_text.label }}: {{ form.announcement_text(class = "announcement_text_input") }}
+
+        {{ form.submit() }}
+        </p>
+    </form>
+</div>
+{% endif %}
