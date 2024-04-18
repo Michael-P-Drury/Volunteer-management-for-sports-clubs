@@ -17,7 +17,7 @@
 <div class="timetable-boxes">
     {% for job in jobs %}
     <div class="job-content">
-        <element onclick="togglePopup('{{ job.job_id }}')">
+        <element class='popup_element' onclick="togglePopup('{{ job.job_id }}')">
             <div class="job-box">
                 <div class="job-name-box">
                     <div class="job-name"><b>{{ job.job_name }}</b></div>
@@ -33,7 +33,7 @@
         <div class="popup" id="popup-{{ job.job_id }}">
             <div class="popup-overlay"></div>
             <div class="popup-content">
-                <div class="popup-close-btn" onclick="togglePopup('{{ job.job_id }}')">&times;</div>
+                <button class="popup-close-btn" onclick="togglePopup('{{ job.job_id }}')">&times;</button>
                 <div class="popup-job-name-box">
                     <p class="job-name"><b>{{ job.job_name }}</b></p>
                 </div>
@@ -62,7 +62,7 @@
                             {% if job.volunteers_needed_left > 0 %}
                             <form method="post">
                                 <input type="hidden" name="job_id_request" value="{{ job.job_id }}">
-                                <input type="submit" value="Request job">
+                                <input class='request-button' type="submit" value="Request job">
                             </form>
                             {% endif %}
                         {% endif %}
