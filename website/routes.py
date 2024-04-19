@@ -448,6 +448,12 @@ def delete_job(job_id):
 @app.route('/delete_qualification/<int:qualifications_id>', methods=['POST'])
 def delete_qualification(qualifications_id):
     delete_qualification = Qualification.query.get(qualifications_id)
+
+    delete_requests = QualificationRequests.query.filter_by(qualification_id = qualifications_id).all()
+    for delete_request in delete_requests:
+        db.session.delete(delete_request)
+        db.session.commit()
+
     if delete_qualification:
         db.session.delete(delete_qualification)
         db.session.commit()
