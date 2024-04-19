@@ -663,7 +663,11 @@ body {
     float: right;
 }
 
-.popup .popup-overlay {
+.popup_element:hover {
+    cursor: pointer;
+}
+
+.popup-overlay {
     position: fixed;
     top: 0px;
     left: 0px;
@@ -673,7 +677,7 @@ body {
     display: none;
 }
 
-.popup .popup-content{
+.popup-content{
     position: absolute;
     top: 50%;
     left: 50%;
@@ -690,7 +694,27 @@ body {
     background-color: white; 
 }
 
-.popup .popup-close-btn {
+.request-button {
+    display: block;
+    font-size: 2vh;
+    background-color: #013A63;
+    color: #F2F2F2;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 15px;
+}
+
+.remove {
+    margin-top: 10px;
+}
+
+.request-button:hover {
+    background-color: #555;
+}
+
+.popup-close-btn {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -700,6 +724,7 @@ body {
     color: #fff;
     font-size: 25px;
     text-align: center;
+    cursor: pointer;
 }
 
 .popup.job_active .popup-overlay {
@@ -743,6 +768,27 @@ body {
     margin-top: 10%;
 }
 
+.info-boxes {
+    display: flex;
+    margin: auto;
+    width: 80%;
+}
+
+.info-box {
+    flex: 30%;
+    text-align: center; 
+    width: 50%;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+
+.info-box-header {
+    font-size: 3vh;
+}
+
+.info-box-text {
+    font-size: 2.5vh;
+}
 
 /*For the admin screen */
 .admin-container {
@@ -764,7 +810,7 @@ body {
 .admin-button {
     display: block;
     margin-top: 10px;
-    font-size: 1.5vh;
+    font-size: 2vh;
     background-color: #013A63;
     color: #F2F2F2;
     border: none;
