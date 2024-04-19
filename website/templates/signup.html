@@ -23,6 +23,9 @@
             {% if error_text %}
                 <p class = 'already_exists'>incorrect admin password</p>
             {% endif %}
+            {% if age_error %}
+                <p class = 'already_exists'>confirm you are over 13 to create account</p>
+            {% endif %}
             <form action="" method="POST">
                 {{ form.csrf_token }}
                 <p class="signup-username">
@@ -42,6 +45,9 @@
                         {{ form.admin_key.label }} {{ form.admin_key() }}
                     </p>
                 </div>
+                <p>
+                {{ form.age_confirm.label }} {{ form.age_confirm() }}
+                </p>
                 <p>
                 {{ form.submit() }}
                 </p>

@@ -10,6 +10,7 @@ class SignupForm(FlaskForm):
     verify_password = PasswordField('Verify password', validators=[input_required(), EqualTo('password', message='Passwords must match')])
     admin = BooleanField('Admin')
     admin_key = PasswordField('Admin key')
+    age_confirm = BooleanField('I confirm I am 13 or over 13')
     submit = SubmitField('Submit')
 
 # creates the login form to be used by routes

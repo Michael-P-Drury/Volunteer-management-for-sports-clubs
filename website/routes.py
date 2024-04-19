@@ -472,16 +472,22 @@ def signup():
         username_in = str(signup_form.username.data)
         admin_in = bool(signup_form.admin.data)
         admin_key_in = str(signup_form.admin_key.data)
+        age_c_in = bool(signup_form.age_confirm.data)
 
-
-        if User.query.filter_by(username=username_in).first() is None:
-            if admin_in and admin_key_in == admin_key:
-                User.register(username_in, password_in, admin_in)
-                return redirect(url_for('login'))
+        if age_c_in:
+            if User.query.filter_by(username=username_in).first() is None:
+                if admin_in and admin_key_in == admin_key:
+                    User.register(username_in, password_in, admin_in)
+                    return redirect(url_for('login'))
+                elif not admin_in:
+                    User.register(username_in, password_in, admin_in)
+                    return redirect(url_for('login'))
+                else:
+                    return render_template('signup.html', form=signup_form, error_text = True)
             else:
-                return render_template('signup.html', form=signup_form, error_text = True)
+                return render_template('signup.html', form=signup_form, exists=True)
         else:
-            return render_template('signup.html', form=signup_form, exists=True)
+            return render_template('signup.html', form=signup_form, age_error=True)
 
     return render_template('signup.html', form=signup_form)
 
