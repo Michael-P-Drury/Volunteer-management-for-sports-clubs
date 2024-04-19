@@ -37,9 +37,11 @@
                 <p>
                 {{ form.admin.label }} {{ form.admin() }}
                 </p>
-                <p>
-                {{ form.admin_key.label }} {{ form.admin_key() }}
-                </p>
+                <div id="admin-key-field" style="display: none;">
+                    <p>
+                        {{ form.admin_key.label }} {{ form.admin_key() }}
+                    </p>
+                </div>
                 <p>
                 {{ form.submit() }}
                 </p>
@@ -51,6 +53,28 @@
 </div>
 
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var adminCheckbox = document.querySelector('input[name="admin"]'); // Assuming the name of your admin checkbox is "admin"
+
+        // Function to toggle visibility of admin key field based on admin checkbox state
+        function toggleAdminKeyField() {
+            var adminKeyField = document.querySelector('#admin-key-field');
+            if (adminCheckbox.checked) {
+                adminKeyField.style.display = 'block';
+            } else {
+                adminKeyField.style.display = 'none';
+            }
+        }
+
+        // Initial toggle
+        toggleAdminKeyField();
+
+        // Event listener for admin checkbox change
+        adminCheckbox.addEventListener('change', toggleAdminKeyField);
+    });
+</script>
 
 
 </html>
