@@ -519,8 +519,6 @@ def profile():
 
     if request.method == 'POST':
         try:
-            print('POST condition met')
-            print(request.form)
             # Runs code for the profile form
             if request.form['form_name'] == 'profileEditForm':
                 if profile_form.save_changes.data and profile_form.validate_on_submit():
@@ -572,14 +570,37 @@ def profile():
                     db.session.commit()
                     return redirect(url_for('profile'))
 
+
         except:
-            selected_qualification_ids = request.form.getlist('qualification_ids')
-            # current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
-            # db.session.commit()
-            for qualification_id in selected_qualification_ids:
-                new_qualification_request = QualificationRequests(user_id=current_user_id, qualification_id =qualification_id)
-                db.session.add(new_qualification_request)
-            db.session.commit()
+
+            if 'qualification_ids' in request.form:
+                selected_qualification_ids = request.form.getlist('qualification_ids')
+                # current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
+                # db.session.commit()
+                for qualification_id in selected_qualification_ids:
+                    new_qualification_request = QualificationRequests(user_id=current_user_id, qualification_id =qualification_id)
+                    db.session.add(new_qualification_request)
+                db.session.commit()
+
+            else:
+                remove_qualification_id = request.form['remove_qualification']
+
+                old_qualifications = current_user.qualifications
+
+                new_qualifications = []
+
+                for old_qualification in old_qualifications:
+
+                    if not old_qualification.qualifications_id == int(remove_qualification_id):
+
+                        new_qualifications.append(old_qualification)
+
+
+                current_user.qualifications = new_qualifications
+
+                db.session.commit()
+
+                return redirect(url_for('profile'))
 
             return redirect(url_for('profile'))
     
