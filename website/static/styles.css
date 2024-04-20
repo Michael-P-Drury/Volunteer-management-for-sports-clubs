@@ -952,6 +952,8 @@ body {
     border-top: 3px solid black;
     border-bottom: 3px solid black;
     width: 100%;
+    padding-left: 1%;
+    padding-right: 1%;
     background-color: #A9D6E5;
 }
 
@@ -969,4 +971,6 @@ body {
     border-top: 1.5px solid black;
     border-bottom: 1.5px solid black;
     margin-bottom: 10px;
+    padding-left: 1%;
+    padding-right: 1%;
 }
