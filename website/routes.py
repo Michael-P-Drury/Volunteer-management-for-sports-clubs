@@ -656,7 +656,7 @@ def announcements():
 
 
     return render_template('announcements.html', announcements = all_announcements, form = new_announcement_form,
-                           current_user = current_user)
+                           current_user = current_user, prescription_level = prescription_level)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')
