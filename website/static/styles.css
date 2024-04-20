@@ -26,7 +26,7 @@ body {
 
 .navbar_box {
     height: 50px;
-    width: 160px;
+    width: 162px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -34,7 +34,7 @@ body {
 .navbar_box:hover {
     border-left: 1px solid grey;
     border-right: 1px solid grey;
-    width: 168px;
+    width: 160px;
 }
 
 li {
