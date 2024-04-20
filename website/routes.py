@@ -533,12 +533,10 @@ def profile():
                     new_email = profile_form.new_email.data
                     new_dob = profile_form.new_dob.data
                     new_address = profile_form.new_address.data
-                    new_gender = profile_form.new_gender.data
                     if new_mobile : user.mobile = new_mobile
                     if new_email: user.email = new_email
                     if new_dob: user.dob = new_dob
                     if new_address: user.address = new_address
-                    if new_gender: user.gender = new_gender
                     db.session.commit()
                     return redirect(url_for('profile'))
                 else:
@@ -559,10 +557,6 @@ def profile():
                     return redirect(url_for('profile'))
                 if profile_form.remove_address.data:
                     user.address = None
-                    db.session.commit()
-                    return redirect(url_for('profile'))
-                if profile_form.remove_gender.data:
-                    user.gender = None
                     db.session.commit()
                     return redirect(url_for('profile'))
 
@@ -618,8 +612,8 @@ def profile():
                         # email_form=email_form, mobile_form=mobile_form,
                         # remove_mobile=remove_mobile, remove_email=remove_email
                         # dob_form=dob_form, address_form=address_form,
-                        # gender_form=gender_form, remove_dob=remove_dob, 
-                        # remove_address=remove_address, remove_gender=remove_gender
+                        # remove_dob=remove_dob,
+                        # remove_address=remove_address
 
 # routing for the announcements page which takes you to the home page and the URL of the base URL/announcements
 @app.route('/announcements', methods=['GET', 'POST'])
