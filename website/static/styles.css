@@ -516,8 +516,8 @@ body {
 
 .Save {
     margin: 0;
-    bottom: 4px;
-    right: 55px;
+    bottom: 9px;
+    right: 60px;
 }
 
 
@@ -927,6 +927,50 @@ body {
 
 .upload-instructions {
     margin-bottom: 1rem;
+}
+
+.volunteers-assigned-flex {
+    display: flex;
+    max-width: 60%;
+}
+
+.volunteers-assigned-item {
+    flex: 50%;
+}
+
+.column {
+    flex-direction: column;
+}
+
+.volunteers-delete-flex{
+    display: flex;
+    flex-direction: column  ;
+}
+
+.volunteers-delete-item {
+    flex: 50%;
+    margin-bottom: 0.5rem;
+}
+
+.remove-volunteer-button {
+    display: inline-block;
+    margin: 10px 0 4px 5px;
+    font-size: 1vw;
+    background-color: #013A63;
+    color: #F2F2F2;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 15px;
+    padding: 0.3rem;
+}
+
+.remove-volunteer-button:hover {
+    background-color: #555;
+}
+
+.remove-hidden {
+    display: none;
 }
 
 /* For smaller screens */
