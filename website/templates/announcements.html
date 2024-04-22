@@ -2,16 +2,18 @@
 
 {% block page_content %}
 
+<!-- Containerd for the page title.-->
 <div class="p-title-box">
     <h1 class = 'profile-title'> Announcements </h1>
 </div>
 
+<!-- Display an advertisment if the user is on a free plan.-->
 {% if prescription_level == 'free' %}
 <div class="ad_top">
     <h1 class='ad_text'>[ad]</h1>
 </div>
 {% endif %}
-
+<!-- Loop through each announcement. -->
 {% for announcement in announcements %}
 
 <div class="announcement_box">
@@ -19,6 +21,7 @@
 
     <p>{{announcement.announcement_text}}</p>
 
+    <!-- Provides a delete button for admins to remove announcements. -->
     {% if current_user.admin %}
     <form method="post">
         <input type="hidden" name="announcement_id_delete" value="{{ announcement.announcement_id }}">
@@ -30,9 +33,8 @@
 
 {% endfor %}
 
-
+<!-- Checks if the current user is an admin to show the form adding announcements. -->
 {% if current_user.admin %}
-
 
 <div class = 'new_announcement_box'>
 
@@ -57,7 +59,7 @@
 
 {% if current_user.admin %}
 
-
+<!-- Allows admins to add announcements to be communicated to club members. -->
 <div class = 'new_announcement_box'>
 
     <p class = 'add_announcemenet_title'>Add new announcement:</p>
