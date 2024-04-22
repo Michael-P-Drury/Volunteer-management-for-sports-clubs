@@ -2,18 +2,22 @@
 <html lang="en">
 
 <head>
+    <!-- Link to external stylesheet to style the page. -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
 
+<!-- Main container for the login form. -->
 <div class="login_container">
 
+    <!-- Left handside used to display the logo. -->
     <div class="big_left">
         <img class="login_logo"
                         src="{{ url_for('static', filename='images/light_logo.png') }}">
     </div>
 
+    <!-- Right handside used to contain the signup form fields. -->
     <div class="big_right">
         <div class="login_box">
             <h1>Sign up</h1>
@@ -26,6 +30,7 @@
             {% if age_error %}
                 <p class = 'already_exists'>confirm you are over 13 to create account</p>
             {% endif %}
+            <!-- Form for users to fill in their personal information. -->
             <form action="" method="POST">
                 {{ form.csrf_token }}
                 <p class="signup-username">
@@ -40,6 +45,7 @@
                 <p>
                 {{ form.admin.label }} {{ form.admin() }}
                 </p>
+                <!-- Hidden field, which is only displayed when the admin checkbox is checked. -->
                 <div id="admin-key-field" style="display: none;">
                     <p>
                         {{ form.admin_key.label }} {{ form.admin_key() }}
@@ -53,6 +59,7 @@
                 </p>
 
             </form>
+            <!-- Link to switch to the login page. -->
             <a class = 'to_signup' href="{{ url_for('login') }}">Login</a>
         </div>
     </div>
@@ -60,6 +67,7 @@
 
 </body>
 
+<!-- Function to toggle the visability of the admin key input based on the checkbox status on the form. -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var adminCheckbox = document.querySelector('input[name="admin"]'); // Assuming the name of your admin checkbox is "admin".
