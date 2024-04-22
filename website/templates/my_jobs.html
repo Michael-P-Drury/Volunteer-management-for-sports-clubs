@@ -2,21 +2,26 @@
 
 {% block page_content %}
 
+<!-- Title section of the page showing the user's jobs. -->
 <div class="p-title-box">
     <h1 class = 'profile-title'>{{ current_user.username }}'s Jobs  </h1>
 </div>
 
+<!-- Ads are shown if the client is on a free subscription plan. -->
 {% if prescription_level == 'free' %}
 <div class="ad_top">
     <h1 class='ad_text'>[ad]</h1>
 </div>
 {% endif %}
 
+<!-- Container used to display job assingments. -->
 <div class="timetable-boxes">
+<!-- Checks to determine whether there are any assigned jobs to display. -->
 {% if assigned_jobs %}
     <p class='profile-box-text' style='font-size: 3vh;'>Assigned Jobs</p>
     {% for job in assigned_jobs %}
     <div class="job-content">
+        <!-- A clickable element that triggers a popup for job details. -->
         <element onclick="togglePopup('{{ job.job_id }}')">
             <div class="job-box">
                 <div class="job-name-box">
@@ -28,9 +33,11 @@
             </div>
         </element>
         
+        <!-- Popup dialog which shows the information about a chosen job. -->
         <div class="popup" id="popup-{{ job.job_id }}">
             <div class="popup-overlay"></div>
             <div class="popup-content">
+                <!-- A button used to close the popup dialog. -->
                 <div class="popup-close-btn" onclick="togglePopup('{{ job.job_id }}')">&times;</div>
                 <div class="popup-job-name-box">
                     <p class="job-name"><b>{{ job.job_name }}</b></p>
@@ -49,6 +56,7 @@
                         <br>
                     </div>
 
+                    <!-- Dynamic display based on job request status. -->
                     {% if job.job_id in requested_removal_job_ids %}
                         <div>You have requested to be removed from this job</div>
                     {% elif job.job_id in assigned_job_ids %}
@@ -68,16 +76,19 @@
     </div>
     {% endfor %}
 {% else %}
+    <!-- Displayed if there are no jobs that are currently assigned. -->
     <p class='profile-box-text' style='font-size: 3vh;'>No assigned jobs currently.</p>
 {% endif %}  
 </div>
 
+<!-- Information tiles that are used for displaying job-related statistics and requests. -->
 <div class='info-boxes'>  
     <div class='info-box'>
         <p class='info-box-header'><b>Number of jobs completed:</b></p>
         <p class='info-box-text'> {{ current_user.jobs_completed }} </p>
     </div>
 
+    <!-- Display requested jobs. -->
     <div class='info-box'>
         <p class='info-box-header'><b>Requested Jobs:</b></p>   
         {% if requested_job_ids %}
@@ -88,7 +99,8 @@
             <p class='info-box-text'><i>No Requests</i></p>
         {% endif %}   
     </div>
-                    
+    
+    <!-- Display requests for job removal.-->
     <div class='info-box'>
         <p class='info-box-header'><b>Remove From Job Requests:</b></p>   
         {% if my_remove_requests %}
@@ -102,7 +114,8 @@
 <div>
 
 </div>
-    
+
+<!-- JavaScript used to toggle the visibility of job detail pop ups. -->
 <script>
     function togglePopup(jobId) {
         document.getElementById("popup-" + jobId).classList.toggle("job_active");
