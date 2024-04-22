@@ -2,28 +2,36 @@
 
 {% block page_content %}
 
+<!-- Title section for the admin dashboard. -->
 <div class="p-title-box">
     <h1 class = 'profile-title'>Admin Dashboard</h1>
 </div>
 
+
+<!-- Renders adverts based on the client's subscription level. -->
 {% if prescription_level == 'free' %}
 <div class="ad_top">
     <h1 class='ad_text'>[ad]</h1>
 </div>
 {% endif %}
 
+
+<!-- Main container for admin functions. --->
 <div class="admin-container">
     
+    <!-- Handle job requests. -->
     <div class="admin-box admin-scrollable-box">
         <h2>Job Requests</h2>
         {% for request in requests %}
         <div>
             <p>Volunteer username: {{ request.user.username }} | Job name: {{ request.job.job_name }}</p>
             <div class="admin-job-request">
+                <!-- Form to accept the job requests. -->
                 <form method="post">
                     <input type="hidden" name="accept_request" value="{{ request.user_id }},{{ request.job_id }}">
                     <input type="submit" value="Accept Request?" class='admin-button'>
                 </form>
+                <!-- Form to delete the job requests. -->
                 <form method="post" onclick="return confirm('Are you sure you want to delete this request?');">
                     <input type="hidden" name="delete_request" value="{{ request.user_id }},{{ request.job_id }}">
                     <input type="submit" value="Delete Request?" class='admin-button'>
@@ -33,16 +41,19 @@
         {% endfor %}
     </div>
 
+    <!-- Handles remove requests. -->
     <div class="admin-box admin-scrollable-box">
         <h2>Remove From Job Requests</h2>
         {% for remove_request in remove_requests %}
         <div>
             <p>Volunteer username: {{ remove_request.user.username }} | Job name: {{ remove_request.job.job_name }}</p>
             <div class="admin-job-request">
+                <!-- Form to accept remove requests. -->
                 <form method="post">
                     <input type="hidden" name="accept_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">
                     <input type="submit" value="Accept Request?" class='admin-button'>
-                </form>
+                </forms>
+                <!-- Form to delete remove requests. -->
                 <form method="post" onclick="return confirm('Are you sure you want to delete this request?');">
                     <input type="hidden" name="delete_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">
                     <input type="submit" value="Delete Request?" class='admin-button'>
@@ -52,9 +63,11 @@
         {% endfor %}
     </div>
 
+    <!-- Section to add more jobs. -->
     <div class="admin-box">
         <h2>Add New Job</h2>
         <div class="admin-new-job">
+        <!-- Form for adding a new job. -->
         <form action="" method="POST">
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
@@ -81,6 +94,7 @@
                 {{ new_job_form.end_time.label }} {{ new_job_form.end_time(class="admin-new-job-etime") }}
             </div>
             <div>
+                <!-- List of job requirements which load dynamically from the form. -->
                 {{ new_job_form.job_requirements.label }}
                 {% for subfield in new_job_form.job_requirements %}
                 <div>
@@ -89,19 +103,22 @@
                 {% endfor %}
             </div>
             <div>
+                <!-- Submit for the admin form. -->
                 {{ new_job_form.submit(class='admin-button') }}
             </div>
         </form>
         </div>
     </div>
 
+    <!-- Form for uploading CSV files to the database in bulk. -->
     <div class="admin-box">
+        <!-- If the client has not paid for the this feature then it will not be accessible. -->
         <h2>Upload Jobs CSV File</h2>
         {% if prescription_level == 'free' %}
         upgrade to premium to unlock this feature
 
         {% else %}
-
+        <!-- Form to upload CSV files. -->
         <div class="upload-instructions">
             <p>Please ensure your CSV file meets the following format requirements before uploading:</p>
             <ul>
@@ -118,6 +135,7 @@
         
     </div>
 
+    <!-- Gets the information of all the volunteers in the club. -->
     <div class="admin-box admin-scrollable-box">
         <h2>Club Members</h2>
         <table class="admin-club-member">
@@ -142,6 +160,7 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.mobile }}</td>
 
+                <!-- Volunteer management -->
                 {% if not user.admin %}
                 <td>
                     <div>
@@ -154,7 +173,7 @@
                 {% else %}
                 <td>user already admin</td>
                 {% endif %}
-
+                <!-- Qualifications of each user. -->
                 <td>{% for qualification in user.qualifications %}
                     {{ qualification.qualification_name }},
                     {% endfor %}
@@ -162,6 +181,7 @@
                 <td>{{ user.events }}</td>
                 <td>{{ user.jobs_completed }}</td>
                 <td>
+                <!-- Enables the admin to keep track of the number of jobs that each volunteer completes. -->
                     <div>
                         <form method="post">
                             <input type="hidden" name="increase_user_id" value="{{ user.user_id }}">
@@ -183,7 +203,7 @@
             </tbody>
         </table>
     </div>
-
+    <!-- Form to enable the client to add qualifications to the database. -->
     <div class="admin-box">
         <h3>Add New Qualification</h3>
         <form action="" method="POST">
@@ -202,14 +222,17 @@
         </form>
     </div>
 
+    <!-- Enables the client to delete qualifications from the database. -->
     <div class="admin-box admin-scrollable-box">
         <h2>Existing Qualifications</h2>
         {% for qualification in qualifications %}
         <div class="admin-qual">
         <hr>
         <div>
+            <!-- Display each qualification's name and description. -->
             <p>{{ qualification.qualification_name }}: {{ qualification.qualification_description }}</p>
             <div>
+                <!-- Form for deleting a qualifcation from the database with a confirmation prompt. -->
                 <form method = "post" action="{{ url_for('delete_qualification', qualifications_id=qualification.qualifications_id) }}" onclick="return confirm('Are you sure you want to delete this qualification?');">
                     <input type = "hidden" name = "delete_qualification_id" value = {{ qualification.qualifications_id }}>
                     <input type = "submit" value = "Delete Qualification" class='admin-button'>
@@ -220,6 +243,7 @@
         {% endfor %}
     </div>
 
+    <!-- Auto assigns volunteers for jobs. Only accessible to those who paid for the premium features.-->
     <div class="admin-box admin-scrollable-box">
         <h3>Existing Jobs</h3>
         {% if prescription_level == 'free' %}
@@ -231,20 +255,23 @@
                 <div>
                     <p>{{ job.job_name }}</p>
                     <div>
+                        <!-- Show auto-assign button only to premium users. -->
                         {% if not prescription_level == 'free' %}
                         <form method = "post">
                             <input type = "hidden" name = "auto_assign_job_id" value = {{ job.job_id }}>
                             <input type = "submit" value = "Auto Assign Volunteers" class='admin-button'>
                         </form>
                         {% endif %}
-
+                        <!-- Form for deleting a job with a confirmation prompt. -->
                         <form method = "post" action="{{ url_for('delete_job', job_id=job.job_id) }}" onclick="return confirm('Are you sure you want to delete this job?');">
                             <input type = "hidden" name = "delete_job_id" value = {{ job.job_id }}>
                             <input type = "submit" value = "Delete Job" class='admin-button'>
                         </form>
                     </div>
                 </div>
+                <!-- Display list of assigned volunteers for each job. -->
                     <p>Volunteers assigned: {% for user_job in user_job_link %}{% if user_job.job_id == job.job_id %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}
+                <!-- Form for removing the volunteer from a job. -->
                 <form method="post" onclick="return confirm('Are you sure you want remove this volunteer from the job?');">
                     <input type="hidden" name="remove_volunteer" value="{{ user_job.user_id }},{{ user_job.job_id }}">
                     <input type="submit" value="Remove Volunteer" class='admin-button'>,
@@ -252,16 +279,21 @@
             </div>
             {% endfor %}
     </div>
+
+    <!-- Section to handle qualification requests from volunteers. -->
     <div class="admin-box admin-scrollable-box">
         <h3>Qualification requests</h3>
         {% for qualification_request in qualification_requests %}
         <div>
+            <!-- Display volunteer username and requests qualification name. -->
             <p>Volunteer username: {{ qualification_request.user.username }} | Qualification: {{ qualification_request.qualification.qualification_name }}</p>
             <div class="admin-job-request">
+                <!-- Form to accept a qualification request. -->
                 <form method="post">
                     <input type="hidden" name="accept_qualification_request" value="{{ qualification_request.user_id }},{{ qualification_request.qualification_id }}">
                     <input type="submit" value="Accept Request?" class='admin-button'>
                 </form>
+                <!-- Form to delete qualification request with a confirmation prompt. -->
                 <form method="post" onclick="return confirm('Are you sure you want to delete this request?');">
                     <input type="hidden" name="delete_qualification_request" value="{{ qualification_request.user_id }},{{ qualification_request.qualification_id }}">
                     <input type="submit" value="Delete Request?" class='admin-button'>
