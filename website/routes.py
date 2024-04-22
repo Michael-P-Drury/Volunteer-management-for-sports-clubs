@@ -448,6 +448,12 @@ def delete_job(job_id):
 @app.route('/delete_qualification/<int:qualifications_id>', methods=['POST'])
 def delete_qualification(qualifications_id):
     delete_qualification = Qualification.query.get(qualifications_id)
+
+    delete_requests = QualificationRequests.query.filter_by(qualification_id = qualifications_id).all()
+    for delete_request in delete_requests:
+        db.session.delete(delete_request)
+        db.session.commit()
+
     if delete_qualification:
         db.session.delete(delete_qualification)
         db.session.commit()
@@ -466,16 +472,22 @@ def signup():
         username_in = str(signup_form.username.data)
         admin_in = bool(signup_form.admin.data)
         admin_key_in = str(signup_form.admin_key.data)
+        age_c_in = bool(signup_form.age_confirm.data)
 
-
-        if User.query.filter_by(username=username_in).first() is None:
-            if admin_in and admin_key_in == admin_key:
-                User.register(username_in, password_in, admin_in)
-                return redirect(url_for('login'))
+        if age_c_in:
+            if User.query.filter_by(username=username_in).first() is None:
+                if admin_in and admin_key_in == admin_key:
+                    User.register(username_in, password_in, admin_in)
+                    return redirect(url_for('login'))
+                elif not admin_in:
+                    User.register(username_in, password_in, admin_in)
+                    return redirect(url_for('login'))
+                else:
+                    return render_template('signup.html', form=signup_form, error_text = True)
             else:
-                return render_template('signup.html', form=signup_form, error_text = True)
+                return render_template('signup.html', form=signup_form, exists=True)
         else:
-            return render_template('signup.html', form=signup_form, exists=True)
+            return render_template('signup.html', form=signup_form, age_error=True)
 
     return render_template('signup.html', form=signup_form)
 
@@ -513,8 +525,6 @@ def profile():
 
     if request.method == 'POST':
         try:
-            print('POST condition met')
-            print(request.form)
             # Runs code for the profile form
             if request.form['form_name'] == 'profileEditForm':
                 if profile_form.save_changes.data and profile_form.validate_on_submit():
@@ -523,12 +533,10 @@ def profile():
                     new_email = profile_form.new_email.data
                     new_dob = profile_form.new_dob.data
                     new_address = profile_form.new_address.data
-                    new_gender = profile_form.new_gender.data
                     if new_mobile : user.mobile = new_mobile
                     if new_email: user.email = new_email
                     if new_dob: user.dob = new_dob
                     if new_address: user.address = new_address
-                    if new_gender: user.gender = new_gender
                     db.session.commit()
                     return redirect(url_for('profile'))
                 else:
@@ -551,10 +559,6 @@ def profile():
                     user.address = None
                     db.session.commit()
                     return redirect(url_for('profile'))
-                if profile_form.remove_gender.data:
-                    user.gender = None
-                    db.session.commit()
-                    return redirect(url_for('profile'))
 
             # Runs the code for the details form
             elif request.form['form_name'] == 'ProfileDetailsForm':
@@ -566,14 +570,37 @@ def profile():
                     db.session.commit()
                     return redirect(url_for('profile'))
 
+
         except:
-            selected_qualification_ids = request.form.getlist('qualification_ids')
-            # current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
-            # db.session.commit()
-            for qualification_id in selected_qualification_ids:
-                new_qualification_request = QualificationRequests(user_id=current_user_id, qualification_id =qualification_id)
-                db.session.add(new_qualification_request)
-            db.session.commit()
+
+            if 'qualification_ids' in request.form:
+                selected_qualification_ids = request.form.getlist('qualification_ids')
+                # current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
+                # db.session.commit()
+                for qualification_id in selected_qualification_ids:
+                    new_qualification_request = QualificationRequests(user_id=current_user_id, qualification_id =qualification_id)
+                    db.session.add(new_qualification_request)
+                db.session.commit()
+
+            else:
+                remove_qualification_id = request.form['remove_qualification']
+
+                old_qualifications = current_user.qualifications
+
+                new_qualifications = []
+
+                for old_qualification in old_qualifications:
+
+                    if not old_qualification.qualifications_id == int(remove_qualification_id):
+
+                        new_qualifications.append(old_qualification)
+
+
+                current_user.qualifications = new_qualifications
+
+                db.session.commit()
+
+                return redirect(url_for('profile'))
 
             return redirect(url_for('profile'))
     
@@ -585,8 +612,8 @@ def profile():
                         # email_form=email_form, mobile_form=mobile_form,
                         # remove_mobile=remove_mobile, remove_email=remove_email
                         # dob_form=dob_form, address_form=address_form,
-                        # gender_form=gender_form, remove_dob=remove_dob, 
-                        # remove_address=remove_address, remove_gender=remove_gender
+                        # remove_dob=remove_dob,
+                        # remove_address=remove_address
 
 # routing for the announcements page which takes you to the home page and the URL of the base URL/announcements
 @app.route('/announcements', methods=['GET', 'POST'])
@@ -623,7 +650,7 @@ def announcements():
 
 
     return render_template('announcements.html', announcements = all_announcements, form = new_announcement_form,
-                           current_user = current_user)
+                           current_user = current_user, prescription_level = prescription_level)
 
 # routing for the privacy page which takes you to the home page and the URL of the base URL/privacy
 @app.route('/privacy')

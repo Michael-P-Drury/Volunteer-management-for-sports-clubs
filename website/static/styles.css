@@ -26,7 +26,7 @@ body {
 
 .navbar_box {
     height: 50px;
-    width: 160px;
+    width: 162px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -34,7 +34,7 @@ body {
 .navbar_box:hover {
     border-left: 1px solid grey;
     border-right: 1px solid grey;
-    width: 168px;
+    width: 160px;
 }
 
 li {
@@ -994,8 +994,11 @@ body {
 
 .new_announcement_box {
     border-top: 3px solid black;
-    width: 100%;
-    background-color: #f0f0f0;
+    border-bottom: 3px solid black;
+    width: 98%;
+    padding-left: 1%;
+    padding-right: 1%;
+    background-color: #A9D6E5;
 }
 
 .announcement_text_input{
@@ -1009,7 +1012,9 @@ body {
 }
 
 .announcement_box{
-    border-top: 3px solid black;
-    border-bottom: 3px solid black;
+    border-top: 1.5px solid black;
+    border-bottom: 1.5px solid black;
     margin-bottom: 10px;
+    padding-left: 1%;
+    padding-right: 1%;
 }

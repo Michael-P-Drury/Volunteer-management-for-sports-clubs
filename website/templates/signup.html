@@ -23,6 +23,9 @@
             {% if error_text %}
                 <p class = 'already_exists'>incorrect admin password</p>
             {% endif %}
+            {% if age_error %}
+                <p class = 'already_exists'>confirm you are over 13 to create account</p>
+            {% endif %}
             <form action="" method="POST">
                 {{ form.csrf_token }}
                 <p class="signup-username">
@@ -37,8 +40,13 @@
                 <p>
                 {{ form.admin.label }} {{ form.admin() }}
                 </p>
+                <div id="admin-key-field" style="display: none;">
+                    <p>
+                        {{ form.admin_key.label }} {{ form.admin_key() }}
+                    </p>
+                </div>
                 <p>
-                {{ form.admin_key.label }} {{ form.admin_key() }}
+                {{ form.age_confirm.label }} {{ form.age_confirm() }}
                 </p>
                 <p>
                 {{ form.submit() }}
@@ -51,6 +59,28 @@
 </div>
 
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var adminCheckbox = document.querySelector('input[name="admin"]'); // Assuming the name of your admin checkbox is "admin"
+
+        // Function to toggle visibility of admin key field based on admin checkbox state
+        function toggleAdminKeyField() {
+            var adminKeyField = document.querySelector('#admin-key-field');
+            if (adminCheckbox.checked) {
+                adminKeyField.style.display = 'block';
+            } else {
+                adminKeyField.style.display = 'none';
+            }
+        }
+
+        // Initial toggle
+        toggleAdminKeyField();
+
+        // Event listener for admin checkbox change
+        adminCheckbox.addEventListener('change', toggleAdminKeyField);
+    });
+</script>
 
 
 </html>

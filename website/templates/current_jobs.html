@@ -1,23 +1,29 @@
 {% extends "layout.html" %}
 
 {% block page_content %}
+<!-- Title section for the current jobs page. -->
 <div class="timetable-title-box">
     <h1 class='timetable-title'>Current Jobs</h1>
 </div>
 
+<!-- Display an ad if the user is ona free subscription plan. -->
 {% if prescription_level == 'free' %}
 <div class="ad_top">
     <h1 class='ad_text'>[ad]</h1>
 </div>
 {% endif %}
 
+<!-- Check to see if any jobs are available. -->
 {% if jobs %}
 <p class="timetable-guide">Click on jobs to see more details and request to volunteer for jobs</p>
 
+<!-- Container for all job listings. -->
 <div class="timetable-boxes">
     {% for job in jobs %}
+    <!-- Each job listing as a clickable element that triggers a pop up for more information. -->
     <div class="job-content">
         <element class='popup_element' onclick="togglePopup('{{ job.job_id }}')">
+            <!-- A brief description about the job which is displayed to the user. -->
             <div class="job-box">
                 <div class="job-name-box">
                     <div class="job-name"><b>{{ job.job_name }}</b></div>
@@ -30,9 +36,11 @@
             </div>
         </element>
         
+        <!-- Displays detailed information about the job when the element is clicked. -->
         <div class="popup" id="popup-{{ job.job_id }}">
             <div class="popup-overlay"></div>
             <div class="popup-content">
+                <!-- Button which is used to close the pop up information. -->
                 <button class="popup-close-btn" onclick="togglePopup('{{ job.job_id }}')">&times;</button>
                 <div class="popup-job-name-box">
                     <p class="job-name"><b>{{ job.job_name }}</b></p>
@@ -53,6 +61,7 @@
                         <br>
                     </div>
 
+                    <!-- Display the appropriate action based on the job availability and the user's qualifications. -->
                     {% if job.job_id in qualified_jobs_ids %}
                         {% if job.job_id in assigned_job_ids %}
                             <div>You are assigned to this job</div>
@@ -78,12 +87,14 @@
 </div>
 
 {% else %}
+<!-- This message when there are no jobs available.-->
 <div class="no-jobs">
     <h1>No jobs found</h1>
     <p>There are no available jobs at the moment.</p>
 </div>
 {% endif %}
 
+<!-- JavaScript to toggle the visibility of job details popups. -->
 <script>
 function togglePopup(jobId) {
     document.getElementById("popup-" + jobId).classList.toggle("job_active");

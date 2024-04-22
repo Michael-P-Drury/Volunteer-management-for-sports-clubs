@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 
 {% block page_content %}
-
+<!-- JavaScript to initiate the slide show when the document is loaded. -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         showSlides();
     });
 </script>
 
+<!-- Main content for the web page, which contains the container for the slideshow images. -->
 <div class="main-content">
     <div class="image-container">
         <img class="mySlides fade" src="{{ url_for('static', filename='images/image_3.1.jpg')}}">
@@ -21,6 +22,7 @@
     </div>
 </div>
 
+<!-- Additional welcome message section, alongside a detailed description. -->
 <div class ="welcome-message">
     <p class="small-text">Get started with Student Volunteers today</p>
 </div>
@@ -36,6 +38,7 @@
     </div>
 </div>
 
+<!-- Describing our solution. -->
 <section class="what-we-do">
     <div class="container">
         <h2 class="about-us-header">What Do We Do?</h2>

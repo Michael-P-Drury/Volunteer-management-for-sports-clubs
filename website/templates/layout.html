@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% import "bootstrap/wtf.html" as wtf %}
 
+<!-- Link to external styling for the page. -->
 <head>
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
@@ -8,6 +9,7 @@
 
 <div id="page-container">
 
+    <!-- Navigation bar for page links. -->
     <ul class="navbar">
         <li>
             <div class="navbar_box_logo">
@@ -20,6 +22,7 @@
             </div>
         </li>
 
+        <!-- Navigation links for different parts of the website. -->
         <li>
             <div class="navbar_box">
                 <a class="navbar_item" href="{{ url_for('current_jobs') }}">Current Jobs</a>
@@ -60,12 +63,14 @@
     </ul>
 
 
+    <!-- Main content area where information and functionality will be added depending on the page. -->
     <div id = "content-wrap">
         {% block page_content %}{% endblock %}
     </div>
     
 </div>
 
+<!-- Footer section with additional links. -->
 <footer class="footer">
     <p class = 'footer_text'>for more infomation click on the following links:</p>
     <p><a href="{{ url_for('terms') }}" class = 'footer_link'>→ Terms & Conditions</a></p>

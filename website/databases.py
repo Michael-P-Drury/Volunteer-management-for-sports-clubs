@@ -55,7 +55,6 @@ class User(UserMixin, db.Model):
     preferred_name = db.Column(db.String(15))
     dob = db.Column(db.String(11))
     address = db.Column(db.String(50))
-    gender = db.Column(db.String(10))
     jobs_completed = db.Column(db.Integer)
     # Removed duplicate 'qualifications' field
     admin = db.Column(db.Boolean)
@@ -129,12 +128,7 @@ class User(UserMixin, db.Model):
     
     def no_address(self):
         self.address = None
-    
-    def no_gender(self):
-        self.gender = None
 
-    
-    
     #sets details to blank
     def no_details(self):
         self.details = None

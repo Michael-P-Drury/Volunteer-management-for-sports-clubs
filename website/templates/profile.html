@@ -88,15 +88,6 @@
                 {{ profile_form.remove_address }}
             </div>
         </div>
-
-        <div class='details-section'>
-            <p class = "profile-box-text">Gender:</p>
-            <p class='profile-box-text profile-data-text'>{{ current_user.gender }}</p>
-            <div class = "profile-box-text toggleEdit">
-                {{ profile_form.new_gender.label }} {{ profile_form.new_gender }}
-                {{ profile_form.remove_gender }}
-            </div>
-        </div>
     </form>
 
     <div id="AboutMe" class="profile-tab-content">
@@ -115,6 +106,10 @@
             My Qualifications:
             {% for qualification in current_user.qualifications %}
                 {{ qualification.qualification_name }}
+                <form method="post">
+                    <input type="hidden" name="remove_qualification" value="{{ qualification.qualifications_id }}">
+                    <input class='request-button' type="submit" value="Remove qualification">
+                </form>
             {% endfor %}
         </p>
         <form action="" method="POST">
