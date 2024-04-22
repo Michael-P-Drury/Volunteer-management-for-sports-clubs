@@ -62,9 +62,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var adminCheckbox = document.querySelector('input[name="admin"]'); // Assuming the name of your admin checkbox is "admin"
+        var adminCheckbox = document.querySelector('input[name="admin"]'); // Assuming the name of your admin checkbox is "admin".
 
-        // Function to toggle visibility of admin key field based on admin checkbox state
+        // Function to toggle visibility of admin key field based on admin checkbox state.
         function toggleAdminKeyField() {
             var adminKeyField = document.querySelector('#admin-key-field');
             if (adminCheckbox.checked) {
@@ -74,10 +74,10 @@
             }
         }
 
-        // Initial toggle
+        // Initial toggle.
         toggleAdminKeyField();
 
-        // Event listener for admin checkbox change
+        // Event listener for admin checkbox change.
         adminCheckbox.addEventListener('change', toggleAdminKeyField);
     });
 </script>
