@@ -249,6 +249,7 @@
         {% if prescription_level == 'free' %}
         upgrade to premium to unlock auto assigning feature
         {% endif %}
+        <button class='remove-volunteer-button' onclick="showRemoveButtons()">Remove Volunteers</button>
         {% for job in jobs %}
             <div class="admin-jobs">
                 <hr>
@@ -267,15 +268,26 @@
                             <input type = "hidden" name = "delete_job_id" value = {{ job.job_id }}>
                             <input type = "submit" value = "Delete Job" class='admin-button'>
                         </form>
+                        <!-- WHy is onclikc not fucking working -->
                     </div>
                 </div>
-                <!-- Display list of assigned volunteers for each job. -->
-                    <p>Volunteers assigned: {% for user_job in user_job_link %}{% if user_job.job_id == job.job_id %}{{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}
-                <!-- Form for removing the volunteer from a job. -->
-                <form method="post" onclick="return confirm('Are you sure you want remove this volunteer from the job?');">
-                    <input type="hidden" name="remove_volunteer" value="{{ user_job.user_id }},{{ user_job.job_id }}">
-                    <input type="submit" value="Remove Volunteer" class='admin-button'>,
-                </form>{% endif %}{% endfor %}</p>
+                <div class='volunteers-assigned-flex'>
+                    <div class='volunteers-assigned-item'>Volunteers assigned:</div>
+                    <div class='volunteers-assigned-item column'>
+                    {% for user_job in user_job_link %}
+                        {% if user_job.job_id == job.job_id %}
+                            <div class='volunteers-delete-item'>
+                                {{ all_users.query.filter_by(user_id = user_job.user_id).first().username }}
+                                <form method="post" onclick="return confirm('Are you sure you want remove this volunteer from the job?');">
+                                    <input type="hidden" name="remove_volunteer" value="{{ user_job.user_id }},{{ user_job.job_id }}">
+                                    <input class='remove-hidden' id='remove-hidden' type="submit" value="-">
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+                
             </div>
             {% endfor %}
     </div>
