@@ -134,33 +134,41 @@ def upload_file():
             return redirect(request.url)
 
         errors = []
-        
-        #Iterate over each row in the uploaded csv file.
         for index, row in csv_input.iterrows():
             try:
                 qualifications_list = row['qualifications'].split(';')
                 qualification_objects = Qualification.query.filter(Qualification.qualification_name.in_(qualifications_list)).all()
-
+                if len(qualifications_list) != len(qualification_objects):
+                    raise ValueError("Some qualifications not found")
+                
+                #Create a new job entry.
                 new_job = Jobs(
                     job_name=row['job_name'],
                     volunteers_needed=row['volunteers_needed'],
+                    volunteers_needed_left=row['volunteers_needed'],
                     start_time=row['start_time'],
                     end_time=row['end_time'],
                     date=row['date'],
                     job_description=row['job_description'],
-                    job_qualifications=qualification_objects
                 )
+                
+                #Adding qualifications to the new job inputted.
+                for qualification in qualification_objects:
+                    new_job.job_qualifications.append(qualification)
+                
                 db.session.add(new_job)
+                db.session.commit()
 
             except Exception as e:
                 errors.append(f"Error in row {index}: {e}")
 
         if errors:
             for error in errors:
-                db.session.rollback()  #rollback the session in case of errors
+                db.session.rollback()
         else:
-            db.session.commit()  #only commit if all rows are processed successfully
+            db.session.commit()
             return redirect(url_for('current_jobs'))
+
     else:
         return redirect(request.url)
     
