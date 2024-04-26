@@ -1,23 +1,30 @@
+// Initialise the slide index for the slideshow.
 var slideIndex = 0;
 
+// Function to manage to the slideshow
 function showSlides() {
     var i;
     var slides = document.getElementsByClassName("mySlides");
 
+    //Set all slides to be invisible initially.
     for (i = 0; i < slides.length; i++) {
         slides[i].style.opacity = 0;
     }
-
+    
+    //Reset index to loop back through to the final slide if the end is reached.
     if (slideIndex >= slides.length) {
         slideIndex = 0}
     
+    //Makes the current side visible.
     slides[slideIndex].style.opacity = 1;
     slideIndex++;
-
+    
+    //Change the slides being shown every 3 seconds.
     setTimeout(showSlides, 3000);
     return 'Slideshow is running'
 }
 
+//Function to expand or collapse an item.
 function expand(button) {
     button.classList.toggle("active");
     var content = button.nextElementSibling;
@@ -28,6 +35,7 @@ function expand(button) {
     }
 }
 
+//A function which is used to switch between tabs when in a tabbed interface.
 function showTab (tab, element) {
 	const colour = '#468FAF';
   
@@ -47,6 +55,7 @@ function showTab (tab, element) {
   element.style.backgroundColor = colour;
 }
 
+//Function to toggle the visibility of editing elements on the page.
 function showEdits (event) {
 
   event.preventDefault();
@@ -64,6 +73,7 @@ function showEdits (event) {
   }
 }
 
+//Function to ensure the correct input of time of the event management functions.
 function checkTime() {
   var startTimeInput = document.querySelector('.admin-new-job-stime');
   var endTimeInput = document.querySelector('.admin-new-job-etime');
@@ -88,6 +98,7 @@ function checkTime() {
   });
 }
 
+//Function to toggle the visibility of elements for any removal actions.
 function showRemoveButtons() {
 
   var divs = document.getElementsByClassName("remove-hidden");

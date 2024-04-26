@@ -7,7 +7,6 @@ import pandas as pd
 import io
 from sqlalchemy import desc
 
-# from .forms import ... (if you want to import a form)
 # routing for the pages in the website
 
 
@@ -41,13 +40,16 @@ def login():
 def home():
     return render_template('home.html')
 
+#Route used to display and manage the user's jobs.
 @app.route('/my_jobs', methods=['GET', 'POST'])
 def my_jobs():
 
     current_user_id = current_user.get_id()
     
+    #Fetch jobs assigned to the current user.
     assigned_jobs = Jobs.query.join(UserJobLink, Jobs.job_id == UserJobLink.job_id).filter(UserJobLink.user_id == current_user_id).all()
     
+    #Fetches the  removal requests made by the current user.
     my_remove_requests = RemoveRequests.query.filter_by(user_id=current_user_id).all()
     requested_removal_job_ids = [rem.job_id for rem in my_remove_requests]
     
@@ -60,6 +62,7 @@ def my_jobs():
     for requested in requested_jobs:
         requested_job_ids.append(requested.job_id)
 
+    #Handles the removal request submissions.
     if 'remove_request_job_id' in request.form:
         job_id_request = request.form['remove_request_job_id']
         new_request = RemoveRequests(user_id=current_user_id, job_id=job_id_request)
@@ -98,6 +101,7 @@ def current_jobs():
     for requested in requested_jobs:
         requested_job_ids.append(requested.job_id)
 
+    #Handles the job request submissions.
     if 'job_id_request' in request.form:
         job_id_request = request.form['job_id_request']
         new_request = Requests(user_id=current_user_id, job_id=job_id_request)
@@ -108,7 +112,7 @@ def current_jobs():
     return render_template('current_jobs.html', jobs=jobs, qualified_jobs_ids=qualified_jobs_ids,
                            requested_job_ids=requested_job_ids, assigned_job_ids=assigned_job_ids, prescription_level = prescription_level)
 
-
+#Route for handling uploading of the jobs via a CSV file.
 @app.route('/upload_jobs', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
@@ -125,6 +129,7 @@ def upload_file():
         
         expected_headers = ['job_name', 'volunteers_needed', 'start_time', 'end_time', 'date', 'job_description', 'qualifications']
 
+        #Verify all the CSV headers.
         if not all(header in csv_input.columns for header in expected_headers):
             return redirect(request.url)
 
@@ -133,27 +138,37 @@ def upload_file():
             try:
                 qualifications_list = row['qualifications'].split(';')
                 qualification_objects = Qualification.query.filter(Qualification.qualification_name.in_(qualifications_list)).all()
-
+                if len(qualifications_list) != len(qualification_objects):
+                    raise ValueError("Some qualifications not found")
+                
+                #Create a new job entry.
                 new_job = Jobs(
                     job_name=row['job_name'],
                     volunteers_needed=row['volunteers_needed'],
+                    volunteers_needed_left=row['volunteers_needed'],
                     start_time=row['start_time'],
                     end_time=row['end_time'],
                     date=row['date'],
                     job_description=row['job_description'],
-                    job_qualifications=qualification_objects
                 )
+                
+                #Adding qualifications to the new job inputted.
+                for qualification in qualification_objects:
+                    new_job.job_qualifications.append(qualification)
+                
                 db.session.add(new_job)
+                db.session.commit()
 
             except Exception as e:
                 errors.append(f"Error in row {index}: {e}")
 
         if errors:
             for error in errors:
-                db.session.rollback()  ##rollback the session in case of errors
+                db.session.rollback()
         else:
-            db.session.commit()  #only commit if all rows are processed successfully
+            db.session.commit()
             return redirect(url_for('current_jobs'))
+
     else:
         return redirect(request.url)
     
@@ -177,6 +192,7 @@ def admin():
 
     qualification_form = QualificationForm()
 
+    #Handles various fom submissions related to job and qualification management.
     if 'accept_request' in request.form:
             user_id, job_id = request.form['accept_request'].split(',')
 
@@ -366,8 +382,7 @@ def admin():
         new_job_date = new_job_form.date.data
         new_job_start = new_job_form.start_time.data
         new_job_end = new_job_form.end_time.data
-        # new_job_requirements = new_job_form.job_requirements.data
-        selected_qualifications = new_job_form.job_requirements.data #NEW
+        selected_qualifications = new_job_form.job_requirements.data
         new_job_volunteers_needed = new_job_form.volunteers_needed.data
         new_job_description = new_job_form.job_description.data
 
@@ -387,14 +402,12 @@ def admin():
 
 
         new_job = Jobs(
-            #volunteers_assigned='',
             volunteers_needed=new_job_volunteers_needed,
             volunteers_needed_left = new_job_volunteers_needed,
             start_time=start_time_insert,
             end_time=end_time_insert,
             date=date_insert,
             job_description=new_job_description,
-            #job_requirements='',
             job_name = new_job_name
         )
 
@@ -426,12 +439,14 @@ def admin():
                            jobs = jobs, user_job_link = user_job_link, all_users = User,
                            prescription_level = prescription_level, qualification_requests = qualification_requests)
 
+#Route to delete a job by job_id
 @app.route('/delete_job/<int:job_id>', methods=['POST'])
 def delete_job(job_id):
+    #Retrieves the job to delete it from the database.
     delete_job = Jobs.query.get(job_id)
 
     if delete_job:
-
+        #Delete associated removal and regular requests before deleting the job itself.
         remove_requests_to_delete = RemoveRequests.query.filter_by(job_id=int(job_id)).all()
 
         for remove_request_to_delete in remove_requests_to_delete:
@@ -441,19 +456,23 @@ def delete_job(job_id):
         for request_to_delete in requests_to_delete:
             db.session.delete(request_to_delete)
 
+        #Delete the job and commit changes to the database.
         db.session.delete(delete_job)
         db.session.commit()
     return redirect(url_for('admin'))
 
+#The route to delete a qualification by its ID.
 @app.route('/delete_qualification/<int:qualifications_id>', methods=['POST'])
 def delete_qualification(qualifications_id):
     delete_qualification = Qualification.query.get(qualifications_id)
 
+    #Delete all requests with this qualification.
     delete_requests = QualificationRequests.query.filter_by(qualification_id = qualifications_id).all()
     for delete_request in delete_requests:
         db.session.delete(delete_request)
         db.session.commit()
 
+    #Deletes the current qualification.
     if delete_qualification:
         db.session.delete(delete_qualification)
         db.session.commit()
@@ -495,10 +514,11 @@ def signup():
 # routing for the profile page which takes you to the home page and the URL of the base URL/profile
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
-
+    #Creates an instance of the profile edit form.
     user = db.session.query(User).filter_by(user_id=current_user.get_id()).first()
     profile_form = profileEditForm()
 
+    #Retrieves all requests and jobs that have been assigned to the current user.
     my_requests = Requests.query.filter_by(user_id=current_user.get_id()).all()
     my_remove_requests = RemoveRequests.query.filter_by(user_id=current_user.get_id()).all()
     job_table = Jobs
@@ -523,12 +543,13 @@ def profile():
         if not qualification.qualifications_id in user_qualification_ids:
             qualifications.append(qualification)
 
+    #This processes the POST requests for updating details or removing qualifications.
     if request.method == 'POST':
         try:
-            # Runs code for the profile form
             if request.form['form_name'] == 'profileEditForm':
                 if profile_form.save_changes.data and profile_form.validate_on_submit():
                     print('Changes saved and form validated')
+                    #Updates user details based on form input.
                     new_mobile = profile_form.new_mobile.data
                     new_email = profile_form.new_email.data
                     new_dob = profile_form.new_dob.data
@@ -537,12 +558,14 @@ def profile():
                     if new_email: user.email = new_email
                     if new_dob: user.dob = new_dob
                     if new_address: user.address = new_address
+                    #Commits changes to the database.
                     db.session.commit()
                     return redirect(url_for('profile'))
                 else:
                     print('Form did not validate')
                     print(profile_form.errors)
 
+                #Handles requests to remove specific.
                 if profile_form.remove_mobile.data:
                     user.mobile = None
                     db.session.commit()
@@ -575,8 +598,6 @@ def profile():
 
             if 'qualification_ids' in request.form:
                 selected_qualification_ids = request.form.getlist('qualification_ids')
-                # current_user.qualifications = [Qualification.query.get(int(id)) for id in selected_qualification_ids]
-                # db.session.commit()
                 for qualification_id in selected_qualification_ids:
                     new_qualification_request = QualificationRequests(user_id=current_user_id, qualification_id =qualification_id)
                     db.session.add(new_qualification_request)
@@ -604,16 +625,11 @@ def profile():
 
             return redirect(url_for('profile'))
     
+    #Renders the profile page with user details and form.
     return render_template('profile.html', assigned_jobs=assigned_jobs, profile_form=profile_form, qualifications=qualifications,
                            user_qualifications=[q.qualifications_id for q in current_user.qualifications], my_requests=my_requests,
                            my_remove_requests=my_remove_requests, details_form=details_form, job_table=job_table,
                            prescription_level = prescription_level)
-
-                        # email_form=email_form, mobile_form=mobile_form,
-                        # remove_mobile=remove_mobile, remove_email=remove_email
-                        # dob_form=dob_form, address_form=address_form,
-                        # remove_dob=remove_dob,
-                        # remove_address=remove_address
 
 # routing for the announcements page which takes you to the home page and the URL of the base URL/announcements
 @app.route('/announcements', methods=['GET', 'POST'])
@@ -624,7 +640,7 @@ def announcements():
     if request.method == 'POST':
 
         if 'announcement_id_delete' in request.form:
-
+            #Deletes an announcement by ID.
             id_delete = request.form['announcement_id_delete']
 
             to_delete = Announcements.query.filter_by(announcement_id=id_delete).first()
@@ -637,7 +653,7 @@ def announcements():
             return redirect(url_for('announcements'))
 
         elif new_announcement_form.validate_on_submit():
-
+            #Adds a new announcement if the form is valid.
             new_ann_name = new_announcement_form.announcement_name.data
             new_ann_text = new_announcement_form.announcement_text.data
 

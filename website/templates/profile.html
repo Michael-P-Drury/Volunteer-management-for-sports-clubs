@@ -8,44 +8,48 @@
     });
 </script>
 
+<!-- Title for the profile page. -->
 <div class="p-title-box">
     <h1 class = 'profile-title'>{{ current_user.username }}'s Profile</h1>
 </div>
 
+<!-- Ad is displayed if the user is on a free subscription level. -->
 {% if prescription_level == 'free' %}
 <div class="ad_top">
     <h1 class='ad_text'>[ad]</h1>
 </div>
 {% endif %}
 
-
+<!-- Main container for the profile data. -->
 <div class='profile-container'>
-
+    
+    <!-- Tab navigation through the different sections of the profile page. -->
     <div class='tab-container'>
         <button class="profile-tab" onclick="showTab('PersonalDetails', this)" id="defaultOpen">Personal Details</button>
         <button class="profile-tab" onclick="showTab('AboutMe', this)">About Me</button>
         <button class="profile-tab" onclick="showTab('Qualifications', this)">Qualifications</button>
     </div>
 
+    <!-- Forms contains personal details. -->
     <form id="PersonalDetails" class="profile-tab-content profile-flex" action="" method="POST">
         
         {{ profile_form.csrf_token }}
         {{ profile_form.hidden_tag() }}
 
-        <!-- Pass in event so that it can be ignored in the js function
-        Was default submitting the form when the button was clicked. -->
+        <!-- Edit button that triggers form fields to be editable. -->
         <button class="Edit" style onclick="showEdits(event)">Edit</button>
         
-        <!-- <button class='Edit Save toggleEdit'>Save Changes</button> -->
         <div class='toggleEdit'>
             {{ profile_form.save_changes(class='Edit Save') }}
         </div>
 
+        <!-- Displays the username. -->
         <div class='details-section'>
             <p class = "profile-box-text">Username: </p>
             <p class='profile-box-text profile-data-text'>{{ current_user.username }}</p>
-        </div>
+        </div> 
         
+        <!-- Displays the user's email with the option to edit or remove. -->
         <div class='details-section'>
             <p class = "profile-box-text">Email:</p>
             <p class='profile-box-text profile-data-text'>{{ current_user.email }}</p>
@@ -53,6 +57,8 @@
                 {{ profile_form.new_email.label }} {{ profile_form.new_email }}
                 {{ profile_form.remove_email }}
             </div>
+
+            <!-- Display any validation errors related to entering an invalid email. -->
             {% if profile_form.new_email.errors %}
                 <div class="errors">
                 {% for error in profile_form.new_email.errors %}
@@ -62,6 +68,7 @@
             {% endif %}
         </div>
 
+        <!-- Displays mobile number with options to edit or remove. -->
         <div class='details-section'>
             <p class = "profile-box-text">Mobile:</p>
             <p class='profile-box-text profile-data-text'>{{ current_user.mobile }}</p>
@@ -71,6 +78,7 @@
             </div>
         </div>
 
+        <!-- Displays date of birth with options to edit or remove. -->
         <div class='details-section'>
             <p class = "profile-box-text">Date of birth (DD/MM/YYYY):</p>
             <p class='profile-box-text profile-data-text'>{{ current_user.dob }}</p>
@@ -79,7 +87,8 @@
                 {{ profile_form.remove_dob }}
             </div>
         </div>
-
+        
+        <!-- Displays the users address with options to edit or remove. -->
         <div class='details-section'>
             <p class = "profile-box-text">Address:</p>
             <p class='profile-box-text profile-data-text'>{{ current_user.address }}</p>
@@ -90,17 +99,19 @@
         </div>
     </form>
 
+    <!-- Tab content with form to update or modify the user's details. -->
     <div id="AboutMe" class="profile-tab-content">
         <p class='profile-box-text'>About {{ current_user.username }}:</p>
         <form action="" method="POST">
             {{ details_form.csrf_token }}
             {{ details_form.hidden_tag() }}
-
+                <!-- Text area of editing details about the user. -->
                 <textarea name="new_details" class="form-control" rows="5">{{ current_user.details }}</textarea>
             <div>{{ details_form.submit5(style='margin: 0rem 0rem 1rem 3rem') }}</div>
         </form>
     </div>
 
+    <!-- "Qualifications" with options to remove or request new qualifications. -->
     <div id="Qualifications" class="profile-tab-content">
         <p class="profile-box-text">
             My Qualifications:

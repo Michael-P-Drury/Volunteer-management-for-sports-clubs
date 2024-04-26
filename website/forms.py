@@ -40,10 +40,12 @@ class profileEditForm(FlaskForm):
     remove_gender = SubmitField('Remove Gender')    
     save_changes = SubmitField('Save Changes')
 
+#Custom field class to handle mulitiple checks.
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
+#Defines a form for adding new job roles.
 class newJobForm(FlaskForm):
     job_name = StringField('Job name', validators=[input_required()])
     job_description = StringField('Job description', validators=[input_required()])
@@ -54,11 +56,13 @@ class newJobForm(FlaskForm):
     job_requirements = MultiCheckboxField('Job Requirements', coerce=int)
     submit = SubmitField('Add Job')
 
+#Defines a form for adding qualifications.
 class QualificationForm(FlaskForm):
     qualification_name = StringField('Qualification Name', validators=[input_required()])
     qualification_description = StringField('Description', validators=[input_required()])
     submit = SubmitField('Add Qualification')
 
+#Defines a form for saving profiel details.
 class ProfileDetailsForm(FlaskForm):
     form_name = HiddenField(default='ProfileDetailsForm')
     new_details = StringField('Detail Text')
