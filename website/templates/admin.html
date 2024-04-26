@@ -52,7 +52,7 @@
                 <form method="post">
                     <input type="hidden" name="accept_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">
                     <input type="submit" value="Accept Request?" class='admin-button'>
-                </forms>
+                </form>
                 <!-- Form to delete remove requests. -->
                 <form method="post" onclick="return confirm('Are you sure you want to delete this request?');">
                     <input type="hidden" name="delete_remove_request" value="{{ remove_request.user_id }},{{ remove_request.job_id }}">

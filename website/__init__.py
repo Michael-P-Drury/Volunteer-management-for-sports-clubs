@@ -16,6 +16,6 @@ app.app_context().push()
 admin_key = 'admin1234'
 
 # 'free' if free presription and anything else if premium
-prescription_level = 'free'
+prescription_level = 'paid'
 
 from . import routes
