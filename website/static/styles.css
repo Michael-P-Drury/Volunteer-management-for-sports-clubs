@@ -418,6 +418,14 @@ body {
     margin-bottom: 25px;
 }
 
+.p-title-box-admin {
+    background-color: #012A4A;
+    padding: 1px;
+    margin-bottom: 25px;
+    border-top: 1px solid white;
+}
+
+
 .profile-box-text {
     font-size: 4vh;
     margin: 1rem 1.5rem 1rem 1.5rem;
