@@ -456,7 +456,7 @@ body {
 }
   
 .profile-tab {
-    flex: 30%;
+    flex: 33.3333333333333333%;
     background-color: #013A63;
     color: #F2F2F2;
     float: left;
@@ -464,7 +464,7 @@ body {
     outline: none;
     cursor: pointer;
     font-size: 2.5vw;
-    width: 33%;
+    width: 33.3333333333333333333%;
     margin: 0;
     padding: 1rem 0 1rem 0;
 }
@@ -551,6 +551,61 @@ body {
     width: 800px;
     height: 400px;
     resize: none;
+}
+
+.remove-qualification-button{
+    position: absolute;
+    top: 4%;
+    left: 83%;
+    max-width: fit-content;
+    font-size: 1vw;
+    background-color: #013A63;
+    color: #F2F2F2;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 15px;
+    padding: 0.3rem;
+}
+
+.remove-qualification-button:hover {
+    background-color: #555;
+}
+
+.qualifications-flex {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 0 1rem;
+}
+
+.qualification-flex-item {
+    
+}
+
+.qualification-name{
+    display: inline-block;
+    font-size: 3.5vh;
+}
+
+.qualification-form {
+    display: inline-block;
+}
+
+.qualification-button {
+    display: inline-block;
+    margin: 0;
+    font-size: 3.5vh;
+    padding: 0px 8px 0px 8px;
+    background-color: #013A63;
+    color: #F2F2F2;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.qualification-button:hover{
+    background-color: #555;
 }
 
 /* Mobile Section */

@@ -108,21 +108,25 @@
                 <!-- Text area of editing details about the user. -->
                 <textarea name="new_details" class="form-control" rows="5">{{ current_user.details }}</textarea>
             <div>{{ details_form.submit5(style='margin: 0rem 0rem 1rem 3rem') }}</div>
-        </form>
+        </form> 
     </div>
 
     <!-- "Qualifications" with options to remove or request new qualifications. -->
     <div id="Qualifications" class="profile-tab-content">
-        <p class="profile-box-text">
-            My Qualifications:
+        <p class="profile-box-text">My Qualifications:</p>
+        <button class='remove-qualification-button' onclick="showRemoveButtons()">Remove Qualification(s)</button>
+        <div class='qualifications-flex'>
             {% for qualification in current_user.qualifications %}
-                {{ qualification.qualification_name }}
-                <form method="post">
-                    <input type="hidden" name="remove_qualification" value="{{ qualification.qualifications_id }}">
-                    <input class='request-button qualifcation' type="submit" value="Remove qualification">
-                </form>
+                <div class='qualifications-flex-item'>
+                    <p class='qualification-name'>{{ qualification.qualification_name }}</p>
+                    <form class='qualification-form' method="post">
+                        <input type="hidden" name="remove_qualification" value="{{ qualification.qualifications_id }}">
+                        <input class='qualification-button remove-hidden' type="submit" value="-">
+                    </form>
+                </div>
             {% endfor %}
-        </p>
+        </div>
+    
         <form action="" method="POST">
             <p class="profile-box-text">
                 <i>Select qualifications that you would like to request and press send request(s) to request for qualifications</i>
