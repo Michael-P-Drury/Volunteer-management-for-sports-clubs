@@ -209,6 +209,18 @@ def admin():
             db.session.commit()
             return redirect(url_for('admin'))
 
+    if 'delete_account_id' in request.form:
+
+        user_delete_id = request.form['delete_account_id']
+
+        user_delete = User.query.filter_by(user_id=user_delete_id).first()
+
+        db.session.delete(user_delete)
+
+        db.session.commit()
+
+        return redirect(url_for('admin'))
+
     elif 'accept_qualification_request' in request.form:
         user_id, qualification_id = request.form['accept_qualification_request'].split(',')
 

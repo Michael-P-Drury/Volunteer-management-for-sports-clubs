@@ -199,8 +199,15 @@
                     {% endif %}
                 </td>
                 <td>
+                    {% if not user.user_id == current_user.user_id %}
                     <!-- Can change this to a form, heres a base for what it looks like  -->
-                    <button>Remove</button>
+                    <form method="post" onclick="return confirm('Are you sure you want to delete user's account?')">
+                        <input type="hidden" name="delete_account_id" value="{{ user.user_id }}">
+                        <input type="submit" value="Delete Account" class='delete-button'>
+                    </form>
+
+                    {% endif %}
+
                 </td>
             </tr>
 
