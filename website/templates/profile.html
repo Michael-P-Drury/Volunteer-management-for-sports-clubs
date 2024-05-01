@@ -22,6 +22,11 @@
 
 <!-- Main container for the profile data. -->
 <div class='profile-container'>
+
+    <form method="post" onclick="return confirm('Are you sure you want to delete your account?')">
+        <input type="hidden" name="delete_account_id" value="{{ current_user.user_id }}">
+        <input type="submit" value="Delete Account" class='delete-button'>
+    </form>
     
     <!-- Tab navigation through the different sections of the profile page. -->
     <div class='tab-container'>
@@ -41,7 +46,7 @@
         
         <div class='toggleEdit'>
             {{ profile_form.save_changes(class='Edit Save') }}
-            <button class='Edit Delete' onclick="return confirm('Are you sure you want to delete your account?')">Delete Account</button>
+
         </div>
 
         <!-- Displays the username. -->

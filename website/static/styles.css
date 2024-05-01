@@ -894,6 +894,23 @@ body {
     border-radius: 15px;
 }
 
+.delete-button {
+    display: block;
+    margin-top: 10px;
+    font-size: 2vh;
+    background-color: red;
+    color: #F2F2F2;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 15px;
+}
+
+.delete-button:hover {
+    background-color: #555;
+}
+
 .upload-instructions-li {
     margin-bottom: 0.5rem;
 }

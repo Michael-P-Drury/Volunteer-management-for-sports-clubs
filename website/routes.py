@@ -596,34 +596,48 @@ def profile():
 
         except:
 
-            if 'qualification_ids' in request.form:
-                selected_qualification_ids = request.form.getlist('qualification_ids')
-                for qualification_id in selected_qualification_ids:
-                    new_qualification_request = QualificationRequests(user_id=current_user_id, qualification_id =qualification_id)
-                    db.session.add(new_qualification_request)
-                db.session.commit()
+            try:
 
-            else:
-                remove_qualification_id = request.form['remove_qualification']
+                if 'qualification_ids' in request.form:
+                    selected_qualification_ids = request.form.getlist('qualification_ids')
+                    for qualification_id in selected_qualification_ids:
+                        new_qualification_request = QualificationRequests(user_id=current_user_id, qualification_id =qualification_id)
+                        db.session.add(new_qualification_request)
+                    db.session.commit()
 
-                old_qualifications = current_user.qualifications
+                else:
+                    remove_qualification_id = request.form['remove_qualification']
 
-                new_qualifications = []
+                    old_qualifications = current_user.qualifications
 
-                for old_qualification in old_qualifications:
+                    new_qualifications = []
 
-                    if not old_qualification.qualifications_id == int(remove_qualification_id):
+                    for old_qualification in old_qualifications:
 
-                        new_qualifications.append(old_qualification)
+                        if not old_qualification.qualifications_id == int(remove_qualification_id):
+
+                            new_qualifications.append(old_qualification)
 
 
-                current_user.qualifications = new_qualifications
+                    current_user.qualifications = new_qualifications
 
-                db.session.commit()
+                    db.session.commit()
+
+                    return redirect(url_for('profile'))
 
                 return redirect(url_for('profile'))
 
-            return redirect(url_for('profile'))
+            except:
+
+                user_delete_id = request.form['delete_account_id']
+
+                user_delete = User.query.filter_by(user_id = user_delete_id).first()
+
+                db.session.delete(user_delete)
+
+                db.session.commit()
+
+                return redirect(url_for('login'))
     
     #Renders the profile page with user details and form.
     return render_template('profile.html', assigned_jobs=assigned_jobs, profile_form=profile_form, qualifications=qualifications,
