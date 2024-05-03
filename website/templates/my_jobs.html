@@ -7,8 +7,8 @@
     <h1 class = 'profile-title'>{{ current_user.username }}'s Jobs  </h1>
 </div>
 
-<!-- Ads are shown if the client is on a free subscription plan. -->
-{% if prescription_level == 'free' %}
+<!-- Renders adverts based on the client's subscription level. -->
+{% if prescription_level == 'standard' %}
 <div class="ad_top">
     <h1 class='ad_text'>[ad]</h1>
 </div>

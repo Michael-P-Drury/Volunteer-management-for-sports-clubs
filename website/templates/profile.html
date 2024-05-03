@@ -13,8 +13,8 @@
     <h1 class = 'profile-title'>{{ current_user.username }}'s Profile</h1>
 </div>
 
-<!-- Ad is displayed if the user is on a free subscription level. -->
-{% if prescription_level == 'free' %}
+<!-- Renders adverts based on the client's subscription level. -->
+{% if prescription_level == 'standard' %}
 <div class="ad_top">
     <h1 class='ad_text'>[ad]</h1>
 </div>

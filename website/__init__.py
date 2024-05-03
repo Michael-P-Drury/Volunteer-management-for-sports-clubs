@@ -15,7 +15,7 @@ lm.login_view = 'login'
 app.app_context().push()
 admin_key = 'admin1234'
 
-# 'free' if free presription and anything else if premium
-prescription_level = 'paid'
+# 'standard' if standard prescription and anything else if premium
+prescription_level = 'premium'
 
 from . import routes

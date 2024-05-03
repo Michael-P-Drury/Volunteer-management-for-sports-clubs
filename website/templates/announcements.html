@@ -7,12 +7,14 @@
     <h1 class = 'profile-title'> Announcements </h1>
 </div>
 
-<!-- Display an advertisment if the user is on a free plan.-->
-{% if prescription_level == 'free' %}
+<!-- Renders adverts based on the client's subscription level. -->
+{% if prescription_level == 'standard' %}
 <div class="ad_top">
     <h1 class='ad_text'>[ad]</h1>
 </div>
 {% endif %}
+
+
 <!-- Loop through each announcement. -->
 {% for announcement in announcements %}
 

@@ -12,4 +12,6 @@ if __name__ == '__main__':
             User.register('michael', 'michael1', False)
         if User.query.filter_by(username='admin').first() is None:
             User.register('admin', 'admin1', True)
+        if User.query.filter_by(username='john').first() is None:
+            User.register('john', 'john1', False)
     app.run(debug = True)
