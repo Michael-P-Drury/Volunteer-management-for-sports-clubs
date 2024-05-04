@@ -2,17 +2,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from . import db
 
-#A many-to-many tables for linking users and their qualifications.
+#A many-to-many table for linking users and their qualifications.
 user_qualifications = db.Table('user_qualifications',
     db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
     db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True)
 )
 
-#A many-to-many tables for linking jobs and their qualifications.
+#A many-to-many table for linking jobs and their qualifications.
 job_requirements = db.Table('job_requirements',
     db.Column('job_id', db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True),
     db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True)
-
 )
 
 #A many to many table for linking users and requests.
@@ -25,12 +24,6 @@ user_request = db.Table('user_request',
 job_request = db.Table('job_request',
     db.Column('job_id', db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True),
     db.Column('request_id', db.Integer, db.ForeignKey('requests.request_id'), primary_key=True)
-)
-
-#A many to many table for linking qualifications and users.
-qualification_request = db.Table('qualification_request',
-    db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True),
-    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
 )
 
 #A many to many table for linking users and remove requests.
@@ -51,7 +44,7 @@ class UserJobLink(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
     job_id = db.Column(db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True)
 
-#A user model defining attributes for user information and relationships with the other models.
+#A user Table defining attributes for user information and relationships with the other models.
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -59,7 +52,6 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(64))
     email = db.Column(db.String(30))
     mobile = db.Column(db.String(15))
-    preferred_name = db.Column(db.String(15))
     dob = db.Column(db.String(11))
     address = db.Column(db.String(50))
     jobs_completed = db.Column(db.Integer)
@@ -95,10 +87,6 @@ class User(UserMixin, db.Model):
         self.details = details
         print("test")
 
-    # sets preferred name of user as inputted
-    def set_preferred_name(self, preferred_name):
-        self.preferred_name = preferred_name
-
     # sets admin statas as inputted
     def set_admin(self, admin):
         self.admin = admin
@@ -117,10 +105,6 @@ class User(UserMixin, db.Model):
 
     def no_jobs_completed(self):
         self.jobs_completed = 0
-
-    # sets the preferred name of teh user to blank
-    def no_preferred_name(self):
-        self.preferred_name = None
 
     # sets email to blank
     def no_email(self):
@@ -156,7 +140,6 @@ class User(UserMixin, db.Model):
         user.no_mobile()
         user.no_events()
         user.no_qualifications()
-        user.no_preferred_name()
         user.no_details()
         user.no_jobs_completed()
         db.session.add(user)
@@ -183,6 +166,7 @@ class Jobs(UserMixin, db.Model):
     end_time = db.Column(db.String(20))
     date = db.Column(db.String(20))
     job_description = db.Column(db.String(300))
+
     job_qualifications = db.relationship('Qualification', secondary=job_requirements,
                                          backref=db.backref('required_for_jobs', lazy='subquery'))
 
@@ -255,21 +239,21 @@ class Jobs(UserMixin, db.Model):
         db.session.add(job)
         db.session.commit()
 
-#Model for qualifications that users can possess and jobs that may require.
+#Table for qualifications that users can possess and jobs that may require.
 class Qualification(UserMixin, db.Model):
     __tablename__ = 'qualification'
     qualifications_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     qualification_name = db.Column(db.String(300))
     qualification_description = db.Column(db.String(300))
 
-#Model for handling annoucements in the systems.
+#Table for handling annoucements in the systems.
 class Announcements(UserMixin, db.Model):
     __tablename__ = 'announcements'
     announcement_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     announcement_name = db.Column(db.String(40))
     announcement_text = db.Column(db.String(1000))
 
-#Model for managing requests related to qualifications, linking the users and qualifications.
+#Table for managing requests related to qualifications, linking the users and qualifications.
 class QualificationRequests(UserMixin, db.Model):
     __tablename__ = 'qualification_requests'
     qualification_request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -279,7 +263,7 @@ class QualificationRequests(UserMixin, db.Model):
     user = db.relationship('User', backref=db.backref('requests', lazy='subquery'))
     qualification = db.relationship('Qualification', backref=db.backref('requests', lazy='subquery'))
 
-#Model for handling requests in the system.
+#Table for handling requests in the system.
 class Requests(UserMixin, db.Model):
     __tablename__ = 'requests'
     request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -289,7 +273,7 @@ class Requests(UserMixin, db.Model):
     user = db.relationship('User', backref=db.backref('users', lazy='subquery'))
     job = db.relationship('Jobs', backref=db.backref('jobs', lazy='subquery'))
 
-#Model for handling remove requests.
+#Table for handling remove requests.
 class RemoveRequests(UserMixin, db.Model):
     __tablename__ = 'remove_requests'
     remove_request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
