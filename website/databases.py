@@ -3,13 +3,13 @@ from flask_login import UserMixin
 from . import db
 
 #A many-to-many table for linking users and their qualifications.
-user_qualifications = db.Table('user_qualifications',
+UserQualifications = db.Table('UserQualifications',
     db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
     db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True)
 )
 
 #A many-to-many table for linking jobs and their qualifications.
-job_requirements = db.Table('job_requirements',
+JobRequirements = db.Table('JobRequirements',
     db.Column('job_id', db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True),
     db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True)
 )
@@ -33,7 +33,7 @@ class User(UserMixin, db.Model):
     jobs_completed = db.Column(db.Integer)
     admin = db.Column(db.Boolean)
     details = db.Column(db.String(255))
-    qualifications = db.relationship('Qualification', secondary=user_qualifications,
+    qualifications = db.relationship('Qualification', secondary=UserQualifications,
                                      backref=db.backref('users', lazy='subquery'))
     jobs = db.relationship('Jobs', secondary='user_job_link',
                            backref=db.backref('assigned_users', lazy='dynamic'))
@@ -143,7 +143,7 @@ class Jobs(UserMixin, db.Model):
     date = db.Column(db.String(20))
     job_description = db.Column(db.String(300))
 
-    job_qualifications = db.relationship('Qualification', secondary=job_requirements,
+    job_qualifications = db.relationship('Qualification', secondary=JobRequirements,
                                          backref=db.backref('required_for_jobs', lazy='subquery'))
 
     def clear_volunteers(self):
@@ -166,8 +166,8 @@ class Jobs(UserMixin, db.Model):
         self.job_description = job_description
 
     # assigns requirements to the job
-    def assign_requirements(self, job_requirements):
-        self.job_requirements = job_requirements
+    def assign_requirements(self, JobRequirements):
+        self.JobRequirements = JobRequirements
 
     # assigns the number of volunteers needed to a job
     def assign_volunteers_needed(self, volunteers_needed):
@@ -202,14 +202,14 @@ class Jobs(UserMixin, db.Model):
 
     # creates a new job with the information passed into it
     @staticmethod
-    def add_new_job(job_name, volunteers_needed, start_time, end_time, date, job_description, job_requirements):
+    def add_new_job(job_name, volunteers_needed, start_time, end_time, date, job_description, JobRequirements):
         job = Jobs()
         job.clear_volunters()
         job.assign_times(start_time, end_time)
         job.assign_date(date)
         job.assign_job_name(job_name)
         job.assign_description(job_description)
-        job.assign_requirements(job_requirements)
+        job.assign_requirements(JobRequirements)
         job.assign_volunteers_needed(volunteers_needed)
         job.assign_volunteers_needed_left(volunteers_needed)
         db.session.add(job)
