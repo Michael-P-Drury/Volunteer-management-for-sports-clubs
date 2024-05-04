@@ -14,30 +14,6 @@ job_requirements = db.Table('job_requirements',
     db.Column('qualification_id', db.Integer, db.ForeignKey('qualification.qualifications_id'), primary_key=True)
 )
 
-#A many to many table for linking users and requests.
-user_request = db.Table('user_request',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
-    db.Column('request_id', db.Integer, db.ForeignKey('requests.request_id'), primary_key=True)
-)
-
-#A many to many table for linking jobs and requests.
-job_request = db.Table('job_request',
-    db.Column('job_id', db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True),
-    db.Column('request_id', db.Integer, db.ForeignKey('requests.request_id'), primary_key=True)
-)
-
-#A many to many table for linking users and remove requests.
-user_remove_request = db.Table('user_remove_request',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
-    db.Column('remove_request_id', db.Integer, db.ForeignKey('remove_requests.remove_request_id'), primary_key=True)
-)
-
-#A many to many table for linking jobs and remove requests.
-job_remove_request = db.Table('job_remove_request',
-    db.Column('job_id', db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True),
-    db.Column('remove_request_id', db.Integer, db.ForeignKey('remove_requests.remove_request_id'), primary_key=True)
-)
-
 #Table to link users and jobs directly which is used for managing job assignments.
 class UserJobLink(db.Model):
     __tablename__ = 'user_job_link'
