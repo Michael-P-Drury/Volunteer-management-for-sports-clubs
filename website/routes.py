@@ -17,7 +17,6 @@ def login():
     # form is the variable for the logins form
     login_form = LoginForm()
 
-
     # if the form is submitted the checks if user is in database and checks password
     # if user is verified takes to home page and log ins the current user as the current user
     if login_form.validate_on_submit():
@@ -209,6 +208,7 @@ def admin():
             db.session.commit()
             return redirect(url_for('admin'))
 
+    # code to allow admin users to delete another users account
     if 'delete_account_id' in request.form:
 
         user_delete_id = request.form['delete_account_id']
@@ -221,6 +221,7 @@ def admin():
 
         return redirect(url_for('admin'))
 
+    # code to accept a qualification request
     elif 'accept_qualification_request' in request.form:
         user_id, qualification_id = request.form['accept_qualification_request'].split(',')
 
@@ -239,6 +240,7 @@ def admin():
 
         return redirect(url_for('admin'))
 
+    # code to promote a user to an admin member
     elif 'add_admin_user_id' in request.form:
 
         user_id = request.form['add_admin_user_id']
@@ -251,6 +253,7 @@ def admin():
 
         return redirect(url_for('admin'))
 
+    # code to delete a qualification request
     elif 'delete_qualification_request' in request.form:
         user_id, qualification_id = request.form['delete_qualification_request'].split(',')
 
@@ -263,6 +266,7 @@ def admin():
 
         return redirect(url_for('admin'))
 
+    # code to remove a volunteer from the club
     elif 'remove_volunteer' in request.form:
 
         user_id, job_id = request.form['remove_volunteer'].split(',')
@@ -277,7 +281,7 @@ def admin():
         db.session.commit()
         return redirect(url_for('admin'))
 
-
+    # increases number of jobs done for a user
     elif 'increase_user_id' in request.form:
 
         user_id = request.form['increase_user_id']
@@ -290,6 +294,7 @@ def admin():
 
         return redirect(url_for('admin'))
 
+    # code to auto assign volunteers to job
     elif 'auto_assign_job_id' in request.form:
 
         job_id = request.form['auto_assign_job_id']
@@ -302,6 +307,7 @@ def admin():
 
         i = 0
 
+        # loop through volunteers adding volunteers to job if they are qualified or run our of spaces left for job
         while needed_left > 0:
             try:
                 current_volunteer = volunteers[i]
@@ -338,7 +344,7 @@ def admin():
 
         return redirect(url_for('admin'))
 
-
+    # decreases users jobs completed by one
     elif 'decrease_user_id' in request.form:
 
         user_id = request.form['decrease_user_id']
@@ -351,6 +357,7 @@ def admin():
 
         return redirect(url_for('admin'))
 
+    # deletes a request from database
     elif 'delete_request' in request.form:
             user_id, job_id = request.form['delete_request'].split(',')
 
@@ -361,6 +368,7 @@ def admin():
             db.session.commit()
             return redirect(url_for('admin'))
 
+    # code accepting a remove request
     elif 'accept_remove_request' in request.form:
             user_id, job_id = request.form['accept_remove_request'].split(',')
  
@@ -378,6 +386,7 @@ def admin():
             db.session.commit()
             return redirect(url_for('admin'))
 
+    # code to delete a remove request sent
     elif 'delete_remove_request' in request.form:
             user_id, job_id = request.form['delete_remove_request'].split(',')
 
@@ -388,6 +397,7 @@ def admin():
             db.session.commit()
             return redirect(url_for('admin'))
 
+    # creates a new job from the inputted form
     if new_job_form.validate_on_submit():
 
         new_job_name = new_job_form.job_name.data

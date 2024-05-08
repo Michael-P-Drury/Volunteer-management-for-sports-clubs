@@ -17,5 +17,3 @@ admin_key = 'admin1234'
 
 # 'standard' if standard prescription and anything else if premium
 prescription_level = 'premium'
-
-from . import routes
