@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 {% import "bootstrap/wtf.html" as wtf %}
 
+<!-- Links to the external CSS file for styling. -->
 <head>
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 
 <div id="page-container">
-
+    <!-- Navigation bar for the site. -->
     <ul class="navbar">
+        <!-- Navbar changes on hover. -->
         <li>
             <div class="navbar_box_logo">
                 <a class="navbar_item" href="{{ url_for('home') }}">
@@ -47,6 +49,7 @@
     
 </div>
 
+<!-- Footer section. -->
 <footer class="footer">
     <p class = 'footer_text'>for more infomation click on the following links:</p>
     <p><a href="{{ url_for('terms') }}" class = 'footer_link'>→ Terms & Conditions</a></p>

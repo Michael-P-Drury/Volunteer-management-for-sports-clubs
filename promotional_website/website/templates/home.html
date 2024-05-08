@@ -2,12 +2,14 @@
 
 {% block page_content %}
 
+<!-- Initiates the slideshow when the page is fulled loaded. -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         showSlides();
     });
 </script>
 
+<!-- Content for the slideshow. -->
 <div class="main-content">
     <div class="image-container">
         <img class="mySlides fade" src="{{ url_for('static', filename='images/image_3.1.jpg')}}">
@@ -35,6 +37,7 @@
     </div>
 </div>
 
+<!-- Used expaining our services. -->
 <h2 class="about-us-header">What Do We Do?</h2>
 <section class="what-we-do">
     <div class="container">
@@ -69,6 +72,7 @@
     </div>
 </section>
 
+<!-- Used to describe our features of our solution. -->
 <div>
     <div class="features">
         <h1 class="about-us-header">Features</h1>
@@ -94,6 +98,7 @@
     </div>
 </div>
 
+<!-- Reviews of our solution -->
 <div>
     <div class="reviews">
         <h1 class="about-us-header">Reviews</h1>
