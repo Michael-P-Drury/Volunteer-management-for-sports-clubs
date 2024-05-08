@@ -20,6 +20,7 @@ class UserJobLink(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
     job_id = db.Column(db.Integer, db.ForeignKey('jobs.job_id'), primary_key=True)
 
+
 #A user Table defining attributes for user information and relationships with the other models.
 class User(UserMixin, db.Model):
     __tablename__ = 'users'

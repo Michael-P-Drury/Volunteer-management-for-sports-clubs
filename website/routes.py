@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 from .databases import User, Jobs, Qualification, Requests, RemoveRequests, UserJobLink, QualificationRequests, Announcements
 from . import lm, db, app, admin_key, prescription_level
-from .forms import LoginForm, profileEditForm, SignupForm, newJobForm, QualificationForm, ProfileDetailsForm, AnouncmentForm
+from .forms import LoginForm, ProfileEditForm, SignupForm, NewJobForm, QualificationForm, ProfileDetailsForm, AnouncmentForm
 import pandas as pd
 import io
 from sqlalchemy import desc
@@ -178,7 +178,7 @@ def upload_file():
 def admin():
     users = User.query.order_by(desc(User.jobs_completed)).all()
     qualifications = Qualification.query.all()
-    new_job_form = newJobForm()
+    new_job_form = NewJobForm()
     jobs = Jobs.query.all()
     user_job_link = UserJobLink.query.all()
 
@@ -528,7 +528,7 @@ def signup():
 def profile():
     #Creates an instance of the profile edit form.
     user = db.session.query(User).filter_by(user_id=current_user.get_id()).first()
-    profile_form = profileEditForm()
+    profile_form = ProfileEditForm()
 
     #Retrieves all requests and jobs that have been assigned to the current user.
     my_requests = Requests.query.filter_by(user_id=current_user.get_id()).all()

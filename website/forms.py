@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Integ
     SelectMultipleField, widgets, HiddenField, TextAreaField
 from wtforms.validators import input_required, Length, EqualTo, Regexp, NumberRange, Optional
 
+
 # creates the signup form to be used by routes
 class SignupForm(FlaskForm):
     username = StringField('Username', validators=[input_required(), Length(1, 20)])
@@ -13,11 +14,13 @@ class SignupForm(FlaskForm):
     age_confirm = BooleanField('I confirm I am 13 or over 13')
     submit = SubmitField('Submit')
 
+
 # creates the login form to be used by routes
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[input_required(), Length(1, 20)])
     password = PasswordField('Password', validators=[input_required()])
     submit = SubmitField('Submit')
+
 
 # add new announcements form
 class AnouncmentForm(FlaskForm):
@@ -25,8 +28,9 @@ class AnouncmentForm(FlaskForm):
     announcement_name = StringField('Announcement name', validators=[input_required(), Length(1, 40)])
     submit = SubmitField('Submit')
 
+
 #Uses one form for all change fields on profile.
-class profileEditForm(FlaskForm):
+class ProfileEditForm(FlaskForm):
     form_name = HiddenField(default='profileEditForm')
     new_email = StringField('Enter a new email:', validators=[Optional(),Regexp(regex="[^@]+@[^@]+.[^@]+", message = 'Invalid Email - incorrect format')])
     new_mobile = StringField('Enter a new mobile:', validators=[Optional(),Regexp(regex='^[+-]?[0-9]+$', message = 'Invalid Mobile - integers only'), Length(11, 11)])
@@ -40,13 +44,15 @@ class profileEditForm(FlaskForm):
     remove_gender = SubmitField('Remove Gender')    
     save_changes = SubmitField('Save Changes')
 
+
 #Custom field class to handle mulitiple checks.
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
+
 #Defines a form for adding new job roles.
-class newJobForm(FlaskForm):
+class NewJobForm(FlaskForm):
     job_name = StringField('Job name', validators=[input_required()])
     job_description = StringField('Job description', validators=[input_required()])
     volunteers_needed = IntegerField('Number of volunteers needed', validators=[input_required(), NumberRange(min=0)])
@@ -55,6 +61,7 @@ class newJobForm(FlaskForm):
     date = DateField('Date', validators=[input_required()], format='%Y-%m-%d')
     job_requirements = MultiCheckboxField('Job Requirements', coerce=int)
     submit = SubmitField('Add Job')
+
 
 #Defines a form for adding qualifications.
 class QualificationForm(FlaskForm):
